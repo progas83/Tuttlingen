@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcPluginUI", "CalcPluginUI\CalcPluginUI.csproj", "{6194FCEE-084D-4124-AFFB-188551584E50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcContract", "CalcContract\CalcContract.csproj", "{6F10FA89-2CD2-4F84-9F16-747A45B56626}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositionHelper", "CompositionHelper\CompositionHelper.csproj", "{571A95E4-CF49-4EA6-ABF9-3053BA41666F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subtraction", "Subtraction\Subtraction.csproj", "{2A54317B-8240-4143-B4A2-2C89D2BC252F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6194FCEE-084D-4124-AFFB-188551584E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6194FCEE-084D-4124-AFFB-188551584E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6194FCEE-084D-4124-AFFB-188551584E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6194FCEE-084D-4124-AFFB-188551584E50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F10FA89-2CD2-4F84-9F16-747A45B56626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F10FA89-2CD2-4F84-9F16-747A45B56626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F10FA89-2CD2-4F84-9F16-747A45B56626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F10FA89-2CD2-4F84-9F16-747A45B56626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{571A95E4-CF49-4EA6-ABF9-3053BA41666F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{571A95E4-CF49-4EA6-ABF9-3053BA41666F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{571A95E4-CF49-4EA6-ABF9-3053BA41666F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{571A95E4-CF49-4EA6-ABF9-3053BA41666F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A54317B-8240-4143-B4A2-2C89D2BC252F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A54317B-8240-4143-B4A2-2C89D2BC252F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A54317B-8240-4143-B4A2-2C89D2BC252F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A54317B-8240-4143-B4A2-2C89D2BC252F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
