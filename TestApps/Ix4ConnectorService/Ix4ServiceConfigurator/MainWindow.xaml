@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Ix4ServiceConfigurator"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Width="50" Height="50" Click="StartService"/>
-    </Grid>
+    <StackPanel>
+        <Button Width="50" Height="50" Click="StartService" Content="InstallService" Margin="10"/>
+        <Button Width="50" Height="50" Click="UninstallService" Content="UninstallService" Margin="10"/>
+    </StackPanel>
 </Window>

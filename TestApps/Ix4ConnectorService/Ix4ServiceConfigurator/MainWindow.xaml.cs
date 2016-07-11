@@ -29,7 +29,13 @@ namespace Ix4ServiceConfigurator
         private void StartService(object sender, RoutedEventArgs e)
         {
             ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
-            SelfAutomaticalInstaller.InstallMe();
+            AutomaticalServiceInstaller.InstallService();
+        }
+
+        private void UninstallService(object sender, RoutedEventArgs e)
+        {
+            ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
+            AutomaticalServiceInstaller.UninstallService();
         }
     }
 }

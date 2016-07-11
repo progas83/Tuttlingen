@@ -12,7 +12,7 @@ namespace Ix4ConnectorService
     {
         public ConnectorService()
         {
-        //    AutoLog = true;
+            AutoLog = true;
             CanPauseAndContinue = true;
             CanStop = true;
           //  CanShutdown = true;
