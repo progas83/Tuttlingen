@@ -57,6 +57,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AutomaticalServiceInstaller.cs" />
+    <Compile Include="CustomServiceController.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ServiceInfoWrapper.cs" />
+    <Compile Include="ServiceViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,6 +106,10 @@
     <ProjectReference Include="..\DataManager\DataManager.csproj">
       <Project>{9ba39461-9f6b-40bd-8b88-5470ff363ad1}</Project>
       <Name>DataManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ix4ConnectorService\Ix4ConnectorService.csproj">
+      <Project>{01c1c647-db26-4b8e-9589-67e7104bead1}</Project>
+      <Name>Ix4ConnectorService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

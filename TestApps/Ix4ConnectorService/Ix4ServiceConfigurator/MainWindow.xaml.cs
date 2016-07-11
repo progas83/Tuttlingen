@@ -28,7 +28,11 @@ namespace Ix4ServiceConfigurator
 
         private void StartService(object sender, RoutedEventArgs e)
         {
-            ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
+            //CustomServiceController sc = new CustomServiceController(DataManager.CurrentServiceInformation.ServiceName);
+
+            //CustomServiceController sc1 = new CustomServiceController(DataManager.CurrentServiceInformation.ServiceName);
+
+            //var res = sc1.Equals(sc);
             AutomaticalServiceInstaller.InstallService();
         }
 

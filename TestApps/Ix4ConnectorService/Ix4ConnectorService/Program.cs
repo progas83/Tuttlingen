@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Ix4ConnectorService
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -30,6 +31,14 @@ namespace Ix4ConnectorService
             //    SelfAutomaticalInstaller.InstallMe();
             //}
            
+        }
+
+        public static string ServiceLocation
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().Location;
+            }
         }
     }
 }
