@@ -8,7 +8,7 @@ namespace DataManager
 {
     public class CurrentServiceInformation
     {
-        private static readonly string _serviceName = "Navision to ix4 connector";
+        private static readonly string _serviceName = "NavisionService";// to ix4 connector";
         public static string ServiceName { get { return _serviceName; } }
     }
 }

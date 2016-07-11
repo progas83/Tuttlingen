@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration.Install;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Ix4ConnectorService
 {
-    public class Ix4ServiceInstaller : Installer
+    [RunInstaller(true)]
+    public partial class ProjectInstaller : System.Configuration.Install.Installer
     {
         private ServiceInstaller _serviceInstaller;
         private ServiceProcessInstaller _processInstaller;
-
-        public Ix4ServiceInstaller()
+        public ProjectInstaller()
         {
+            InitializeComponent();
+
             _serviceInstaller = new ServiceInstaller();
-            _serviceInstaller.ServiceName = DataManager.CurrentServiceInformation.ServiceName;
+            _serviceInstaller.ServiceName = "NavisionService";// DataManager.CurrentServiceInformation.ServiceName;
             _serviceInstaller.StartType = ServiceStartMode.Automatic;
             _serviceInstaller.AfterInstall += OnAfterServiceInstall;
             _serviceInstaller.BeforeInstall += OnBeforeServiceInstall;
@@ -35,13 +38,14 @@ namespace Ix4ConnectorService
 
         private void OnBeforeServiceInstall(object sender, InstallEventArgs e)
         {
+
             //throw new NotImplementedException();
         }
 
         private void OnAfterServiceInstall(object sender, InstallEventArgs e)
         {
-            ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
-            sc.Start();
+          //  ServiceController sc = new ServiceController("NavisionService");//DataManager.CurrentServiceInformation.ServiceName);
+          //  sc.Start();
         }
     }
 }

@@ -180,12 +180,12 @@ namespace IX4InterfaceExample
             }
 
             //Webservice
-            WSPickPublic.ix4PublicInterface wsProxy = new WSPickPublic.ix4PublicInterface();
+            ix4WebReference.ix4PublicInterface wsProxy = new ix4WebReference.ix4PublicInterface();
             wsProxy.Url = tbEndpoint.Text;
 
 
             //Authentication
-            WSPickPublic.LBSoapAuthenticationHeader head = new WSPickPublic.LBSoapAuthenticationHeader();
+            ix4WebReference.LBSoapAuthenticationHeader head = new ix4WebReference.LBSoapAuthenticationHeader();
             head.ClientId = int.Parse(tbClientId.Text);
             head.UserName = tbUsername.Text;
             head.Password = tbPassword.Text;

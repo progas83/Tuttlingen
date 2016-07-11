@@ -12,36 +12,36 @@ namespace Ix4ConnectorService
     {
         public ConnectorService()
         {
-            AutoLog = true;
+        //    AutoLog = true;
             CanPauseAndContinue = true;
             CanStop = true;
-            CanShutdown = true;
-            ServiceName = CurrentServiceInformation.ServiceName;
+          //  CanShutdown = true;
+            ServiceName = "NavisionService";// CurrentServiceInformation.ServiceName;
         }
 
-        protected override void OnStart(string[] args)
-        {
-            base.OnStart(args);
-        }
+        //protected override void OnStart(string[] args)
+        //{
+        //    base.OnStart(args);
+        //}
 
-        protected override void OnStop()
-        {
-            base.OnStop();
-        }
+        //protected override void OnStop()
+        //{
+        //    base.OnStop();
+        //}
 
-        protected override void OnContinue()
-        {
-            base.OnContinue();
-        }
+        //protected override void OnContinue()
+        //{
+        //    base.OnContinue();
+        //}
 
-        protected override void OnPause()
-        {
-            base.OnPause();
-        }
+        //protected override void OnPause()
+        //{
+        //    base.OnPause();
+        //}
 
-        protected override void OnShutdown()
-        {
-            base.OnShutdown();
-        }
+        //protected override void OnShutdown()
+        //{
+        //    base.OnShutdown();
+        //}
     }
 }
