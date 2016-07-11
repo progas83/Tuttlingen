@@ -28,7 +28,7 @@ namespace Ix4ServiceConfigurator
 
         private void StartService(object sender, RoutedEventArgs e)
         {
-            ServiceController sc = new ServiceController("NavisionService");//DataManager.CurrentServiceInformation.ServiceName);
+            ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
             SelfAutomaticalInstaller.InstallMe();
         }
     }

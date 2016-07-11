@@ -19,7 +19,8 @@ namespace Ix4ConnectorService
             InitializeComponent();
 
             _serviceInstaller = new ServiceInstaller();
-            _serviceInstaller.ServiceName = "NavisionService";// DataManager.CurrentServiceInformation.ServiceName;
+            _serviceInstaller.ServiceName =  DataManager.CurrentServiceInformation.ServiceName;//"NavisionService";//
+            _serviceInstaller.Description = DataManager.CurrentServiceInformation.ServiceDescription;
             _serviceInstaller.StartType = ServiceStartMode.Automatic;
             _serviceInstaller.AfterInstall += OnAfterServiceInstall;
             _serviceInstaller.BeforeInstall += OnBeforeServiceInstall;
@@ -44,8 +45,16 @@ namespace Ix4ConnectorService
 
         private void OnAfterServiceInstall(object sender, InstallEventArgs e)
         {
-          //  ServiceController sc = new ServiceController("NavisionService");//DataManager.CurrentServiceInformation.ServiceName);
-          //  sc.Start();
+            try
+            {
+                ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
+                sc.Start();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+           
         }
     }
 }

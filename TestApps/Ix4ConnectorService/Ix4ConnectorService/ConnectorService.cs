@@ -16,7 +16,8 @@ namespace Ix4ConnectorService
             CanPauseAndContinue = true;
             CanStop = true;
           //  CanShutdown = true;
-            ServiceName = "NavisionService";// CurrentServiceInformation.ServiceName;
+            ServiceName =  CurrentServiceInformation.ServiceName; //"NavisionService";//
+            
         }
 
         //protected override void OnStart(string[] args)
