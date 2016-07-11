@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONTENT>
+  <ArtPosStockIn>
+    <Id>1</Id>
+    <SSCC>SSCC1</SSCC>
+    <ArticleNo>ArticleNo1</ArticleNo>
+    <ArticleDescription>ArticleDescription1</ArticleDescription>
+    <EAN>EAN1</EAN>
+    <Amount>1</Amount>
+    <QuantityUnit>QuantityUnit1</QuantityUnit>
+    <Place>Place1</Place>
+    <DeliveryDate>2014-06-07T03:03:03+01:00</DeliveryDate>
+    <Charge>Charge1</Charge>
+    <SerialNo>SerialNo1</SerialNo>
+    <ProjectNo>ProjectNo1</ProjectNo>
+    <BBD>BBD1</BBD>
+    <DeliveryNo>DeliveryNo1</DeliveryNo>
+    <DeliveryPos>DeliveryPos1</DeliveryPos>
+    <DeliveryReferenceNo>DeliveryReferenceNo1</DeliveryReferenceNo>
+    <DeliveryOrderDate>2014-06-07T08:08:04+01:00</DeliveryOrderDate>
+    <Creator>Creator1</Creator>
+    <CreatedTS>2014-06-07T08:45:44+01:00</CreatedTS>
+  </ArtPosStockIn>
+  <ArtPosStockIn>
+    <Id>1528255</Id>
+    <SSCC>SSCC2</SSCC>
+    <ArticleNo>ArticleNo2</ArticleNo>
+    <ArticleDescription>ArticleDescription2</ArticleDescription>
+    <Amount>35.5</Amount>
+    <QuantityUnit>QuantityUnit2</QuantityUnit>
+    <Place>Place2</Place>
+    <DeliveryDate>2014-06-07T08:08:04+01:00</DeliveryDate>
+    <DeliveryNo>DeliveryNo2</DeliveryNo>
+    <DeliveryPos>DeliveryPos2</DeliveryPos>
+    <DeliveryReferenceNo>DeliveryReferenceNo2</DeliveryReferenceNo>
+    <DeliveryOrderDate>2014-05-07T08:08:04+01:00</DeliveryOrderDate>
+    <Creator>Creator2</Creator>
+    <CreatedTS>2014-06-08T08:08:04+01:00</CreatedTS>
+  </ArtPosStockIn>
+</CONTENT>

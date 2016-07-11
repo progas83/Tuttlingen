@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONTENT>
+  <ArtPosStock>
+    <Id>1</Id>
+    <SSCC>SSCC1</SSCC>
+    <ArticleNo>ArticleNo1</ArticleNo>
+    <ArticleDescription>ArticleDescription1</ArticleDescription>
+    <EAN>EAN1</EAN>
+    <Amount>1</Amount>
+    <QuantityUnit>Stueck</QuantityUnit>
+    <Place>Place1</Place>
+    <Charge>Charge1</Charge>
+    <SerialNo>SerialNo1</SerialNo>
+    <ProjectNo>ProjectNo1</ProjectNo>
+    <BBD>BBD1</BBD>
+    <DeliveryNo>DeliveryNo1</DeliveryNo>
+    <OrderNo>OrderNo1</OrderNo>
+    <Reserved>1</Reserved>
+  </ArtPosStock>
+  <ArtPosStock>
+    <Id>25978</Id>
+    <SSCC>SSCC2</SSCC>
+    <ArticleNo>ArticleNo2</ArticleNo>
+    <ArticleDescription>ArticleDescription2</ArticleDescription>
+    <EAN>EAN2</EAN>
+    <Amount>50.5</Amount>
+    <QuantityUnit>Liter</QuantityUnit>
+    <Place>Place2</Place>
+    <DeliveryNo>DeliveryNo2</DeliveryNo>
+    <Reserved>0</Reserved>
+  </ArtPosStock>
+</CONTENT>

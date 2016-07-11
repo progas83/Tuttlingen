@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LICSRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://logistikbroker.com/LICSRequest.xsd">
+  <ClientId>-1</ClientId>
+  <ArticleImport>
+    <Article>
+      <ArticleNo>12345</ArticleNo>
+      <ArticleDescription>Badewanne</ArticleDescription>
+      <QuantityUnit>1000008</QuantityUnit>
+    </Article>
+    <Article>
+      <ArticleNo>67890</ArticleNo>
+      <ArticleDescription>Waschbecken</ArticleDescription>
+      <QuantityUnit>Stueck</QuantityUnit>
+    </Article>
+  </ArticleImport>
+  <OrderImport>
+    <Order>
+      <OrderNo>Order10000</OrderNo>
+      <CommissionText>Amazon</CommissionText>
+      <ShipmentMode>100</ShipmentMode>
+      <ShipmentDate>2011-11-11T00:00:00</ShipmentDate>
+      <Recipient>
+        <Name>Max Mustermann</Name>
+        <Street>Weg 1</Street>
+        <City>Stadt</City>
+        <ZIPCode>09876</ZIPCode>
+        <Country>DE</Country>
+        <CompanyName>Muster AG</CompanyName>
+        <ContactTelephone>0987654321</ContactTelephone>
+        <ContactEMail>maxmustermann@muster.de</ContactEMail>
+      </Recipient>
+      <Positions>
+        <Position>
+          <PositionNo>1</PositionNo>
+          <ArticleNo>12345</ArticleNo>
+          <TargetQuantity>1</TargetQuantity>
+          <ProjectNo>Variante 1</ProjectNo>
+        </Position>
+        <Position>
+          <PositionNo>2</PositionNo>
+          <ArticleNo>67890</ArticleNo>
+          <TargetQuantity>5</TargetQuantity>
+          <ProjectNo>Schwarz</ProjectNo>
+        </Position>
+      </Positions>
+    </Order>
+    <Order>
+      <OrderNo>Order10001</OrderNo>
+      <Recipient>
+        <Name>Max Schulze</Name>
+        <Street>Waldstr. 2</Street>
+        <City>Staedchen</City>
+        <ZIPCode>99899</ZIPCode>
+        <Country>DE</Country>
+        <CompanyName>Firma Schulze</CompanyName>
+        <ContactTelephone>03777/ 22828828</ContactTelephone>
+        <ContactEMail>info@online.de</ContactEMail>
+      </Recipient>
+      <Positions>
+        <Position>
+          <PositionNo>1</PositionNo>
+          <ArticleNo>67890</ArticleNo>
+          <TargetQuantity>100</TargetQuantity>
+        </Position>
+      </Positions>
+    </Order>
+  </OrderImport>
+  <DeliveryImport>
+    <Delivery>
+      <DeliveryNo>Lieferung002</DeliveryNo>
+      <ReferenceNo>ExtDeliveryNo1</ReferenceNo>
+      <OrderDate>2012-10-02T01:01:01+01:00</OrderDate>
+      <Positions>
+        <Position>
+          <PositionNo>1</PositionNo>
+          <ArticleNo>12345</ArticleNo>
+          <LoadType>1</LoadType>
+          <TargetLoadsCount>5</TargetLoadsCount>
+          <ArticlePerLoad>20</ArticlePerLoad>
+          <TargetQuantity>100</TargetQuantity>
+          <ProjectNo>Variante A1</ProjectNo>
+        </Position> 
+      </Positions>
+    </Delivery>
+  </DeliveryImport>
+</LICSRequest>

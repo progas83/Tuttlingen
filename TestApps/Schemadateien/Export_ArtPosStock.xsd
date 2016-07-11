@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CONTENT">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="ArtPosStock">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" type="xs:int" />
+              <xs:element minOccurs="0" maxOccurs="1" name="SSCC" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="ArticleNo" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="ArticleDescription" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="EAN" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="Amount" type="xs:float" />
+              <xs:element minOccurs="0" maxOccurs="1" name="QuantityUnit" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="Place" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="Charge" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="SerialNo" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="ProjectNo" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="BBD" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="DeliveryNo" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="OrderNo" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="1" name="Reserved" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

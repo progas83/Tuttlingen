@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Content>
+  <DataRow>
+    <PackageId>1111111</PackageId>
+    <PackageSSCC>AA9501538-1</PackageSSCC>
+    <OrderNo>9501538</OrderNo>
+    <TrackingNo>DHL888887</TrackingNo>
+    <ShipmentDate>2015-08-27</ShipmentDate>
+    <ShipmentSystem>DHL</ShipmentSystem>
+  </DataRow>
+  <DataRow>
+    <PackageId>1111112</PackageId>
+    <PackageSSCC>AB9501538-2</PackageSSCC>
+    <OrderNo>9501538</OrderNo>
+    <TrackingNo>DHL888888</TrackingNo>
+    <ShipmentDate>2015-08-27</ShipmentDate>
+    <ShipmentSystem>DHL</ShipmentSystem>
+  </DataRow>
+  <DataRow>
+    <PackageId>2222222</PackageId>
+    <PackageSSCC>ZZB9501537-1</PackageSSCC>
+    <OrderNo>9501537</OrderNo>
+    <TrackingNo>DPD999999</TrackingNo>
+    <ShipmentDate>2015-08-27</ShipmentDate>
+    <ShipmentSystem>DPD</ShipmentSystem>
+  </DataRow>
+</Content>
