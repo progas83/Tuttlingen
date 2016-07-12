@@ -316,7 +316,7 @@ namespace IX4InterfaceExample
             {
 
                 ix4WebReference.ix4PublicInterface ws = new ix4WebReference.ix4PublicInterface();
-
+                
                 ix4WebReference.LBSoapAuthenticationHeader header = new ix4WebReference.LBSoapAuthenticationHeader();
                 header.UserName = "adminbio";// tbUsername.Text;
                 header.Password = "rhSjQFWB";// tbPassword.Text;
