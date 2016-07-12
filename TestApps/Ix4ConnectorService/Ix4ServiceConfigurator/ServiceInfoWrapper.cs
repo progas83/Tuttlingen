@@ -10,8 +10,6 @@ namespace Ix4ServiceConfigurator
     class ServiceInfoWrapper
     {
         private static object _padlock = new object();
-        // 
-        // private ServiceController CurrentService { get { } }
 
         private static object _singletoneLocker = new object();
         private static ServiceInfoWrapper _serviceInfoWrapper = null;
@@ -82,28 +80,6 @@ namespace Ix4ServiceConfigurator
                  return CurrentService.Status;
             }
         }
-        //private CustomServiceController GetCurrentServiceController()
-        //{
-        //    lock (_padlock)
-        //    {
-        //        ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
-
-        //        try
-        //        {
-        //            if (sc.ServiceName.Equals(DataManager.CurrentServiceInformation.ServiceName))
-        //            {
-        //                _serviceExist = true;
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _serviceExist = false;
-        //            sc = null;
-        //        }
-        //        return sc;
-        //    }
-
-        //}
 
         private bool _serviceExist = false;
         public bool ServiceExist
@@ -115,7 +91,6 @@ namespace Ix4ServiceConfigurator
             }
         }
 
-        //private ServiceController CurrentService { get { return GetCurrentServiceController(); } }
         public void StopService()
         {
             try
@@ -131,8 +106,6 @@ namespace Ix4ServiceConfigurator
             }
 
         }
-
-
 
         public void StartService()
         {

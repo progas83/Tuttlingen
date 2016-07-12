@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ix4ServiceConfigurator.Commands;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,17 +11,29 @@ namespace Ix4ServiceConfigurator
 {
     public class ServiceViewModel : INotifyPropertyChanged
     {
-     //   private ServiceInfoWrapper _serviceModel;
         public ServiceViewModel()
         {
-       //     _serviceModel = new ServiceInfoWrapper();
+            InstallationCommand InstallationCommand = new InstallationCommand();
+            InstallationCommand.ServiceInfoNeedToUpdate += OnServiceInfoNeedToUpdate;
+            InstallServiceCommand = InstallationCommand;
             
         }
 
-        public ICommand InstallService { get; private set; }
-        public ICommand UninstallService { get; private set; }
+        private void OnServiceInfoNeedToUpdate(object sender, EventArgs e)
+        {
+            OnPropertyChanged("ServiceExist");
+        }
 
-       // private bool _serviceExist = false;
+        public ICommand InstallServiceCommand { get; private set; }
+  
+        public string ServiceName
+        {
+            get
+            {
+                return DataManager.CurrentServiceInformation.ServiceName;
+            }
+        }
+
         public bool ServiceExist
         {
             get { return ServiceInfoWrapper.Instance.ServiceExist; }

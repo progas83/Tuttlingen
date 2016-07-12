@@ -24,22 +24,7 @@ namespace Ix4ServiceConfigurator
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void StartService(object sender, RoutedEventArgs e)
-        {
-            //CustomServiceController sc = new CustomServiceController(DataManager.CurrentServiceInformation.ServiceName);
-
-            //CustomServiceController sc1 = new CustomServiceController(DataManager.CurrentServiceInformation.ServiceName);
-
-            //var res = sc1.Equals(sc);
-            AutomaticalServiceInstaller.InstallService();
-        }
-
-        private void UninstallService(object sender, RoutedEventArgs e)
-        {
-            ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
-            AutomaticalServiceInstaller.UninstallService();
+            this.DataContext = new ServiceViewModel();
         }
     }
 }

@@ -3,12 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Ix4ServiceConfigurator.Converters"
         xmlns:local="clr-namespace:Ix4ServiceConfigurator"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    
-    <StackPanel>
-        <Button Width="50" Height="50" Click="StartService" Content="InstallService" Margin="10"/>
-        <Button Width="50" Height="50" Click="UninstallService" Content="UninstallService" Margin="10"/>
-    </StackPanel>
+    <Window.Resources>
+        <converters:BoolToInstallStateConverter x:Key="ExistServiceConverter"/>
+    </Window.Resources>
+    <DockPanel>
+        <Border BorderThickness="5" BorderBrush="Red" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <DockPanel HorizontalAlignment="Right">
+           
+                <StackPanel VerticalAlignment="Top" Orientation="Horizontal" DockPanel.Dock="Top">
+                    <Label Content="ServiceName: " HorizontalAlignment="Left"/>
+                    <Label Content="{Binding ServiceName}" HorizontalAlignment="Left"/>
+                </StackPanel>
+
+                <Button  Width="100" Height="50"  Margin="10" DockPanel.Dock="Top"
+                 Command="{Binding InstallServiceCommand}" CommandParameter="{Binding ServiceExist}" 
+                 Content="{Binding ServiceExist, Converter={StaticResource ExistServiceConverter}}"
+                     HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                </Button>
+        </DockPanel>
+        </Border>
+    </DockPanel>
+   
 </Window>
