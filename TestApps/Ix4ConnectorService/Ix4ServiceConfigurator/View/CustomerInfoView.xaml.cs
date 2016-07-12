@@ -1,8 +1,6 @@
-﻿using Ix4ServiceConfigurator.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,20 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Ix4ServiceConfigurator
+namespace Ix4ServiceConfigurator.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CustomerInfoView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CustomerInfoView : Window
     {
-        public MainWindow()
+        public CustomerInfoView()
         {
             InitializeComponent();
-            this.DataContext = new ServiceViewModel();
         }
     }
 }

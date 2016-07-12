@@ -4,14 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:Ix4ServiceConfigurator.Converters"
+        xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
         xmlns:local="clr-namespace:Ix4ServiceConfigurator"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
         <converters:BoolToInstallStateConverter x:Key="ExistServiceConverter"/>
     </Window.Resources>
-    <DockPanel>
-        <Border BorderThickness="5" BorderBrush="Red" HorizontalAlignment="Right" VerticalAlignment="Top">
+    <DockPanel >
+        <Border BorderThickness="5" BorderBrush="Red" HorizontalAlignment="Right" VerticalAlignment="Top" DockPanel.Dock="Right">
             <DockPanel HorizontalAlignment="Right">
            
                 <StackPanel VerticalAlignment="Top" Orientation="Horizontal" DockPanel.Dock="Top">
@@ -26,6 +27,17 @@
 
                 </Button>
         </DockPanel>
+        </Border>
+
+        <Border  BorderThickness="5" BorderBrush="Green" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" >
+            <DockPanel>
+                <controls:CustomerInfoControl DataContext="{Binding Customer}" DockPanel.Dock="Top" IsEnabled="False"/>
+              
+                <Button Height="50" HorizontalAlignment="Stretch" Content="Make changes" Command="{Binding MakeChangesCmd}" DockPanel.Dock="Top"/>
+            </DockPanel>
+      
+
+           
         </Border>
     </DockPanel>
    

@@ -1,0 +1,14 @@
+﻿<Window x:Class="Ix4ServiceConfigurator.View.CustomerInfoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ix4ServiceConfigurator.View"
+        xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
+        mc:Ignorable="d"
+        Title="CustomerInfoView" MinHeight="200" MinWidth="300" SizeToContent="WidthAndHeight">
+    <DockPanel Margin="5,10,10,5">
+        <controls:CustomerInfoControl DockPanel.Dock="Top" DataContext="{Binding Customer}"/>
+        <Button Height="50" IsDefault="True" HorizontalAlignment="Stretch" Command="{Binding}" Content="Save Information"/>
+    </DockPanel>
+</Window>
