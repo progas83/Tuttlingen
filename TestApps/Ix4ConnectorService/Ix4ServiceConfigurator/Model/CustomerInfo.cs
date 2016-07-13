@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,9 +20,24 @@ namespace Ix4ServiceConfigurator.Model
 
         public int ClientID { get; set; }
 
-        public string Password { get; set; }
+        private string _password;
+        public string Password
+        {
+            get { return _password; }
+            set { _password = value; }
+        }
         public string ServiceEndpoint { get; set; }
 
         public bool Default { get; set; }
+
+        public void Decrypt(CryptoModule.Cryptor cryptor)
+        {
+            _password =cryptor.Decrypt(_password);// 
+        }
+
+        public void Encrypt(CryptoModule.Cryptor cryptor)
+        {
+            _password = cryptor.Encrypt(_password);
+        }
     }
 }

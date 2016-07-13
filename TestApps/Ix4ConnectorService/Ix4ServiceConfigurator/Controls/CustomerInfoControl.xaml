@@ -25,7 +25,7 @@
             <Label Content="UserName" Grid.Row="2"/>
             <Label Content="Password" Grid.Row="3"/>
             <Label Content="Endpoint" Grid.Row="4"/>
-            <Label Content="By default" Grid.Row="5"/>
+            <Label Content="By default" Grid.Row="5" />
 
             <TextBox Text="{Binding ServiceName}" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <TextBox Text="{Binding ClientID}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>

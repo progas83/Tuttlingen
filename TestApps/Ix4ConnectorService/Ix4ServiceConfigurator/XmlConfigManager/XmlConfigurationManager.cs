@@ -5,18 +5,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace Ix4ServiceConfigurator.XmlConfigManager
 {
     public class XmlConfigurationManager
     {
         private static object _padlock = new object();
-        private XmlSerializer _xmlSerializer;
+        private CustomerInfoSerializer _xmlSerializer;
         private static XmlConfigurationManager _configrator = null;
         private XmlConfigurationManager()
         {
-            _xmlSerializer = new XmlSerializer(typeof(CustomerInfo));
+            _xmlSerializer = new CustomerInfoSerializer();
         }
         public static XmlConfigurationManager Instance
         {
@@ -44,12 +46,12 @@ namespace Ix4ServiceConfigurator.XmlConfigManager
             {
                 using (FileStream fs = new FileStream(DataManager.XmlFileData.FileName, FileMode.OpenOrCreate))
                 {
-                    customerInfo = (CustomerInfo)_xmlSerializer.Deserialize(fs);
+                    customerInfo = _xmlSerializer.Deserialize(fs);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                customerInfo = new CustomerInfo();
             }
 
             return customerInfo;
@@ -59,12 +61,13 @@ namespace Ix4ServiceConfigurator.XmlConfigManager
         {
             try
             {
-                using (FileStream fs = new FileStream(DataManager.XmlFileData.FileName, FileMode.OpenOrCreate))
+                using (FileStream fs = new FileStream(DataManager.XmlFileData.FileName, FileMode.Truncate))
                 {
                     _xmlSerializer.Serialize(fs, customerInfo);
+                    fs.Flush(true);
                 }
             }
-            catch
+            catch (Exception ex)
             {
 
             }
