@@ -40,9 +40,9 @@ namespace Ix4Connector
             }
         }
 
-        public string ImportXmlRequest(byte[] xmlFile, string fileName)
+        public string ImportXmlRequest(byte[] xmlFileContent, string fileName)
         {
-            throw new NotImplementedException();
+            return GetWebPublicInterface().LICSImportXMLRequest(xmlFileContent, fileName);
         }
 
         private Ix4WebService.ix4PublicInterface GetWebPublicInterface()
