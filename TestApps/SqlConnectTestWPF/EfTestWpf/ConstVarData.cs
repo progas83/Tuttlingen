@@ -8,6 +8,8 @@ namespace EfTestWpf
 {
     static class ConstVarData
     {
-        public static string ConnectionStringTo = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = NavisionTest; Integrated Security = True";
+        public static string ConnectionStringToPhones = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = NavisionTest; Integrated Security = True";
+
+        public static string ConnectionStringToChips = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = IlyaTest; Integrated Security = True";
     }
 }

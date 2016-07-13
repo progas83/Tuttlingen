@@ -22,17 +22,34 @@ namespace Ix4Connector
 
         public XmlNode ExportData(string exportDataType, string[] additionalParameters)
         {
-            throw new NotImplementedException();
+            return GetWebPublicInterface().ExportData(exportDataType, additionalParameters);
         }
 
         public void ExportDataAsync(string exportDataType, string[] additionalParameters)
         {
-            throw new NotImplementedException();
+            Ix4WebService.ix4PublicInterface ws = GetWebPublicInterface();
+            ws.ExportDataCompleted += OnExportDataAsyncCompleted;
+            ws.ExportDataAsync(exportDataType, additionalParameters);
+        }
+
+        private void OnExportDataAsyncCompleted(object sender, ExportDataCompletedEventArgs e)
+        {
+            if(ExportDataAsyncCompleted!=null)
+            {
+                ExportDataAsyncCompleted(sender, new ExportDataAsyncCompletedEventArgs(e));
+            }
         }
 
         public string ImportXmlRequest(byte[] xmlFile, string fileName)
         {
             throw new NotImplementedException();
+        }
+
+        private Ix4WebService.ix4PublicInterface GetWebPublicInterface()
+        {
+            Ix4WebService.ix4PublicInterface ws = new Ix4WebService.ix4PublicInterface();
+            ws.LBSoapAuthenticationHeaderValue = _header;
+            return ws;
         }
     }
 }

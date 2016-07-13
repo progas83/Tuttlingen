@@ -252,27 +252,7 @@ namespace IX4InterfaceExample
 
         #region Export
 
-        private void btnExportDataAsync_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                WSPickPublic.ix4PublicInterface ws = new WSPickPublic.ix4PublicInterface();
-                WSPickPublic.LBSoapAuthenticationHeader head = new WSPickPublic.LBSoapAuthenticationHeader();
-                head.UserName = tbUsername.Text;
-                head.Password = tbPassword.Text;
-                head.ClientId = int.Parse(tbClientId.Text);
-                ws.LBSoapAuthenticationHeaderValue = head;
-
-                ws.ExportDataCompleted += ws_ExportDataCompleted;
-
-                ws.ExportDataAsync(tbExportDataType.Text, getParameter());
-
-            }
-            catch (Exception exc)
-            {
-                rtbExportDataResponse.Text = exc.Message;
-            }
-        }
+       
 
         private string[] getParameter()
         {
@@ -283,18 +263,7 @@ namespace IX4InterfaceExample
             return null;
         }
 
-        private void ws_ExportDataCompleted(object sender, WSPickPublic.ExportDataCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                SetRTBText("Error: " + e.Error.Message);
-            }
-            else
-            {
-                XmlNode n = e.Result;
-                SetRTBText(n.OuterXml);
-            }
-        }
+      
 
         private delegate void SetText(string text);
 
@@ -309,7 +278,44 @@ namespace IX4InterfaceExample
                 rtbExportDataResponse.Text = text;
             }
         }
+        private void btnExportDataAsync_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ix4WebReference.ix4PublicInterface ws = new ix4WebReference.ix4PublicInterface();
 
+                ix4WebReference.LBSoapAuthenticationHeader header = new ix4WebReference.LBSoapAuthenticationHeader();
+                header.UserName = "wsbio";// tbUsername.Text;
+                header.Password = "bon8s2a5w2";// tbPassword.Text;
+                header.ClientId = 1000001;// i;// int.Parse(tbClientId.Text);
+                ws.LBSoapAuthenticationHeaderValue = header;
+
+                ws.ExportDataCompleted += Ws_ExportDataCompleted;
+                    //+= ws_ExportDataCompleted;
+
+                ws.ExportDataAsync(tbExportDataType.Text, getParameter());
+
+            }
+            catch (Exception exc)
+            {
+                rtbExportDataResponse.Text = exc.Message;
+            }
+        }
+
+        private void Ws_ExportDataCompleted(object sender, ix4WebReference.ExportDataCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                SetRTBText("Error: " + e.Error.Message);
+            }
+            else
+            {
+                XmlNode n = e.Result;
+                SetRTBText(n.OuterXml);
+            }
+        }
+
+       
         private void btnExportData_Click(object sender, EventArgs e)
         {
             try
@@ -318,8 +324,8 @@ namespace IX4InterfaceExample
                 ix4WebReference.ix4PublicInterface ws = new ix4WebReference.ix4PublicInterface();
                 
                 ix4WebReference.LBSoapAuthenticationHeader header = new ix4WebReference.LBSoapAuthenticationHeader();
-                header.UserName = "adminbio";// tbUsername.Text;
-                header.Password = "rhSjQFWB";// tbPassword.Text;
+                header.UserName = "wsbio";// tbUsername.Text;
+                header.Password = "bon8s2a5w2";// tbPassword.Text;
                 header.ClientId = 1000001;// i;// int.Parse(tbClientId.Text);
 
                 ws.LBSoapAuthenticationHeaderValue = header;
