@@ -10,7 +10,7 @@ namespace Ix4ServiceConfigurator
 {
     internal class AutomaticalServiceInstaller
     {
-        private static readonly string servicePath = Ix4ConnectorService.Program.ServiceLocation;
+        private static string servicePath = Ix4ConnectorService.Program.ServiceLocation;
 
         public static bool InstallService()
         {
@@ -18,12 +18,12 @@ namespace Ix4ServiceConfigurator
             {
                 if(!ServiceInfoWrapper.Instance.ServiceExist)
                 {
-                    ManagedInstallerClass.InstallHelper(new string[] { servicePath });
+                    ManagedInstallerClass.InstallHelper(new string[] { servicePath});
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                return false;
+                 return false;
             }
             return true;
         }

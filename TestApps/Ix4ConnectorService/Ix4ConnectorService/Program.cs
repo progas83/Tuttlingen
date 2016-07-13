@@ -12,25 +12,7 @@ namespace Ix4ConnectorService
     {
         static void Main(string[] args)
         {
-
             ServiceBase.Run(new ConnectorService());
-            //ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
-            //try
-            //{
-            //    if (sc.ServiceName == null)
-            //    {
-            //        SelfAutomaticalInstaller.InstallMe();
-            //    }
-            //    else
-            //    {
-            //        SelfAutomaticalInstaller.UninstallMe();
-            //    }
-            //}
-            //catch(Exception ex)
-            //{
-            //    SelfAutomaticalInstaller.InstallMe();
-            //}
-           
         }
 
         public static string ServiceLocation

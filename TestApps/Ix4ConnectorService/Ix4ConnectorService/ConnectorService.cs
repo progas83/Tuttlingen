@@ -13,11 +13,11 @@ namespace Ix4ConnectorService
         private string _username;
         private string _pwd;
         private string _clientId;
-        public ConnectorService(string username, string pwd, string clientId)
+        public ConnectorService()
         {
-            _username = username;
-            _pwd = pwd;
-            _clientId = clientId;
+            _username = "username";
+            _pwd = "pwd";
+            _clientId = "clientId";
 
             AutoLog = true;
             CanPauseAndContinue = true;
