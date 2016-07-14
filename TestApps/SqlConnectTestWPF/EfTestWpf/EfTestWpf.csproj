@@ -63,6 +63,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AdjustDatasourceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,12 +76,24 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConstVarData.cs" />
+    <Compile Include="Controls\AdjustDatasourceControl.xaml.cs">
+      <DependentUpon>AdjustDatasourceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ManualMapping\View\ManualMappingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManualMapping\TableHeaderExplorer.cs" />
+    <Compile Include="ManualMapping\ViewModel\ManualMapperViewModel.cs" />
+    <Compile Include="ManualMapping\View\ManualMappingView.xaml.cs">
+      <DependentUpon>ManualMappingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\MobileContext.cs" />
     <Compile Include="Models\Phone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -107,6 +123,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ix4Modes\Ix4Modes.csproj">
+      <Project>{292f4529-5c8b-496d-8a3a-23a5ddf1ecb0}</Project>
+      <Name>Ix4Modes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

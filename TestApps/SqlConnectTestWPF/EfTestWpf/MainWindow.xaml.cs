@@ -1,4 +1,5 @@
-﻿using EfTestWpf.Models;
+﻿using EfTestWpf.ManualMapping;
+using EfTestWpf.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -58,6 +59,20 @@ namespace EfTestWpf
                 }
             }
             db.SaveChanges();
+        }
+
+        private void TestButton_Click(object sender, RoutedEventArgs e)
+        {
+            TableHeaderExplorer exploreTable = new TableHeaderExplorer(ConstVarData.ConnectionStringToChips);
+
+            var res = exploreTable.GetTabelHeader("Chips");
+        }
+
+        private void CreateMapperWindow(object sender, RoutedEventArgs e)
+        {
+            ManualMapping.View.ManualMappingView view = new ManualMapping.View.ManualMappingView();
+            view.DataContext = new ManualMapping.ViewModel.ManualMapperViewModel();
+            view.ShowDialog();
         }
     }
 }

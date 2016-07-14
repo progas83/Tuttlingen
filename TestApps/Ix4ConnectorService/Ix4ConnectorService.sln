@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositionHelper", "Compos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoModule", "CryptoModule\CryptoModule.csproj", "{20BC0FD4-CEC0-4DF9-B96A-AFD6026DC84E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ix4Models", "Ix4Models\Ix4Models.csproj", "{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{20BC0FD4-CEC0-4DF9-B96A-AFD6026DC84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20BC0FD4-CEC0-4DF9-B96A-AFD6026DC84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20BC0FD4-CEC0-4DF9-B96A-AFD6026DC84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

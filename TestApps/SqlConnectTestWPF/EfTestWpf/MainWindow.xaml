@@ -29,6 +29,10 @@
         <StackPanel HorizontalAlignment="Center"  Grid.Row="1" Orientation="Horizontal">
             <Button x:Name="updateButton" Content="Обновить" Click="updateButton_Click" />
             <Button x:Name="deleteButton" Content="Удалить" Click="deleteButton_Click" />
+            <Button x:Name="TestButton" Content="Test" Click="TestButton_Click" />
+
+            <Button x:Name="Mapper" Content="Mapper" Click="CreateMapperWindow" />
+
         </StackPanel>
     </Grid>
 </Window>
