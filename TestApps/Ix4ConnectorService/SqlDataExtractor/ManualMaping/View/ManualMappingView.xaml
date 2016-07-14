@@ -29,7 +29,7 @@
                             <ColumnDefinition Width="200"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock HorizontalAlignment="Stretch" Height="20" Text="{Binding Path=Key}" />
-                        <ComboBox Width="150" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"  
+                        <ComboBox Width="150" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  
                                       Grid.Column="1" SelectedItem="{Binding SelItemValue}" SelectedValue="{Binding SelVal}" SelectedValuePath="PropertyName"
                                               ItemsSource="{Binding SourceMapCollection}"  
                                               DockPanel.Dock="Left"/>

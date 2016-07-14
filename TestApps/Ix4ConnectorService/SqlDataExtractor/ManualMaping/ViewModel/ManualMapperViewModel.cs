@@ -51,7 +51,7 @@ namespace SqlDataExtractor.ManualMaping.ViewModel
         private void ServeMappedDictionary(string key, string val)
         {
             MappedDictionary[key] = val;
-            SourceMapCollection.Remove(_SelItem);
+          //  SourceMapCollection.Remove(_SelItem);
         }
         private string _selKey;
 
@@ -68,9 +68,11 @@ namespace SqlDataExtractor.ManualMaping.ViewModel
             get; private set;
         }
 
+        public ObservableCollection<DataSourceInfo> _sourceMapCollection = new ObservableCollection<DataSourceInfo>();
         public ObservableCollection<DataSourceInfo> SourceMapCollection
         {
-            get; private set;
+            get { return _sourceMapCollection; }
+            private set { _sourceMapCollection = value; }
         }
 
         private DataSourceInfo _selectedMappedData;
