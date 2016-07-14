@@ -7,8 +7,9 @@
         xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
         mc:Ignorable="d"
         Title="CustomerInfoView" MinHeight="200" MinWidth="300" SizeToContent="WidthAndHeight">
-    <DockPanel Margin="5,10,10,5">
+    <DockPanel Margin="5,10,10,5" x:Name="UIMainDockPanel">
         <controls:CustomerInfoControl DockPanel.Dock="Top" DataContext="{Binding Customer}"/>
-        <Button Height="50" IsDefault="True" HorizontalAlignment="Stretch" Command="{Binding}" Content="Save Information"/>
+        <Button Height="50" IsDefault="True" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Command="{Binding}" Content="Save Information"/>
+        <ContentControl x:Name="UiPlaceHolder" Content="{Binding PluginControl}" DockPanel.Dock="Top"/>
     </DockPanel>
 </Window>

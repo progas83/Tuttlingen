@@ -22,6 +22,7 @@ namespace Ix4ServiceConfigurator.View
         public CustomerInfoView()
         {
             InitializeComponent();
+           // this.UiPlaceHolder.Content = new Button() { HorizontalAlignment = HorizontalAlignment.Stretch, Height = 30, Content = "WWWWWWWWWWWWWWW" };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ix4Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,8 +20,8 @@ namespace Ix4ConnectorService
             InitializeComponent();
 
             _serviceInstaller = new ServiceInstaller();
-            _serviceInstaller.ServiceName =  DataManager.CurrentServiceInformation.ServiceName;//"NavisionService";//
-            _serviceInstaller.Description = DataManager.CurrentServiceInformation.ServiceDescription;
+            _serviceInstaller.ServiceName =  CurrentServiceInformation.ServiceName;//"NavisionService";//
+            _serviceInstaller.Description = CurrentServiceInformation.ServiceDescription;
             _serviceInstaller.StartType = ServiceStartMode.Automatic;
             _serviceInstaller.AfterInstall += OnAfterServiceInstall;
             _serviceInstaller.BeforeInstall += OnBeforeServiceInstall;
@@ -47,7 +48,7 @@ namespace Ix4ConnectorService
         {
             try
             {
-                ServiceController sc = new ServiceController(DataManager.CurrentServiceInformation.ServiceName);
+                ServiceController sc = new ServiceController(CurrentServiceInformation.ServiceName);
                 sc.Start();
             }
             catch(Exception ex)

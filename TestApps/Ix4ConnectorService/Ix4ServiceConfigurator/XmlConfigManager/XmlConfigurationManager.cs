@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Linq;
+using Ix4Models;
 
 namespace Ix4ServiceConfigurator.XmlConfigManager
 {
@@ -44,7 +45,7 @@ namespace Ix4ServiceConfigurator.XmlConfigManager
             CustomerInfo customerInfo = new CustomerInfo();
             try
             {
-                using (FileStream fs = new FileStream(DataManager.XmlFileData.FileName, FileMode.OpenOrCreate))
+                using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.OpenOrCreate))
                 {
                     customerInfo = _xmlSerializer.Deserialize(fs);
                 }
@@ -61,7 +62,7 @@ namespace Ix4ServiceConfigurator.XmlConfigManager
         {
             try
             {
-                using (FileStream fs = new FileStream(DataManager.XmlFileData.FileName, FileMode.Truncate))
+                using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.Truncate))
                 {
                     _xmlSerializer.Serialize(fs, customerInfo);
                     fs.Flush(true);

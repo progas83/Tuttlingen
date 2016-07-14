@@ -4,10 +4,11 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataManager;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Reflection;
+using System.Windows.Controls;
+using Ix4Models;
 
 namespace CompositionHelper
 {
@@ -50,6 +51,20 @@ namespace CompositionHelper
                 }
             }
             return resultData;
+        }
+
+        public UserControl GetDataSettingsControl()
+        {
+            UserControl uc = null;// resultData = string.Empty;
+            foreach (var plugin in CustomerDataPlagins)
+            {
+                if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(CurrentServiceInformation.ServiceName))
+                {
+                    uc = plugin.Value.GetControlForSettings();
+                    break;
+                }
+            }
+            return uc;
         }
     }
 }

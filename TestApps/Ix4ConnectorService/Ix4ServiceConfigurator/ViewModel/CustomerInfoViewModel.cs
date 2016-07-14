@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Windows.Controls;
+using CompositionHelper;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
@@ -19,10 +21,18 @@ namespace Ix4ServiceConfigurator.ViewModel
             _view = new CustomerInfoView();
             _view.DataContext = this;
             _view.Closing += OnCustomerViewClosing;
+            
             Customer = XmlConfigurationManager.Instance.GetCustomerInformation();
+
+            CustomerDataComposition compositor = new CustomerDataComposition();
+            compositor.AssembleCustomerDataComponents();
+            PluginControl = compositor.GetDataSettingsControl();
+
+
             
         }
 
+        public UserControl PluginControl { get; set; }
         public bool? ShowCustomerInfoWindow()
         {
             if(_view!=null)

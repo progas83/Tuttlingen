@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ix4Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -12,7 +13,7 @@ namespace Ix4ServiceConfigurator.Model
     {
         public CustomerInfo()
         {
-            ServiceName = DataManager.CurrentServiceInformation.ServiceName;
+            ServiceName = CurrentServiceInformation.ServiceName;
         }
 
         public string ServiceName { get; set; }

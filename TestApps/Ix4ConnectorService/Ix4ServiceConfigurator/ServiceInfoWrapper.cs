@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ix4Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
@@ -53,7 +54,7 @@ namespace Ix4ServiceConfigurator
             {
                 try
                 {
-                    CustomServiceController sc = new CustomServiceController(DataManager.CurrentServiceInformation.ServiceName);
+                    CustomServiceController sc = new CustomServiceController(CurrentServiceInformation.ServiceName);
                     
                     if (!sc.Equals(_currentService))
                     {
@@ -61,7 +62,7 @@ namespace Ix4ServiceConfigurator
                     }
 
 
-                    if (_currentService.ServiceName.Equals(DataManager.CurrentServiceInformation.ServiceName))
+                    if (_currentService.ServiceName.Equals(CurrentServiceInformation.ServiceName))
                     {
                         _serviceExist = true;
                     }

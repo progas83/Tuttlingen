@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
-namespace DataManager
+namespace Ix4Models
 {
-   public interface ICustomerDataConnector
+    public interface ICustomerDataConnector
     {
         string GetCustomerData();
+
+        UserControl GetControlForSettings();
     }
 }

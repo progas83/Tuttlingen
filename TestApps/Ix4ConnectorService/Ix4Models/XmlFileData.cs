@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataManager
+namespace Ix4Models
 {
     public class XmlFileData
     {
         private static readonly string _xmlFileName = "configuration.xml";
-        public static string FileName { get { return _xmlFileName; }}
+        public static string FileName { get { return _xmlFileName; } }
     }
 }

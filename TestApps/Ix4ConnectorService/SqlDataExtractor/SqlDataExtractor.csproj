@@ -54,13 +54,11 @@
     <Compile Include="SqlTableHeaderExplorer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataManager\DataManager.csproj">
-      <Project>{9BA39461-9F6B-40BD-8B88-5470FF363AD1}</Project>
-      <Name>DataManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">
       <Project>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</Project>
       <Name>Ix4Models</Name>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

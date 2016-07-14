@@ -127,17 +127,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CompositionHelper\CompositionHelper.csproj">
+      <Project>{85be46e7-9202-4cb6-8bb6-bc10e6c844da}</Project>
+      <Name>CompositionHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CryptoModule\CryptoModule.csproj">
       <Project>{20bc0fd4-cec0-4df9-b96a-afd6026dc84e}</Project>
       <Name>CryptoModule</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataManager\DataManager.csproj">
-      <Project>{9ba39461-9f6b-40bd-8b88-5470ff363ad1}</Project>
-      <Name>DataManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ix4ConnectorService\Ix4ConnectorService.csproj">
       <Project>{01c1c647-db26-4b8e-9589-67e7104bead1}</Project>
       <Name>Ix4ConnectorService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">
+      <Project>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</Project>
+      <Name>Ix4Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

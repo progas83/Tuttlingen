@@ -1,4 +1,5 @@
-﻿using Ix4ServiceConfigurator.Commands;
+﻿using Ix4Models;
+using Ix4ServiceConfigurator.Commands;
 using Ix4ServiceConfigurator.Model;
 using Ix4ServiceConfigurator.ViewModel;
 using Ix4ServiceConfigurator.XmlConfigManager;
@@ -63,7 +64,7 @@ namespace Ix4ServiceConfigurator.ViewModel
         {
             get
             {
-                return DataManager.CurrentServiceInformation.ServiceName;
+                return CurrentServiceInformation.ServiceName;
             }
         }
 

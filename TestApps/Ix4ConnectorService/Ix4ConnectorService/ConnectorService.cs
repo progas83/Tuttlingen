@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Ix4Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using DataManager;
 
 namespace Ix4ConnectorService
 {

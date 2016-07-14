@@ -1,10 +1,11 @@
-﻿using DataManager;
+﻿using Ix4Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SqlDataExtractor
 {
@@ -12,9 +13,16 @@ namespace SqlDataExtractor
     [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
     public class MsSqlCustomerDataExtractor : ICustomerDataConnector
     {
+        public UserControl GetControlForSettings()
+        {
+            ManualMaping.View.ManualMappingView view = new ManualMaping.View.ManualMappingView();
+            view.DataContext = new ManualMaping.ViewModel.ManualMapperViewModel();
+            return view;
+        }
+
         public string GetCustomerData()
         {
-            throw new NotImplementedException();
+            return "ddd";
         }
     }
 }
