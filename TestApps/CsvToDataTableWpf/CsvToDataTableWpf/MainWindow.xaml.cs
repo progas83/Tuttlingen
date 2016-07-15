@@ -23,6 +23,7 @@ namespace CsvToDataTableWpf
         public MainWindow()
         {
             InitializeComponent();
+            (new CsvManager()).ReadScv(@"C:\Ilya\NavisionCVS\Verkaufszeile.csv");
         }
     }
 }

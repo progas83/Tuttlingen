@@ -17,8 +17,14 @@ namespace Ix4Models
         public const string NameForPluginMetadata = "ConnectorMetadata";
 
         public const string PluginsSubdirectory = "Plugins";
+        public const string NameForPluginDataSourceType = "DataSourceTypeMetadata";
 
         public const string MsSqlDatabaseConnectionString = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = IlyaTest; Integrated Security = True";
         public const string MsSqlDataTableName = "Chips";
+
+        
+
+        public const string CustomDataSourceTypeMsSql = "MsSql";
+        public const string CustomDataSourceTypeCsv = "Csv";
     }
 }
