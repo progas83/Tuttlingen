@@ -44,11 +44,25 @@
     <Compile Include="Class1.cs" />
     <Compile Include="CurrentServiceInformation.cs" />
     <Compile Include="DataSourceInfo.cs" />
-    <Compile Include="ICustomerDataConnector.cs" />
+    <Compile Include="Interfaces\ICustomerDataConnector.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
     <Compile Include="MappedItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schema\LICSRequest.cs">
+      <DependentUpon>LICSRequest.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\LICSResponse.cs">
+      <DependentUpon>LICSResponse.xsd</DependentUpon>
+    </Compile>
     <Compile Include="XmlFileData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema\LICSRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\LICSResponse.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
