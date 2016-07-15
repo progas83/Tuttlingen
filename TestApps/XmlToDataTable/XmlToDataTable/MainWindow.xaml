@@ -1,0 +1,13 @@
+﻿<Window x:Class="XmlToDataTable.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XmlToDataTable"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <DockPanel>
+        <DataGrid Name="UIDataGrid" ItemsSource="{Binding DataGridItems}" DockPanel.Dock="Top"/>
+        <Button Height="30" HorizontalAlignment="Stretch" Content="Load" Command="{Binding}"/>
+    </DockPanel>
+</Window>
