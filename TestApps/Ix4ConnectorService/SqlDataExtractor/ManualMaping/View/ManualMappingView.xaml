@@ -17,20 +17,21 @@
     </UserControl.Resources>
     <DockPanel>
         <ListBox DockPanel.Dock="Top"
-            ItemsSource="{Binding Path=MappedDictionary}"
+            ItemsSource="{Binding Path=MappedDictionary,NotifyOnSourceUpdated=True}"
             SelectedValuePath="Key"
-            SelectedValue="{Binding Path=SelectedKey}"
-            >
+            SelectedValue="{Binding Path=SelectedKey}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions >
                             <ColumnDefinition Width="200"></ColumnDefinition>
                             <ColumnDefinition Width="200"></ColumnDefinition>
+                            <ColumnDefinition Width="200"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock HorizontalAlignment="Stretch" Height="20" Text="{Binding Path=Key}" />
+                        <TextBlock HorizontalAlignment="Stretch" Height="20" Text="{Binding Path=Value,NotifyOnSourceUpdated=True}" Grid.Column="1" />
                         <ComboBox Width="150" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  
-                                      Grid.Column="1" SelectedItem="{Binding SelItemValue}" SelectedValue="{Binding SelVal}" SelectedValuePath="PropertyName"
+                                      Grid.Column="2" SelectedItem="{Binding SelItemValue}" SelectedValue="{Binding SelVal}" SelectedValuePath="PropertyName"
                                               ItemsSource="{Binding SourceMapCollection}"  
                                               DockPanel.Dock="Left"/>
                     </Grid>

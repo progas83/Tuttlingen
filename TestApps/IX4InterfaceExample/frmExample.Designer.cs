@@ -32,6 +32,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpAuth = new System.Windows.Forms.TabPage();
             this.gbCredentials = new System.Windows.Forms.GroupBox();
+            this.uiTestConnection = new System.Windows.Forms.Button();
             this.lblEndpoint = new System.Windows.Forms.Label();
             this.tbEndpoint = new System.Windows.Forms.TextBox();
             this.lblComment = new System.Windows.Forms.Label();
@@ -63,7 +64,7 @@
             this.tbParam0 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbExportDataType = new System.Windows.Forms.TextBox();
-            this.uiTestConnection = new System.Windows.Forms.Button();
+            this.butClear = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tpAuth.SuspendLayout();
             this.gbCredentials.SuspendLayout();
@@ -117,6 +118,16 @@
             this.gbCredentials.Size = new System.Drawing.Size(622, 160);
             this.gbCredentials.TabIndex = 9;
             this.gbCredentials.TabStop = false;
+            // 
+            // uiTestConnection
+            // 
+            this.uiTestConnection.Location = new System.Drawing.Point(131, 123);
+            this.uiTestConnection.Name = "uiTestConnection";
+            this.uiTestConnection.Size = new System.Drawing.Size(112, 23);
+            this.uiTestConnection.TabIndex = 16;
+            this.uiTestConnection.Text = "Select File";
+            this.uiTestConnection.UseVisualStyleBackColor = true;
+            this.uiTestConnection.Click += new System.EventHandler(this.uiTestConnection_Click);
             // 
             // lblEndpoint
             // 
@@ -228,6 +239,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.butClear);
             this.groupBox1.Controls.Add(this.btnSendRequest);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(3, 88);
@@ -419,15 +431,15 @@
             this.tbExportDataType.TabIndex = 15;
             this.tbExportDataType.Text = "Stock";
             // 
-            // uiTestConnection
+            // butClear
             // 
-            this.uiTestConnection.Location = new System.Drawing.Point(131, 123);
-            this.uiTestConnection.Name = "uiTestConnection";
-            this.uiTestConnection.Size = new System.Drawing.Size(112, 23);
-            this.uiTestConnection.TabIndex = 16;
-            this.uiTestConnection.Text = "Select File";
-            this.uiTestConnection.UseVisualStyleBackColor = true;
-            this.uiTestConnection.Click += new System.EventHandler(this.uiTestConnection_Click);
+            this.butClear.Location = new System.Drawing.Point(522, 16);
+            this.butClear.Name = "butClear";
+            this.butClear.Size = new System.Drawing.Size(75, 26);
+            this.butClear.TabIndex = 22;
+            this.butClear.Text = "Clear";
+            this.butClear.UseVisualStyleBackColor = true;
+            this.butClear.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmExample
             // 
@@ -493,6 +505,7 @@
         private System.Windows.Forms.RichTextBox rtbExportDataResponse;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button uiTestConnection;
+        private System.Windows.Forms.Button butClear;
     }
 }
 

@@ -186,9 +186,12 @@ namespace IX4InterfaceExample
 
             //Authentication
             ix4WebReference.LBSoapAuthenticationHeader head = new ix4WebReference.LBSoapAuthenticationHeader();
-            head.ClientId = int.Parse(tbClientId.Text);
-            head.UserName = tbUsername.Text;
-            head.Password = tbPassword.Text;
+            head.UserName = "wsbio";// tbUsername.Text;
+            head.Password = "bon8s2a5w2";// tbPassword.Text;
+            head.ClientId = 1000001;
+            //head.ClientId = int.Parse(tbClientId.Text);
+            //head.UserName = tbUsername.Text;
+            //head.Password = tbPassword.Text;
             wsProxy.LBSoapAuthenticationHeaderValue = head;
 
             //Call
@@ -315,20 +318,33 @@ namespace IX4InterfaceExample
             }
         }
 
-       
+       private ix4WebReference.LBSoapAuthenticationHeader GetHeader(bool automatic = true)
+        {
+            ix4WebReference.LBSoapAuthenticationHeader header = new ix4WebReference.LBSoapAuthenticationHeader();
+
+                       if(automatic)
+            {
+                header.UserName = tbUsername.Text;
+                header.Password = tbPassword.Text;
+                header.ClientId = int.Parse(tbClientId.Text);
+            }
+            else
+            {
+                header.UserName = "wsbio"; //"bionisys";// 
+                header.Password = "bon8s2a5w2";
+                header.ClientId = 1000001;
+
+            }
+
+            return header;
+        }
         private void btnExportData_Click(object sender, EventArgs e)
         {
             try
             {
 
                 ix4WebReference.ix4PublicInterface ws = new ix4WebReference.ix4PublicInterface();
-                
-                ix4WebReference.LBSoapAuthenticationHeader header = new ix4WebReference.LBSoapAuthenticationHeader();
-                header.UserName = "wsbio";// tbUsername.Text;
-                header.Password = "bon8s2a5w2";// tbPassword.Text;
-                header.ClientId = 1000001;// i;// int.Parse(tbClientId.Text);
-
-                ws.LBSoapAuthenticationHeaderValue = header;
+                ws.LBSoapAuthenticationHeaderValue = GetHeader(false);
 
                 XmlNode n = ws.ExportData(tbExportDataType.Text, getParameter());
                 // WSPickPublic.ix4PublicInterface ws = new WSPickPublic.ix4PublicInterface();
@@ -479,6 +495,11 @@ namespace IX4InterfaceExample
             }
 
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            rtbXMLResponse.Text = string.Empty;
         }
     }
 

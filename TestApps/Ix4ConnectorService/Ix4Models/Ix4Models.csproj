@@ -46,6 +46,7 @@
     <Compile Include="DataSourceInfo.cs" />
     <Compile Include="ICustomerDataConnector.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
+    <Compile Include="MappedItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlFileData.cs" />
   </ItemGroup>
