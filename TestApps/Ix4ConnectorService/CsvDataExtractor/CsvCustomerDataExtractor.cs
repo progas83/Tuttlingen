@@ -22,6 +22,9 @@ namespace CsvDataExtractor
         public string GetCustomerData()
         {
             throw new NotImplementedException();
+            //LICSRequest lre = new LICSRequest();
+            
+            
         }
     }
 }

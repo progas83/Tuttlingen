@@ -12,7 +12,7 @@ namespace CsvToDataTableWpf
     {
         private string csvPath = @"C:\Ilya\NavisionCVS\dbo.top10.xls";
         private char _splitChar = ';';
-        public void ReadScv(string filePath)
+        public void ReadScv(string filePath, char delimeter)
         {
             using (var sr = new StreamReader(filePath))
             {
