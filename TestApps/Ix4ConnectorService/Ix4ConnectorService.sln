@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPluginUI", "TestPluginU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvDataExtractor", "CsvDataExtractor\CsvDataExtractor.csproj", "{0F3D30BE-6633-4A1A-97B9-7F50C9D09973}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlDataExtractor", "XmlDataExtractor\XmlDataExtractor.csproj", "{18745DBA-774F-47D7-92D8-BECBB3C06DF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{0F3D30BE-6633-4A1A-97B9-7F50C9D09973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F3D30BE-6633-4A1A-97B9-7F50C9D09973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F3D30BE-6633-4A1A-97B9-7F50C9D09973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18745DBA-774F-47D7-92D8-BECBB3C06DF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18745DBA-774F-47D7-92D8-BECBB3C06DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18745DBA-774F-47D7-92D8-BECBB3C06DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18745DBA-774F-47D7-92D8-BECBB3C06DF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +78,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BA4EB636-2E78-438E-B3E6-A3DAAB363B52} = {11A6BE52-4B18-4E71-BC81-8AEC07C9EDF1}
 		{0F3D30BE-6633-4A1A-97B9-7F50C9D09973} = {11A6BE52-4B18-4E71-BC81-8AEC07C9EDF1}
+		{18745DBA-774F-47D7-92D8-BECBB3C06DF9} = {11A6BE52-4B18-4E71-BC81-8AEC07C9EDF1}
 	EndGlobalSection
 EndGlobal

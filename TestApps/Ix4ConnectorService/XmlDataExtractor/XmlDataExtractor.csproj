@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</ProjectGuid>
+    <ProjectGuid>{18745DBA-774F-47D7-92D8-BECBB3C06DF9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ix4Models</RootNamespace>
-    <AssemblyName>Ix4Models</AssemblyName>
+    <RootNamespace>XmlDataExtractor</RootNamespace>
+    <AssemblyName>XmlDataExtractor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,38 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Converters\XmlDataConverterExtensions.cs" />
-    <Compile Include="CurrentServiceInformation.cs" />
-    <Compile Include="CustomDataSourceTypes.cs" />
-    <Compile Include="DataSourceInfo.cs" />
-    <Compile Include="Interfaces\ICustomerDataConnector.cs" />
-    <Compile Include="Ix4ComplexModel.cs" />
-    <Compile Include="MappedItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schema\LICSRequest.cs">
-      <DependentUpon>LICSRequest.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Schema\LICSResponse.cs">
-      <DependentUpon>LICSResponse.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Schema\NavisionXmlOut.cs">
-      <DependentUpon>NavisionXmlOut.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="XmlFileData.cs" />
+    <Compile Include="XmlDataExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Schema\LICSRequest.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\LICSResponse.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\NavisionXmlOut.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">
+      <Project>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</Project>
+      <Name>Ix4Models</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Settins\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

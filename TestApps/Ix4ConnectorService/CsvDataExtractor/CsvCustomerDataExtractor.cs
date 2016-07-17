@@ -10,8 +10,9 @@ using System.Windows.Controls;
 namespace CsvDataExtractor
 {
     [Export(typeof(ICustomerDataConnector))]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeCsv)]
+    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CustomDataSourceTypes.Csv)]
+    // [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
+    // [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeCsv)]
     public class CsvCustomerDataExtractor : ICustomerDataConnector
     {
         public UserControl GetControlForSettings()
@@ -25,6 +26,11 @@ namespace CsvDataExtractor
             //LICSRequest lre = new LICSRequest();
             
             
+        }
+
+        public LICSRequest GetCustomerDataFromXml(string fileName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

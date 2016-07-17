@@ -10,8 +10,9 @@ using System.Windows.Controls;
 namespace SqlDataExtractor
 {
     [Export(typeof(ICustomerDataConnector))]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeMsSql)]
+    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CustomDataSourceTypes.MsSql)]
+    // [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
+    //  [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeMsSql)]
     public class MsSqlCustomerDataExtractor : ICustomerDataConnector
     {
         public UserControl GetControlForSettings()
@@ -24,6 +25,11 @@ namespace SqlDataExtractor
         public string GetCustomerData()
         {
             return "ddd";
+        }
+
+        public LICSRequest GetCustomerDataFromXml(string fileName)
+        {
+            return new LICSRequest();
         }
     }
 }

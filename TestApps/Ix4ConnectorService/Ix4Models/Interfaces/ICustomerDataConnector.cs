@@ -12,5 +12,7 @@ namespace Ix4Models
         string GetCustomerData();
 
         UserControl GetControlForSettings();
+
+        LICSRequest GetCustomerDataFromXml(string fileName);
     }
 }

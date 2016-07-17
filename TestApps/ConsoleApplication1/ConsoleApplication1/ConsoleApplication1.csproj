@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{4D299126-71D5-4DB0-B2B9-A8CC7B437BA5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ix4Models</RootNamespace>
-    <AssemblyName>Ix4Models</AssemblyName>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <AssemblyName>ConsoleApplication1</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,7 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,38 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Converters\XmlDataConverterExtensions.cs" />
-    <Compile Include="CurrentServiceInformation.cs" />
-    <Compile Include="CustomDataSourceTypes.cs" />
-    <Compile Include="DataSourceInfo.cs" />
-    <Compile Include="Interfaces\ICustomerDataConnector.cs" />
-    <Compile Include="Ix4ComplexModel.cs" />
-    <Compile Include="MappedItem.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schema\LICSRequest.cs">
-      <DependentUpon>LICSRequest.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Schema\LICSResponse.cs">
-      <DependentUpon>LICSResponse.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Schema\NavisionXmlOut.cs">
-      <DependentUpon>NavisionXmlOut.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="XmlFileData.cs" />
+    <Compile Include="TestTy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Schema\LICSRequest.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\LICSResponse.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\NavisionXmlOut.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
