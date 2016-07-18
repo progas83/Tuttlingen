@@ -8,50 +8,86 @@ namespace Ix4Models.Converters
 {
     public static class XmlDataConverterExtensions
     {
-        public static LICSRequest ConvertTo(this OutputPayLoad navisionOutputPayload)
+        public static LICSRequest ConvertToLICSRequest(this OutputPayLoad navisionOutputPayload)
         {
             LICSRequest licsRequest = new LICSRequest();
-            licsRequest.ClientId = 1000001;
+            List<LICSRequestArticle> listLicsRequestArticles = new List<LICSRequestArticle>();
+            List<LICSRequestOrderPosition> orderPositions = new List<LICSRequestOrderPosition>();
 
-            List<LICSRequestOrder> listLicsRequestOrder = new List<LICSRequestOrder>();
-          
-          //  navisionOutputPayload.OrderHeader
-           // licsRequest.OrderImport
-            foreach(OutputPayLoadOutputPosition outputPosition in navisionOutputPayload.Positions)
+            LICSRequestOrder requestOrder = new LICSRequestOrder();
+            requestOrder.ShipmentDate = DateTime.Parse(navisionOutputPayload.OrderHeader.Date); // STRONG TYPIZATION!!!!
+            requestOrder.OrderNo = navisionOutputPayload.OrderHeader.OrderNumber;
+            requestOrder.CustomerNo = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerNumber);
+            requestOrder.DistributionCenter = navisionOutputPayload.OrderHeader.WarehouseOrder;
+           
+
+            LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
+            orderRecipient.Name = navisionOutputPayload.OrderHeader.CustomerName;
+            orderRecipient.AdditionalName = (string)navisionOutputPayload.OrderHeader.CustomerName2;
+            orderRecipient.Street = navisionOutputPayload.OrderHeader.CustomerStreet;
+            orderRecipient.ZIPCode = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerZIP);
+            orderRecipient.City = navisionOutputPayload.OrderHeader.CustomerTown;
+
+            
+            //  navisionOutputPayload.OrderHeader
+            // licsRequest.OrderImport
+            foreach (OutputPayLoadOutputPosition outputPosition in navisionOutputPayload.Positions)
             {
-                LICSRequestOrder requestOrder = new LICSRequestOrder();
-                requestOrder.ShipmentDate = DateTime.Parse(navisionOutputPayload.OrderHeader.Date); // STRONG TYPIZATION!!!!
+
+                LICSRequestOrderPosition orderPosition = new LICSRequestOrderPosition();
+                orderPosition.ArticleGroup = outputPosition.VPECode;
+                orderPosition.PositionNo =(int) outputPosition.ArticleRowNumber;
+                orderPosition.ArticleNo = outputPosition.ArticleNumber;
+                orderPosition.TargetQuantity =Convert.ToDouble(outputPosition.VPECount);
+
+                LICSRequestArticle requestArticle = new LICSRequestArticle();
+                requestArticle.ArticleNo = outputPosition.ArticleNumber;
+                requestArticle.ArticleDescription = outputPosition.Description;
+                requestArticle.ArticleDescription2 = outputPosition.Description2;
+                requestArticle.ArticleGroup = outputPosition.VPECode;
+                requestArticle.ArticleGroupFactor = outputPosition.BaseUnitQuantity;
+
+
+                orderPositions.Add(orderPosition);
+
+                listLicsRequestArticles.Add(requestArticle);
             }
+            requestOrder.Positions = orderPositions.ToArray();
+            requestOrder.Recipient = orderRecipient;
+
+            licsRequest.ClientId = 1000001;
+            licsRequest.ArticleImport = listLicsRequestArticles.ToArray();
+            licsRequest.OrderImport = new LICSRequestOrder[] { requestOrder };
             return licsRequest;
         }
 
-        public static LICSRequestOrderPosition ConvertTo(this OutputPayLoadOutputPosition navisionOutputPosition)
-        {
-            LICSRequestOrderPosition orderPosition = new LICSRequestOrderPosition();
-            orderPosition.ArticleNo = navisionOutputPosition.ArticleNumber;
-            orderPosition.TargetQuantity =Convert.ToDouble(navisionOutputPosition.VPECount);
-            //navisionOutputPosition.ArticleRowNumber;
-            //navisionOutputPosition.AttachedToLineNo;
-            //navisionOutputPosition.BaseUnitQuantity;
-            //navisionOutputPosition.Description;
-            //navisionOutputPosition.Description2;
-            //navisionOutputPosition.VPECode;
-            //navisionOutputPosition.Warehouse;
+        //public static LICSRequestOrderPosition ConvertTo(this OutputPayLoadOutputPosition navisionOutputPosition)
+        //{
+        //    LICSRequestOrderPosition orderPosition = new LICSRequestOrderPosition();
+        //    orderPosition.ArticleNo = navisionOutputPosition.ArticleNumber;
+        //    orderPosition.TargetQuantity =Convert.ToDouble(navisionOutputPosition.VPECount);
+        //    //navisionOutputPosition.ArticleRowNumber;
+        //    //navisionOutputPosition.AttachedToLineNo;
+        //    //navisionOutputPosition.BaseUnitQuantity;
+        //    //navisionOutputPosition.Description;
+        //    //navisionOutputPosition.Description2;
+        //    //navisionOutputPosition.VPECode;
+        //    //navisionOutputPosition.Warehouse;
 
 
-                return orderPosition;
-        }
+        //        return orderPosition;
+        //}
 
-        public static LICSRequestOrderRecipient ConvertTo(this OutputPayLoadOrderHeader navisionOrderHeader)
-        {
-            LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
-            orderRecipient.Name = navisionOrderHeader.CustomerName;
-            orderRecipient.AdditionalName = (string)navisionOrderHeader.CustomerName2;
-            orderRecipient.Street = navisionOrderHeader.CustomerStreet;
-            orderRecipient.ZIPCode =navisionOrderHeader.CustomerZIP.ToString();
-            orderRecipient.City = navisionOrderHeader.CustomerTown;
+        //public static LICSRequestOrderRecipient ConvertTo(this OutputPayLoadOrderHeader navisionOrderHeader)
+        //{
+        //    LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
+        //    orderRecipient.Name = navisionOrderHeader.CustomerName;
+        //    orderRecipient.AdditionalName = (string)navisionOrderHeader.CustomerName2;
+        //    orderRecipient.Street = navisionOrderHeader.CustomerStreet;
+        //    orderRecipient.ZIPCode =navisionOrderHeader.CustomerZIP.ToString();
+        //    orderRecipient.City = navisionOrderHeader.CustomerTown;
 
-            return orderRecipient;
-        }
+        //    return orderRecipient;
+        //}
     }
 }
