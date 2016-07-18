@@ -1,5 +1,4 @@
-﻿using Ix4ServiceConfigurator.Model;
-using Ix4ServiceConfigurator.View;
+﻿using Ix4ServiceConfigurator.View;
 using Ix4ServiceConfigurator.XmlConfigManager;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using CompositionHelper;
 using Ix4Models;
+using Ix4Models.SettingsDataModel;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
@@ -27,7 +27,7 @@ namespace Ix4ServiceConfigurator.ViewModel
 
             Customer = XmlConfigurationManager.Instance.GetCustomerInformation();
 
-            _compositor = new CustomerDataComposition();
+            _compositor = new CustomerDataComposition(Customer.PluginSettings);
             _compositor.AssembleCustomerDataComponents();
             //PluginControl = compositor.GetDataSettingsControl();
 
@@ -75,6 +75,7 @@ namespace Ix4ServiceConfigurator.ViewModel
 
         public void Execute(object parameter)
         {
+            Customer.PluginSettings = _compositor.SavePluginsSettings();
             XmlConfigurationManager.Instance.UpdateCustomerInformation(Customer);
             _view.DialogResult = true;
             _view.Close();

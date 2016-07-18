@@ -49,6 +49,11 @@
     <Compile Include="Interfaces\ICustomerDataConnector.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
     <Compile Include="MappedItem.cs" />
+    <Compile Include="SettingsDataModel\CsvPluginSettings.cs" />
+    <Compile Include="SettingsDataModel\CustomerInfo.cs" />
+    <Compile Include="SettingsDataModel\MsSqlPluginSettings.cs" />
+    <Compile Include="SettingsDataModel\PluginsSettings.cs" />
+    <Compile Include="SettingsDataModel\XmlPluginSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schema\LICSRequest.cs">
       <DependentUpon>LICSRequest.xsd</DependentUpon>
@@ -72,7 +77,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CryptoModule\CryptoModule.csproj">
+      <Project>{20bc0fd4-cec0-4df9-b96a-afd6026dc84e}</Project>
+      <Name>CryptoModule</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

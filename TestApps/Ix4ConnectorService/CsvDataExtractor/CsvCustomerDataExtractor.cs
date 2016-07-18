@@ -1,4 +1,6 @@
 ﻿using Ix4Models;
+using Ix4Models.Interfaces;
+using Ix4Models.SettingsDataModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -15,7 +17,15 @@ namespace CsvDataExtractor
     // [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeCsv)]
     public class CsvCustomerDataExtractor : ICustomerDataConnector
     {
-        public UserControl GetControlForSettings()
+        public CustomDataSourceTypes DataSourceType
+        {
+            get
+            {
+                return CustomDataSourceTypes.Csv;
+            }
+        }
+
+        public UserControl GetControlForSettings(PluginsSettings settings)
         {
             return new UserControl() { Content = new Label() { Content = "I am no implemented user control Of CSV DaTA" } };
         }
@@ -31,6 +41,11 @@ namespace CsvDataExtractor
         public LICSRequest GetCustomerDataFromXml(string fileName)
         {
             throw new NotImplementedException();
+        }
+
+        public void SaveSettings(PluginsSettings settings)
+        {
+            
         }
     }
 }

@@ -29,8 +29,8 @@ namespace TestPluginUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MsSqlCustomerDataExtractor test = new MsSqlCustomerDataExtractor();
-            test.GetControlForSettings();
+            //MsSqlCustomerDataExtractor test = new MsSqlCustomerDataExtractor();
+            //test.GetControlForSettings();
             //test.GetControlForSettings();
         }
     }

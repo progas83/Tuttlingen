@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ix4Models
+namespace Ix4Models.SettingsDataModel
 {
-   
-    public enum CustomDataSourceTypes
+    [Serializable]
+   public class CsvPluginSettings
     {
-        Csv = 0,
-        MsSql = 1,
-        Xml = 2
     }
 }

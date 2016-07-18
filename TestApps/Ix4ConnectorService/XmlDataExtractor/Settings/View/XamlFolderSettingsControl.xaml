@@ -19,9 +19,12 @@
                 <RowDefinition/>
                 <RowDefinition Height="5"/>
                 <RowDefinition/>
+                <RowDefinition Height="5"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Height="30" Content="Select Xml source folder: " HorizontalAlignment="Left" VerticalContentAlignment="Center" />
             <Label Height="30" Content="Select folder for processed files: " DockPanel.Dock="Left" Grid.Row="2" VerticalContentAlignment="Center"/>
+            <Label Height="30" Content="Select folder for Ix4 request files: " DockPanel.Dock="Left" Grid.Row="4" VerticalContentAlignment="Center"/>
 
             <TextBox VerticalAlignment="Center" 
                     VerticalContentAlignment="Center" 
@@ -33,6 +36,9 @@
 
             <TextBox VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" Width="Auto"  Height="30" Text="{Binding XmlProcessedFilesFolder}" ToolTip="{Binding XmlProcessedFilesFolder}" />
             <Button Height="30" Content=" ... " HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="2" Command="{Binding}" CommandParameter="{x:Static localVM:XmlFolderTypes.ProcessedFolder}"/>
+
+            <TextBox VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Stretch" Width="Auto"  Height="30" Text="{Binding XmlIx4RequestFilesFolder}" ToolTip="{Binding XmlIx4RequestFilesFolder}" />
+            <Button Height="30" Content=" ... " HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="4" Command="{Binding}" CommandParameter="{x:Static localVM:XmlFolderTypes.Ix4RequestFolder}"/>
 
         </Grid>
     </DockPanel>

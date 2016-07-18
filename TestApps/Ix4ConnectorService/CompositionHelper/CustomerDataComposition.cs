@@ -9,11 +9,25 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Controls;
 using Ix4Models;
+using Ix4Models.SettingsDataModel;
+using Ix4Models.Interfaces;
 
 namespace CompositionHelper
 {
    public class CustomerDataComposition
     {
+        private PluginsSettings _pluginSettings;
+
+        //public CustomerDataComposition()
+        //{
+
+        //}
+
+        public CustomerDataComposition(PluginsSettings pluginSettings)
+        {
+            this._pluginSettings = pluginSettings;
+        }
+
         [ImportMany]
         public System.Lazy<ICustomerDataConnector,IDictionary<string,object>>[] CustomerDataPlagins { get; set; }
 
@@ -53,6 +67,16 @@ namespace CompositionHelper
             return resultData;
         }
 
+        public PluginsSettings SavePluginsSettings()
+        {
+            PluginsSettings ps = new PluginsSettings();
+            foreach (var plugin in CustomerDataPlagins)
+            {
+                plugin.Value.SaveSettings(ps);
+            }
+            return ps;
+        }
+
         public UserControl GetDataSettingsControl(CustomDataSourceTypes dataSourceType)
         {
             UserControl uc = null;// resultData = string.Empty;
@@ -60,7 +84,7 @@ namespace CompositionHelper
             {
                 if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
                 {
-                    uc = plugin.Value.GetControlForSettings();
+                    uc = plugin.Value.GetControlForSettings(_pluginSettings);
                     break;
                 }
             }

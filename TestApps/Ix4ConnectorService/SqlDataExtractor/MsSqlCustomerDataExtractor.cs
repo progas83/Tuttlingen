@@ -1,4 +1,6 @@
 ﻿using Ix4Models;
+using Ix4Models.Interfaces;
+using Ix4Models.SettingsDataModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -15,7 +17,15 @@ namespace SqlDataExtractor
     //  [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeMsSql)]
     public class MsSqlCustomerDataExtractor : ICustomerDataConnector
     {
-        public UserControl GetControlForSettings()
+        public CustomDataSourceTypes DataSourceType
+        {
+            get
+            {
+                return CustomDataSourceTypes.MsSql ;
+            }
+        }
+
+        public UserControl GetControlForSettings(PluginsSettings settings)
         {
             ManualMaping.View.ManualMappingView view = new ManualMaping.View.ManualMappingView();
             view.DataContext = new ManualMaping.ViewModel.ManualMapperViewModel();
@@ -30,6 +40,11 @@ namespace SqlDataExtractor
         public LICSRequest GetCustomerDataFromXml(string fileName)
         {
             return new LICSRequest();
+        }
+
+        public void SaveSettings(PluginsSettings settings)
+        {
+           
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Ix4ServiceConfigurator.Model;
-using Ix4ServiceConfigurator.ViewModel;
+﻿using Ix4ServiceConfigurator.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

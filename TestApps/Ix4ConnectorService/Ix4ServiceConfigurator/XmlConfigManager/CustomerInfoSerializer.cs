@@ -1,5 +1,5 @@
 ﻿using CryptoModule;
-using Ix4ServiceConfigurator.Model;
+using Ix4Models.SettingsDataModel;
 using System;
 using System.Collections.Generic;
 using System.IO;

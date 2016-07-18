@@ -68,7 +68,6 @@
     <Compile Include="CustomServiceController.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Model\CustomerInfo.cs" />
     <Compile Include="ServiceInfoWrapper.cs" />
     <Compile Include="ViewModel\ServiceViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />

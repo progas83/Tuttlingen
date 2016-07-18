@@ -1,5 +1,4 @@
-﻿using Ix4ServiceConfigurator.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Linq;
 using Ix4Models;
+using Ix4Models.SettingsDataModel;
 
 namespace Ix4ServiceConfigurator.XmlConfigManager
 {
@@ -43,6 +43,14 @@ namespace Ix4ServiceConfigurator.XmlConfigManager
         public CustomerInfo GetCustomerInformation()
         {
             CustomerInfo customerInfo = new CustomerInfo();
+            if(!File.Exists(XmlFileData.FileName))
+            {
+                using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.CreateNew))
+                {
+                    _xmlSerializer.Serialize(fs, customerInfo);
+                    fs.Flush(true);
+                }
+            }
             try
             {
                 using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.OpenOrCreate))

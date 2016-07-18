@@ -6,7 +6,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ix4ServiceConfigurator.Model
+namespace Ix4Models.SettingsDataModel
 {
     [Serializable]
     public class CustomerInfo
@@ -14,6 +14,12 @@ namespace Ix4ServiceConfigurator.Model
         public CustomerInfo()
         {
             ServiceName = CurrentServiceInformation.ServiceName;
+            PluginSettings = new PluginsSettings()
+            {
+                CsvSettings = new CsvPluginSettings(),
+                MsSqlSettings = new MsSqlPluginSettings(),
+                XmlSettings = new XmlPluginSettings()
+            };
         }
 
 

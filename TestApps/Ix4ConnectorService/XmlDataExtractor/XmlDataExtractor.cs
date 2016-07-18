@@ -11,6 +11,8 @@ using System.Xml.Serialization;
 using XmlDataExtractor.Settings.View;
 using XmlDataExtractor.Settings.ViewModel;
 using Ix4Models.Converters;
+using Ix4Models.SettingsDataModel;
+using Ix4Models.Interfaces;
 
 namespace XmlDataExtractor
 {
@@ -20,12 +22,29 @@ namespace XmlDataExtractor
     //  [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CustomDataSourceTypes.Xml)]
     public class XmlDataExtractor : ICustomerDataConnector
     {
-        public UserControl GetControlForSettings()
+        public CustomDataSourceTypes DataSourceType
         {
-            XamlFolderSettingsControl xamlUserControl = new XamlFolderSettingsControl();
-            XamlFolderSettingsViewModel viewModel = new XamlFolderSettingsViewModel();
-            xamlUserControl.DataContext = viewModel; ;
-            return xamlUserControl;// new UserControl() { Content = new Label() { Content = "I am no imülemented user control Of XML DaTA" } };
+            get
+            {
+                return CustomDataSourceTypes.Xml;
+            }
+        }
+        XamlFolderSettingsControl _xamlUserControl;
+        XamlFolderSettingsViewModel _viewModel;
+        XmlPluginSettings _xmlSettings;
+        public UserControl GetControlForSettings(PluginsSettings settings)
+        {
+            _xmlSettings = settings.XmlSettings;
+            if(_xamlUserControl == null)
+            {
+                _xamlUserControl = new XamlFolderSettingsControl();
+            }
+            if(_viewModel==null)
+            {
+                _viewModel = new XamlFolderSettingsViewModel(_xmlSettings);
+            }
+            _xamlUserControl.DataContext = _viewModel; ;
+            return _xamlUserControl;// new UserControl() { Content = new Label() { Content = "I am no imülemented user control Of XML DaTA" } };
         }
 
         public string GetCustomerData()
@@ -46,6 +65,14 @@ namespace XmlDataExtractor
             }
 
             return licsRequest;
+        }
+
+       public void SaveSettings(PluginsSettings settings)
+        {
+            if(_xmlSettings.IsActivated)
+            {
+                settings.XmlSettings = _xmlSettings;
+            }
         }
     }
 }

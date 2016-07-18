@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ix4Models.SettingsDataModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,33 +11,41 @@ namespace XmlDataExtractor.Settings.ViewModel
 {
     public class XamlFolderSettingsViewModel : INotifyPropertyChanged, ICommand
     {
-
-        private bool _isActivated;
-
+        private XmlPluginSettings _xmlPluginSettings;
+        public XamlFolderSettingsViewModel(XmlPluginSettings xmlPluginSettings)
+        {
+            _xmlPluginSettings = xmlPluginSettings;
+        }
+        public XmlPluginSettings GetXmlPluginSettings
+        {
+            get { return _xmlPluginSettings; }
+        }
         public bool IsActivated
         {
-            get { return _isActivated; }
-            set { _isActivated = value;
+            get { return _xmlPluginSettings.IsActivated; }
+            set
+            {
+                _xmlPluginSettings.IsActivated = value;
                 OnPropertyChanged("IsActivated");
             }
         }
 
-        private string _xmlSourceFolder;
-
         public string XmlSourceFolder
         {
-            get { return _xmlSourceFolder; }
-            set { _xmlSourceFolder = value;
+            get { return _xmlPluginSettings.SourceFolder; }
+            set
+            {
+                _xmlPluginSettings.SourceFolder = value;
                 OnPropertyChanged("XmlSourceFolder");
             }
         }
 
-        private string _xmlProcessedFilesFolder;
-
         public string XmlProcessedFilesFolder
         {
-            get { return _xmlProcessedFilesFolder; }
-            set { _xmlProcessedFilesFolder = value;
+            get { return _xmlPluginSettings.ProcessedFilesFolder; }
+            set
+            {
+                _xmlPluginSettings.ProcessedFilesFolder = value;
                 OnPropertyChanged("XmlProcessedFilesFolder");
             }
         }
@@ -49,12 +58,18 @@ namespace XmlDataExtractor.Settings.ViewModel
             return true;
         }
 
+        public string XmlIx4RequestFilesFolder
+        {
+            get { return _xmlPluginSettings.Ix4RequestFilesFolder; }
+            set { _xmlPluginSettings.Ix4RequestFilesFolder = value; }
+        }
+
         public void Execute(object parameter)
         {
             XmlFolderTypes folderName = (XmlFolderTypes)parameter;
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            switch(folderName)
+            switch (folderName)
             {
                 case XmlFolderTypes.SourceFolder:
                     XmlSourceFolder = dialog.SelectedPath;
@@ -62,6 +77,11 @@ namespace XmlDataExtractor.Settings.ViewModel
                 case XmlFolderTypes.ProcessedFolder:
                     XmlProcessedFilesFolder = dialog.SelectedPath;
                     break;
+                case XmlFolderTypes.Ix4RequestFolder:
+                    XmlIx4RequestFilesFolder = dialog.SelectedPath;
+                    break;
+
+
                 default:
                     break;
             }

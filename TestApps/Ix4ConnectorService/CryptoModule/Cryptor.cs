@@ -13,7 +13,8 @@ namespace CryptoModule
         private static readonly string Brunnen = "pvmJd4L4jdprfHnÜ";
         public string Encrypt(string decrypted)
         {
-
+            if (string.IsNullOrEmpty(decrypted))
+                return string.Empty;
             byte[] textBytes = ASCIIEncoding.ASCII.GetBytes(decrypted);
             AesCryptoServiceProvider encDec = GetCryptProvider();
             
