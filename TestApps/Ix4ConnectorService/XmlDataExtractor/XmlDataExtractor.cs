@@ -12,14 +12,14 @@ using System.Xml.Serialization;
 namespace XmlDataExtractor
 {
     [Export(typeof(ICustomerDataConnector))]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CustomDataSourceTypes.Xml)]
+    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.CustomDataSourceTypeXml)]
     //  [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
     //  [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CustomDataSourceTypes.Xml)]
     public class XmlDataExtractor : ICustomerDataConnector
     {
         public UserControl GetControlForSettings()
         {
-            throw new NotImplementedException();
+            return new UserControl() { Content = new Label() { Content = "I am no imülemented user control Of XML DaTA" } };
         }
 
         public string GetCustomerData()

@@ -10,14 +10,14 @@ using System.Windows.Controls;
 namespace CsvDataExtractor
 {
     [Export(typeof(ICustomerDataConnector))]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CustomDataSourceTypes.Csv)]
+    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.CustomDataSourceTypeCsv)]
     // [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
     // [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeCsv)]
     public class CsvCustomerDataExtractor : ICustomerDataConnector
     {
         public UserControl GetControlForSettings()
         {
-            throw new NotImplementedException();
+            return new UserControl() { Content = new Label() { Content = "I am no implemented user control Of CSV DaTA" } };
         }
 
         public string GetCustomerData()

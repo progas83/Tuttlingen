@@ -53,12 +53,12 @@ namespace CompositionHelper
             return resultData;
         }
 
-        public UserControl GetDataSettingsControl()
+        public UserControl GetDataSettingsControl(CustomDataSourceTypes dataSourceType)
         {
             UserControl uc = null;// resultData = string.Empty;
             foreach (var plugin in CustomerDataPlagins)
             {
-                if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(CurrentServiceInformation.ServiceName))
+                if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
                 {
                     uc = plugin.Value.GetControlForSettings();
                     break;

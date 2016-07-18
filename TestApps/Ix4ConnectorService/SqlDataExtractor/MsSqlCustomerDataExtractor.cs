@@ -10,7 +10,7 @@ using System.Windows.Controls;
 namespace SqlDataExtractor
 {
     [Export(typeof(ICustomerDataConnector))]
-    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CustomDataSourceTypes.MsSql)]
+    [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.CustomDataSourceTypeMsSql)]
     // [ExportMetadata(CurrentServiceInformation.NameForPluginMetadata, CurrentServiceInformation.ServiceName)]
     //  [ExportMetadata(CurrentServiceInformation.NameForPluginDataSourceType, CurrentServiceInformation.CustomDataSourceTypeMsSql)]
     public class MsSqlCustomerDataExtractor : ICustomerDataConnector

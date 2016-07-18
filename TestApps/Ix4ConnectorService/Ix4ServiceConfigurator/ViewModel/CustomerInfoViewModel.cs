@@ -10,32 +10,54 @@ using System.ComponentModel;
 using System.Windows.Input;
 using System.Windows.Controls;
 using CompositionHelper;
+using Ix4Models;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
+
     public class CustomerInfoViewModel : BaseViewModel, ICommand, IDisposable
     {
+        CustomerDataComposition _compositor;
         private CustomerInfoView _view;
         public CustomerInfoViewModel()
         {
             _view = new CustomerInfoView();
             _view.DataContext = this;
             _view.Closing += OnCustomerViewClosing;
-            
+
             Customer = XmlConfigurationManager.Instance.GetCustomerInformation();
 
-            CustomerDataComposition compositor = new CustomerDataComposition();
-            compositor.AssembleCustomerDataComponents();
-            PluginControl = compositor.GetDataSettingsControl();
+            _compositor = new CustomerDataComposition();
+            _compositor.AssembleCustomerDataComponents();
+            //PluginControl = compositor.GetDataSettingsControl();
 
 
-            
+
         }
 
-        public UserControl PluginControl { get; set; }
+        private CustomDataSourceTypes _selectedDataSource;
+        public CustomDataSourceTypes SelectedDataSource
+        {
+            get { return _selectedDataSource; }
+            set
+            {
+                _selectedDataSource = value;
+                OnPropertyChanged("PluginControl");
+            }
+        }
+
+        
+        public UserControl PluginControl
+        {
+            get
+            {
+                return _compositor.GetDataSettingsControl(SelectedDataSource);
+            }
+        }
+            //    ; set; }
         public bool? ShowCustomerInfoWindow()
         {
-            if(_view!=null)
+            if (_view != null)
             {
                 _view.ShowDialog();
             }
@@ -43,7 +65,7 @@ namespace Ix4ServiceConfigurator.ViewModel
         }
         private void OnCustomerViewClosing(object sender, CancelEventArgs e)
         {
-            
+
         }
 
         public bool CanExecute(object parameter)
@@ -62,7 +84,7 @@ namespace Ix4ServiceConfigurator.ViewModel
             //}
         }
 
-      //  public event EventHandler CustomInformationSaveComplete;
+        //  public event EventHandler CustomInformationSaveComplete;
 
         public void Dispose()
         {
@@ -78,7 +100,8 @@ namespace Ix4ServiceConfigurator.ViewModel
         {
             get { return _customer; }
             set
-            { _customer = value;
+            {
+                _customer = value;
                 OnPropertyChanged("Customer");
             }
         }

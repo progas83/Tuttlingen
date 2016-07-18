@@ -10,7 +10,11 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine((int)TestTy.Xml);
+            var rer = Enum.GetName(typeof(TestTy), TestTy.MsSql);
+          //  string res =(string) TestTy.Xml;
+
+
+            Console.WriteLine(rer);
             Console.ReadKey();
         }
     }

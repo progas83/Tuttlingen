@@ -26,5 +26,6 @@ namespace Ix4Models
 
         public const string CustomDataSourceTypeMsSql = "MsSql";
         public const string CustomDataSourceTypeCsv = "Csv";
+        public const string CustomDataSourceTypeXml = "Xml";
     }
 }

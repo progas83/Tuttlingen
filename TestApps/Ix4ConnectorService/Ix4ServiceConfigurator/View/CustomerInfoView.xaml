@@ -5,10 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ix4ServiceConfigurator.View"
         xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
+        xmlns:core="clr-namespace:System;assembly=mscorlib"
+        xmlns:dataModels="clr-namespace:Ix4Models;assembly=Ix4Models"
         mc:Ignorable="d"
         Title="CustomerInfoView" MinHeight="200" MinWidth="300" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="DataSourceType" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dataModels:CustomDataSourceTypes"/>
+            </ObjectDataProvider.MethodParameters>
+            
+        </ObjectDataProvider>
+    </Window.Resources>
     <DockPanel Margin="5,10,10,5" x:Name="UIMainDockPanel">
+        
         <controls:CustomerInfoControl DockPanel.Dock="Top" DataContext="{Binding Customer}"/>
+        <ComboBox Width="50" Margin="10,10,0,10" ItemsSource="{Binding Source={StaticResource DataSourceType}}" SelectedItem="{Binding Path=SelectedDataSource}" DockPanel.Dock="Top" HorizontalAlignment="Left"/>
         <Button Height="50" IsDefault="True" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Command="{Binding}" Content="Save Information"/>
         <ContentControl MaxHeight="400" x:Name="UiPlaceHolder" Content="{Binding PluginControl}" DockPanel.Dock="Top"/>
         
