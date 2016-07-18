@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Xml.Serialization;
+using XmlDataExtractor.Settings.View;
+using XmlDataExtractor.Settings.ViewModel;
+using Ix4Models.Converters;
 
 namespace XmlDataExtractor
 {
@@ -19,7 +22,10 @@ namespace XmlDataExtractor
     {
         public UserControl GetControlForSettings()
         {
-            return new UserControl() { Content = new Label() { Content = "I am no imülemented user control Of XML DaTA" } };
+            XamlFolderSettingsControl xamlUserControl = new XamlFolderSettingsControl();
+            XamlFolderSettingsViewModel viewModel = new XamlFolderSettingsViewModel();
+            xamlUserControl.DataContext = viewModel; ;
+            return xamlUserControl;// new UserControl() { Content = new Label() { Content = "I am no imülemented user control Of XML DaTA" } };
         }
 
         public string GetCustomerData()
@@ -36,6 +42,7 @@ namespace XmlDataExtractor
             {
             
                 OutputPayLoad customerInfo =(OutputPayLoad) xS.Deserialize(fs);
+                licsRequest = customerInfo.ConvertToLICSRequest();
             }
 
             return licsRequest;

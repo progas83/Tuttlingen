@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
+
 namespace Ix4ServiceConfigurator.Converters
 {
     public class BoolToInstallStateConverter : IValueConverter
