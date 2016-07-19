@@ -59,8 +59,12 @@ namespace CryptoModule
 
         public void Dispose()
         {
-            _cyptProvider.Dispose();
-            _cyptProvider = null;
+            if(_cyptProvider!=null)
+            {
+                _cyptProvider.Dispose();
+                _cyptProvider = null;
+            }
+            
         }
     }
 }

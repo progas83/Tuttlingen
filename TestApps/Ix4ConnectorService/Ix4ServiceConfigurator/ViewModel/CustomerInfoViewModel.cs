@@ -57,11 +57,13 @@ namespace Ix4ServiceConfigurator.ViewModel
             //    ; set; }
         public bool? ShowCustomerInfoWindow()
         {
+            bool? result = false;
             if (_view != null)
             {
                 _view.ShowDialog();
+                result = _view.DialogResult;
             }
-            return _view.DialogResult;
+            return result;
         }
         private void OnCustomerViewClosing(object sender, CancelEventArgs e)
         {
