@@ -26,7 +26,7 @@ namespace Ix4Connector.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://test.logistic-cloud.com/system/webservices/wspickpublic.asmx")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://mackschuehle.logistic-cloud.com/system/webservices/wspickpublic.asmx")]
         public string Ix4Connector_Ix4WebService_ix4PublicInterface {
             get {
                 return ((string)(this["Ix4Connector_Ix4WebService_ix4PublicInterface"]));

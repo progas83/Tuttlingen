@@ -276,10 +276,10 @@
   <wsdl:service name="ix4PublicInterface">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">ix4 Public Interface for import or export data requests.</wsdl:documentation>
     <wsdl:port name="LBAuthenticated" binding="tns:LBAuthenticated">
-      <soap:address location="https://test.logistic-cloud.com/system/webservices/wspickpublic.asmx" />
+      <soap:address location="https://mackschuehle.logistic-cloud.com/system/webservices/wspickpublic.asmx" />
     </wsdl:port>
     <wsdl:port name="LBAuthenticated1" binding="tns:LBAuthenticated1">
-      <soap12:address location="https://test.logistic-cloud.com/system/webservices/wspickpublic.asmx" />
+      <soap12:address location="https://mackschuehle.logistic-cloud.com/system/webservices/wspickpublic.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

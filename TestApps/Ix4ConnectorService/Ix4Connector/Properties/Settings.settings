@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Ix4Connector_Ix4WebService_ix4PublicInterface" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://test.logistic-cloud.com/system/webservices/wspickpublic.asmx</Value>
+      <Value Profile="(Default)">https://mackschuehle.logistic-cloud.com/system/webservices/wspickpublic.asmx</Value>
     </Setting>
   </Settings>
 </SettingsFile>
