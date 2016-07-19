@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Linq;
 using Ix4Models;
 using Ix4Models.SettingsDataModel;
+using System.Reflection;
 
 namespace Ix4Models.SettingsManager
 {
@@ -61,6 +62,7 @@ namespace Ix4Models.SettingsManager
             catch(Exception ex)
             {
                 customerInfo = new CustomerInfo();
+                throw new Exception(Assembly.GetExecutingAssembly().Location);
             }
 
             return customerInfo;

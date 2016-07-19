@@ -46,9 +46,20 @@ namespace ConnectorWorkflowManager
         {
             _streamWriterFile = new StreamWriter(new FileStream("C:\\Ilya\\TestXmlFolder\\testService.log", System.IO.FileMode.Append));
             _streamWriterFile.WriteLine(string.Format("Service has been started at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
-            _streamWriterFile.Flush();
-
-            _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
+            
+            try
+            {
+                _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
+            }
+            catch(Exception ex)
+            {
+                _streamWriterFile.WriteLine(ex);// string.Format("Service has been started at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+            }
+            finally
+            {
+                _streamWriterFile.Flush();
+            }
+           
             _timer.Enabled = true;
             _timer.AutoReset = true;
             _timer.Elapsed += OnTimedEvent;
