@@ -29,10 +29,6 @@ namespace Ix4ServiceConfigurator.ViewModel
 
             _compositor = new CustomerDataComposition(Customer.PluginSettings);
             _compositor.AssembleCustomerDataComponents();
-            //PluginControl = compositor.GetDataSettingsControl();
-
-
-
         }
 
         private CustomDataSourceTypes _selectedDataSource;
@@ -46,7 +42,7 @@ namespace Ix4ServiceConfigurator.ViewModel
             }
         }
 
-        
+
         public UserControl PluginControl
         {
             get
@@ -54,7 +50,6 @@ namespace Ix4ServiceConfigurator.ViewModel
                 return _compositor.GetDataSettingsControl(SelectedDataSource);
             }
         }
-            //    ; set; }
         public bool? ShowCustomerInfoWindow()
         {
             bool? result = false;

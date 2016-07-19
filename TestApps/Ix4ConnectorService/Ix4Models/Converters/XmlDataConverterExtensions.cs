@@ -15,7 +15,9 @@ namespace Ix4Models.Converters
             List<LICSRequestOrderPosition> orderPositions = new List<LICSRequestOrderPosition>();
 
             LICSRequestOrder requestOrder = new LICSRequestOrder();
-            requestOrder.ShipmentDate = DateTime.Parse(navisionOutputPayload.OrderHeader.Date); // STRONG TYPIZATION!!!!
+
+            //17.05.16
+            requestOrder.ShipmentDate = DateTime.ParseExact(navisionOutputPayload.OrderHeader.Date, "dd.MM.yy", System.Globalization.CultureInfo.InvariantCulture);//.Parse(navisionOutputPayload.OrderHeader.Date); // STRONG TYPIZATION!!!!
             requestOrder.OrderNo = navisionOutputPayload.OrderHeader.OrderNumber;
             requestOrder.CustomerNo = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerNumber);
             requestOrder.DistributionCenter = navisionOutputPayload.OrderHeader.WarehouseOrder;
@@ -23,7 +25,7 @@ namespace Ix4Models.Converters
 
             LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
             orderRecipient.Name = navisionOutputPayload.OrderHeader.CustomerName;
-            orderRecipient.AdditionalName = (string)navisionOutputPayload.OrderHeader.CustomerName2;
+        //    orderRecipient.AdditionalName = (string)navisionOutputPayload.OrderHeader.CustomerName2;  RESOLVE THIS PROBLEM
             orderRecipient.Street = navisionOutputPayload.OrderHeader.CustomerStreet;
             orderRecipient.ZIPCode = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerZIP);
             orderRecipient.City = navisionOutputPayload.OrderHeader.CustomerTown;

@@ -28,7 +28,10 @@ namespace Ix4Connector
                 return _manager;
             }
         }
+        private Ix4ConnectorManager()
+        {
 
+        }
         public IProxyIx4WebService GetRegisteredIx4WebServiceInterface(int clientId, string userName, string pwd)
         {
             Ix4WebService.LBSoapAuthenticationHeader header = new Ix4WebService.LBSoapAuthenticationHeader();

@@ -16,6 +16,32 @@ namespace CompositionHelper
 {
    public class CustomerDataComposition
     {
+        private static CustomerDataComposition _compositor;
+        private static object _padlock = new object();
+        public static CustomerDataComposition Instance
+        {
+            get
+            {
+                if (_compositor == null)
+                {
+                    lock(_padlock)
+                    {
+                        if(_compositor==null)
+                        {
+                            _compositor = new CustomerDataComposition();
+                        }
+                    }
+                }
+
+
+                return _compositor;
+            }
+          
+        }
+        private CustomerDataComposition()
+        {
+            AssembleCustomerDataComponents();
+        }
         private PluginsSettings _pluginSettings;
 
         //public CustomerDataComposition()
@@ -90,5 +116,29 @@ namespace CompositionHelper
             }
             return uc;
         }
+        public LICSRequest GetCustomerDataFromXml(string fileName)
+        {
+            LICSRequest request = new LICSRequest();
+            if (CustomerDataPlagins != null)
+            {
+                foreach (var plugin in CustomerDataPlagins)
+                {
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.Xml)))
+                    {
+                        request = plugin.Value.GetCustomerDataFromXml(fileName);
+                        break;
+                    }
+                }
+            }
+            return request;
+        }
+        //public ICustomerDataConnector GetDataConnector(CustomDataSourceTypes dataSourceType)
+        //{
+        //    //AssembleCustomerDataComponents();
+        //    ICustomerDataConnector connector = null;
+            
+        //    return connector;
+           
+        //}
     }
 }

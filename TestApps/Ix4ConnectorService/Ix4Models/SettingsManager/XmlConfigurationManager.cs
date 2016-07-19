@@ -44,7 +44,6 @@ namespace Ix4Models.SettingsManager
         public CustomerInfo GetCustomerInformation()
         {
             CustomerInfo customerInfo = new CustomerInfo();
-            //string fileName = @"C:\Ilya\ServiceProgram\configuration.xml";
 
             if (!File.Exists(XmlFileData.FileName))
             {
@@ -64,7 +63,6 @@ namespace Ix4Models.SettingsManager
             catch(Exception ex)
             {
                 customerInfo = new CustomerInfo();
-                throw ex;
             }
 
             return customerInfo;
