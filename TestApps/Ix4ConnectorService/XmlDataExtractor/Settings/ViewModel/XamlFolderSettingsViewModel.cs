@@ -61,7 +61,9 @@ namespace XmlDataExtractor.Settings.ViewModel
         public string XmlIx4RequestFilesFolder
         {
             get { return _xmlPluginSettings.Ix4RequestFilesFolder; }
-            set { _xmlPluginSettings.Ix4RequestFilesFolder = value; }
+            set { _xmlPluginSettings.Ix4RequestFilesFolder = value;
+                OnPropertyChanged("XmlIx4RequestFilesFolder");
+            }
         }
 
         public void Execute(object parameter)

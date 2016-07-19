@@ -1,5 +1,4 @@
 ﻿using Ix4ServiceConfigurator.View;
-using Ix4ServiceConfigurator.XmlConfigManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Windows.Controls;
 using CompositionHelper;
 using Ix4Models;
 using Ix4Models.SettingsDataModel;
+using Ix4Models.SettingsManager;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {

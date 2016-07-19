@@ -46,6 +46,7 @@
     <Compile Include="CurrentServiceInformation.cs" />
     <Compile Include="CustomDataSourceTypes.cs" />
     <Compile Include="DataSourceInfo.cs" />
+    <Compile Include="Interfaces\ICryptor.cs" />
     <Compile Include="Interfaces\ICustomerDataConnector.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
     <Compile Include="MappedItem.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Schema\NavisionXmlOut.cs">
       <DependentUpon>NavisionXmlOut.xsd</DependentUpon>
     </Compile>
+    <Compile Include="SettingsManager\CustomerInfoSerializer.cs" />
+    <Compile Include="SettingsManager\XmlConfigurationManager.cs" />
     <Compile Include="XmlFileData.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CryptoModule\CryptoModule.csproj">
-      <Project>{20bc0fd4-cec0-4df9-b96a-afd6026dc84e}</Project>
+      <Project>{20BC0FD4-CEC0-4DF9-B96A-AFD6026DC84E}</Project>
       <Name>CryptoModule</Name>
     </ProjectReference>
   </ItemGroup>

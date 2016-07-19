@@ -1,4 +1,6 @@
-﻿using SqlDataExtractor;
+﻿using ConnectorWorkflowManager;
+using Ix4Models.SettingsManager;
+using SqlDataExtractor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,8 @@ namespace TestPluginUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            WorkflowManager.Instance.Start();
+
             //MsSqlCustomerDataExtractor test = new MsSqlCustomerDataExtractor();
             //test.GetControlForSettings();
             //test.GetControlForSettings();

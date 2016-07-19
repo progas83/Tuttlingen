@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace CryptoModule
 {
-     public class Cryptor
+     public class Cryptor : IDisposable
     {
         private static readonly string Schlüssel = "je8dGckI8dnMXjdusemdpv8n4D8fm2Jd";
         private static readonly string Brunnen = "pvmJd4L4jdprfHnÜ";
@@ -26,11 +26,12 @@ namespace CryptoModule
             return Convert.ToBase64String(enc);
 
         }
-
-        private static AesCryptoServiceProvider GetCryptProvider()
+        private AesCryptoServiceProvider _cyptProvider;
+        private AesCryptoServiceProvider GetCryptProvider()
         {
-            return
-                new AesCryptoServiceProvider()
+            if(_cyptProvider==null)
+            {
+                _cyptProvider = new AesCryptoServiceProvider()
                 {
                     BlockSize = 128,
                     KeySize = 256,
@@ -39,7 +40,8 @@ namespace CryptoModule
                     Padding = PaddingMode.PKCS7,
                     Mode = CipherMode.CBC
                 };
-
+            }
+            return _cyptProvider;
         }
 
         public string Decrypt(string encrypted)
@@ -53,6 +55,12 @@ namespace CryptoModule
 
             return ASCIIEncoding.ASCII.GetString(decryptBytes);
 
+        }
+
+        public void Dispose()
+        {
+            _cyptProvider.Dispose();
+            _cyptProvider = null;
         }
     }
 }

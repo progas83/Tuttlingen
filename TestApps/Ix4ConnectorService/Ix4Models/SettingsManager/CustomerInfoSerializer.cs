@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Ix4ServiceConfigurator.XmlConfigManager
+namespace Ix4Models.SettingsManager
 {
    public class CustomerInfoSerializer : XmlSerializer
     {

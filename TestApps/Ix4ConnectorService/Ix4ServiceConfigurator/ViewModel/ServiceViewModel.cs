@@ -1,8 +1,8 @@
 ﻿using Ix4Models;
 using Ix4Models.SettingsDataModel;
+using Ix4Models.SettingsManager;
 using Ix4ServiceConfigurator.Commands;
 using Ix4ServiceConfigurator.ViewModel;
-using Ix4ServiceConfigurator.XmlConfigManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

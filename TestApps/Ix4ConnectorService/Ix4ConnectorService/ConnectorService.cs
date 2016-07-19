@@ -1,4 +1,5 @@
-﻿using Ix4Models;
+﻿using ConnectorWorkflowManager;
+using Ix4Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +11,8 @@ namespace Ix4ConnectorService
 {
    public class ConnectorService : ServiceBase
     {
-        private string _username;
-        private string _pwd;
-        private string _clientId;
         public ConnectorService()
         {
-            _username = "username";
-            _pwd = "pwd";
-            _clientId = "clientId";
-
             AutoLog = true;
             CanPauseAndContinue = true;
             CanStop = true;
@@ -27,10 +21,11 @@ namespace Ix4ConnectorService
             
         }
 
-        //protected override void OnStart(string[] args)
-        //{
-        //    base.OnStart(args);
-        //}
+        protected override void OnStart(string[] args)
+        {
+            WorkflowManager.Instance.Start();
+            base.OnStart(args);
+        }
 
         //protected override void OnStop()
         //{

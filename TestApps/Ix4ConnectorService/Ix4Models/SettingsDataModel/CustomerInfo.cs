@@ -1,4 +1,6 @@
-﻿using Ix4Models;
+﻿using CryptoModule;
+using Ix4Models;
+using Ix4Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace Ix4Models.SettingsDataModel
 {
     [Serializable]
-    public class CustomerInfo
+    public class CustomerInfo : ICryptor
     {
         public CustomerInfo()
         {
@@ -39,14 +41,21 @@ namespace Ix4Models.SettingsDataModel
 
         public bool Default { get; set; }
 
-        public void Decrypt(CryptoModule.Cryptor cryptor)
+        public void Decrypt()
         {
-            _password =cryptor.Decrypt(_password);// 
+            using (var cryptor = new Cryptor())
+            {
+                _password = cryptor.Decrypt(_password);
+            }
         }
 
-        public void Encrypt(CryptoModule.Cryptor cryptor)
+        public void Encrypt()
         {
-            _password = cryptor.Encrypt(_password);
+            using (var cryptor = new Cryptor())
+            {
+                _password = cryptor.Encrypt(_password);
+            }
+            
         }
 
         #region PluginsSettings

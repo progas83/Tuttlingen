@@ -95,6 +95,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConnectorWorkflowManager\ConnectorWorkflowManager.csproj">
+      <Project>{a292c322-3104-47af-ab47-1edfe0f96efa}</Project>
+      <Name>ConnectorWorkflowManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">
       <Project>{fc7c4d19-401c-43b8-a054-1f4c1c6b8228}</Project>
       <Name>Ix4Models</Name>

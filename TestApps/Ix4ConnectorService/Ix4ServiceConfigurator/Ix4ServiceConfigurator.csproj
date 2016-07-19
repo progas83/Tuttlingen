@@ -75,8 +75,6 @@
     <Compile Include="View\CustomerInfoView.xaml.cs">
       <DependentUpon>CustomerInfoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="XmlConfigManager\CustomerInfoSerializer.cs" />
-    <Compile Include="XmlConfigManager\XmlConfigurationManager.cs" />
     <Page Include="Controls\CustomerInfoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,10 +127,6 @@
     <ProjectReference Include="..\CompositionHelper\CompositionHelper.csproj">
       <Project>{85be46e7-9202-4cb6-8bb6-bc10e6c844da}</Project>
       <Name>CompositionHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CryptoModule\CryptoModule.csproj">
-      <Project>{20bc0fd4-cec0-4df9-b96a-afd6026dc84e}</Project>
-      <Name>CryptoModule</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ix4ConnectorService\Ix4ConnectorService.csproj">
       <Project>{01c1c647-db26-4b8e-9589-67e7104bead1}</Project>
