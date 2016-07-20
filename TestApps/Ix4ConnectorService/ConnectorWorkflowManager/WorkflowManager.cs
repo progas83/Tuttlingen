@@ -19,6 +19,7 @@ namespace ConnectorWorkflowManager
     {
         private static WorkflowManager _manager;
         private static object _padlock = new object();
+        private static readonly long RElapsedEvery = 10000;
 
         private WorkflowManager()
         {
@@ -45,9 +46,10 @@ namespace ConnectorWorkflowManager
         }
         private CustomerInfo _customerInfo;
         private IProxyIx4WebService _ix4ServiceConnector;
+        private System.IO.StreamWriter _streamWriterFile;
 
-        protected System.Timers.Timer _timer = new System.Timers.Timer(RElapsedEvery);
-        private static readonly long RElapsedEvery = 10000;
+        protected Timer _timer = new Timer(RElapsedEvery);
+        
         public void Start()
         {
 
@@ -78,7 +80,7 @@ namespace ConnectorWorkflowManager
             _timer.Elapsed += OnTimedEvent;
 
         }
-        private System.IO.StreamWriter _streamWriterFile;
+       
 
         private bool SendLicsRequestToIx4(LICSRequest request, string fileName)
         {
