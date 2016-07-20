@@ -142,7 +142,7 @@ namespace CompositionHelper
                 {
                     if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.MsSql)))
                     {
-                        articles = plugin.Value.GetCustomerDataFromXml(fileName);
+                        articles = plugin.Value.GetRequestArticles();
                         break;
                     }
                 }

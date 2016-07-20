@@ -169,7 +169,40 @@ namespace ConnectorWorkflowManager
                 _streamWriterFile.Flush();
             }
         }
+
+
+    
+
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+          //  CheckXmlOrdersFolder();
+            CheckMsSqlArticles();
+        }
+
+        private void CheckMsSqlArticles()
+        {
+            int currentClientID = _customerInfo.ClientID;
+            LICSRequest request = new LICSRequest();
+            request.ClientId = currentClientID;
+           // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
+            LICSRequestArticle[] articles = CustomerDataComposition.Instance.GetRequestArticles();
+            if(articles.Length == 0)
+            {
+                return;
+            }
+            foreach (LICSRequestArticle article in articles)
+            {
+                article.ClientNo = currentClientID;
+            }
+            request.ArticleImport = articles;
+
+            var res = SendLicsRequestToIx4(request, "articleFile.xml");
+
+        }
+
+
+
+        private void CheckXmlOrdersFolder()
         {
             try
             {
@@ -179,9 +212,9 @@ namespace ConnectorWorkflowManager
                 }
 
                 // string[] xmlSourceFiles = Directory.GetFiles("C:\\Ilya\\TestXmlFolder\\XmlSource");// _customerInfo.PluginSettings.XmlSettings.SourceFolder);
-               // ICustomerDataConnector xmlDataConnector = CustomerDataComposition.Instance.GetDataConnector(CustomDataSourceTypes.Xml);
+                // ICustomerDataConnector xmlDataConnector = CustomerDataComposition.Instance.GetDataConnector(CustomDataSourceTypes.Xml);
                 string[] xmlSourceFiles = Directory.GetFiles(_customerInfo.PluginSettings.XmlSettings.SourceFolder);
-                if ( xmlSourceFiles.Length > 0)
+                if (xmlSourceFiles.Length > 0)
                 {
                     foreach (string file in xmlSourceFiles)
                     {
