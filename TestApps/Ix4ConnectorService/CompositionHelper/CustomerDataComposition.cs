@@ -132,6 +132,24 @@ namespace CompositionHelper
             }
             return request;
         }
+
+        public LICSRequestArticle[] GetRequestArticles()
+        {
+            LICSRequestArticle[] articles = new LICSRequestArticle[] { };
+            if (CustomerDataPlagins != null)
+            {
+                foreach (var plugin in CustomerDataPlagins)
+                {
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.MsSql)))
+                    {
+                        articles = plugin.Value.GetCustomerDataFromXml(fileName);
+                        break;
+                    }
+                }
+            }
+            return articles;
+
+        }
         //public ICustomerDataConnector GetDataConnector(CustomDataSourceTypes dataSourceType)
         //{
         //    //AssembleCustomerDataComponents();

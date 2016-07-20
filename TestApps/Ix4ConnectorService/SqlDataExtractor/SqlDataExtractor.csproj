@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="MsSqlCustomerDataExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlTableArticleExplorer.cs" />
     <Compile Include="SqlTableHeaderExplorer.cs" />
   </ItemGroup>
   <ItemGroup>

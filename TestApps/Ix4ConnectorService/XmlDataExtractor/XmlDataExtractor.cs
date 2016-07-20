@@ -74,5 +74,10 @@ namespace XmlDataExtractor
                 settings.XmlSettings = _xmlSettings;
             }
         }
+
+        public LICSRequestArticle[] GetRequestArticles()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

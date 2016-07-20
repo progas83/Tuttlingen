@@ -46,5 +46,11 @@ namespace SqlDataExtractor
         {
            
         }
+
+        public LICSRequestArticle[] GetRequestArticles()
+        {
+            SqlTableArticleExplorer articleExplorer = new SqlTableArticleExplorer();
+            return articleExplorer.GetArticles();
+        }
     }
 }
