@@ -195,7 +195,7 @@ namespace ConnectorWorkflowManager
             {
                 delivery.ClientNo = currentClientID;
             }
-            request.DeliveryImport = deliveries;
+            request.DeliveryImport = new LICSRequestDelivery[] { deliveries[0], deliveries[1], deliveries[2] };
 
             var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
         }
