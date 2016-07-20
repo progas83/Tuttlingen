@@ -13,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TestSqlArticle
+namespace SqlDataExtractor.ManualMaping.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ManualMappingView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ManualMappingView : UserControl
     {
-        public MainWindow()
+        public ManualMappingView()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            SqlDataExtractor.SqlTableArticleExplorer explorer = new SqlDataExtractor.SqlTableArticleExplorer();
-            explorer.GetArticles();
         }
     }
 }
