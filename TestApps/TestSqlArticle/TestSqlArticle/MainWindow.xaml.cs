@@ -27,8 +27,11 @@ namespace TestSqlArticle
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SqlDataExtractor.SqlTableArticleExplorer explorer = new SqlDataExtractor.SqlTableArticleExplorer();
-            explorer.GetArticles();
+          //  SqlDataExtractor.SqlTableArticleExplorer explorer = new SqlDataExtractor.SqlTableArticleExplorer();
+          //  explorer.GetArticles();
+
+            SqlDataExtractor.SqlTableDeliveryExplorer deliveryExplorer = new SqlDataExtractor.SqlTableDeliveryExplorer();
+            deliveryExplorer.GetArticles();
         }
     }
 }
