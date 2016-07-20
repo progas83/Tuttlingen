@@ -150,13 +150,31 @@ namespace CompositionHelper
             return articles;
 
         }
+
+        public LICSRequestDelivery[] GetRequestDeliveries()
+        {
+            LICSRequestDelivery[] deliveries = new LICSRequestDelivery[] { };
+            if (CustomerDataPlagins != null)
+            {
+                foreach (var plugin in CustomerDataPlagins)
+                {
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.MsSql)))
+                    {
+                        deliveries = plugin.Value.GetRequestDeliveries();
+                        break;
+                    }
+                }
+            }
+            return deliveries;
+
+        }
         //public ICustomerDataConnector GetDataConnector(CustomDataSourceTypes dataSourceType)
         //{
         //    //AssembleCustomerDataComponents();
         //    ICustomerDataConnector connector = null;
-            
+
         //    return connector;
-           
+
         //}
     }
 }

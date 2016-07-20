@@ -18,7 +18,8 @@ namespace Ix4Models.Interfaces
 
         UserControl GetControlForSettings(PluginsSettings settings);
 
-        LICSRequest GetCustomerDataFromXml(string fileName);
+        LICSRequest GetCustomerDataFromXml(string fileName); //Change name to 
         LICSRequestArticle[] GetRequestArticles();
+        LICSRequestDelivery[] GetRequestDeliveries();
     }
 }

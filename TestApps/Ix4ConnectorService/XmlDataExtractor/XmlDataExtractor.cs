@@ -79,5 +79,10 @@ namespace XmlDataExtractor
         {
             throw new NotImplementedException();
         }
+
+        public LICSRequestDelivery[] GetRequestDeliveries()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

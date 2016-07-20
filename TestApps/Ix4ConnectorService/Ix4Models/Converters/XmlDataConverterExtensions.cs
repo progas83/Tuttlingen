@@ -57,7 +57,6 @@ namespace Ix4Models.Converters
             requestOrder.Positions = orderPositions.ToArray();
             requestOrder.Recipient = orderRecipient;
 
-            licsRequest.ClientId = 1000001;
             licsRequest.ArticleImport = listLicsRequestArticles.ToArray();
             licsRequest.OrderImport = new LICSRequestOrder[] { requestOrder };
             return licsRequest;

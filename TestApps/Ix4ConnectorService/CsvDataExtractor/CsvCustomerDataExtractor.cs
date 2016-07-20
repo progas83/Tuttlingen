@@ -48,6 +48,11 @@ namespace CsvDataExtractor
             throw new NotImplementedException();
         }
 
+        public LICSRequestDelivery[] GetRequestDeliveries()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SaveSettings(PluginsSettings settings)
         {
             

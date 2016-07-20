@@ -175,8 +175,29 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-          //  CheckXmlOrdersFolder();
-            CheckMsSqlArticles();
+            // CheckXmlOrdersFolder();
+            //    CheckMsSqlArticles();
+            CheckMsSqlDeliveriew();
+        }
+
+        private void CheckMsSqlDeliveriew()
+        {
+            int currentClientID = _customerInfo.ClientID;
+            LICSRequest request = new LICSRequest();
+            request.ClientId = currentClientID;
+            // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
+            LICSRequestDelivery[] deliveries = CustomerDataComposition.Instance.GetRequestDeliveries();
+            if (deliveries.Length == 0)
+            {
+                return;
+            }
+            foreach (LICSRequestDelivery delivery in deliveries)
+            {
+                delivery.ClientNo = currentClientID;
+            }
+            request.DeliveryImport = deliveries;
+
+            var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
         }
 
         private void CheckMsSqlArticles()
@@ -221,6 +242,7 @@ namespace ConnectorWorkflowManager
                         _streamWriterFile.WriteLine(string.Format("Filename:  {0}", file));
 
                         LICSRequest request = CustomerDataComposition.Instance.GetCustomerDataFromXml(file);// xmlDataConnector.GetCustomerDataFromXml(file);
+                        request.ClientId = _customerInfo.ClientID;
                         SendLicsRequestToIx4(request, Path.GetFileName(file));
                     }
                 }
