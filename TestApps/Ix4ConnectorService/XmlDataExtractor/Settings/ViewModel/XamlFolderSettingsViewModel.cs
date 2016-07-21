@@ -14,11 +14,12 @@ namespace XmlDataExtractor.Settings.ViewModel
         private XmlPluginSettings _xmlPluginSettings;
         public XamlFolderSettingsViewModel(XmlPluginSettings xmlPluginSettings)
         {
-            _xmlPluginSettings = xmlPluginSettings;
+            CurrentPluginSettings = xmlPluginSettings;
         }
-        public XmlPluginSettings GetXmlPluginSettings
+        public XmlPluginSettings CurrentPluginSettings
         {
             get { return _xmlPluginSettings; }
+            private set { _xmlPluginSettings = value; }
         }
         public bool IsActivated
         {

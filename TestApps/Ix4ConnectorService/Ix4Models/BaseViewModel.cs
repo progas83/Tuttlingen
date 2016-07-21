@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ix4ServiceConfigurator.ViewModel
+namespace Ix4Models
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

@@ -9,6 +9,9 @@ namespace Ix4Models
     public class CurrentServiceInformation
     {
         // private static readonly string _serviceName = "Navision to ix4 connector";
+
+        // remote db connection server=sip1.skypro.eu;database=GWTalkDB;userid=UserReadDB;password=Asdf1234;Allow User Variables=True
+
         private static readonly string _serviceDescription = "Navitel to ix4 adapter service";
         public const string ServiceName = "Navision to ix4 connector";// { get { return _serviceName; } }
 

@@ -69,9 +69,9 @@ namespace XmlDataExtractor
 
        public void SaveSettings(PluginsSettings settings)
         {
-            if(_xmlSettings.IsActivated)
+            if(_viewModel.CurrentPluginSettings.IsActivated)
             {
-                settings.XmlSettings = _xmlSettings;
+                settings.XmlSettings = _viewModel.CurrentPluginSettings;
             }
         }
 

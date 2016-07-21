@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseViewModel.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Converters\XmlDataConverterExtensions.cs" />
     <Compile Include="CurrentServiceInformation.cs" />
@@ -48,11 +49,13 @@
     <Compile Include="DataSourceInfo.cs" />
     <Compile Include="Interfaces\ICryptor.cs" />
     <Compile Include="Interfaces\ICustomerDataConnector.cs" />
+    <Compile Include="Interfaces\IPluginSettings.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
     <Compile Include="MappedItem.cs" />
     <Compile Include="SettingsDataModel\CsvPluginSettings.cs" />
     <Compile Include="SettingsDataModel\CustomerInfo.cs" />
     <Compile Include="SettingsDataModel\MsSqlPluginSettings.cs" />
+    <Compile Include="SettingsDataModel\MsSqlSettings.cs" />
     <Compile Include="SettingsDataModel\PluginsSettings.cs" />
     <Compile Include="SettingsDataModel\XmlPluginSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

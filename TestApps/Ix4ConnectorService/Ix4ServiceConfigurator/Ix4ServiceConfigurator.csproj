@@ -79,7 +79,6 @@
     </Compile>
     <Compile Include="ServiceInfoWrapper.cs" />
     <Compile Include="ViewModel\ServiceViewModel.cs" />
-    <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\CustomerInfoViewModel.cs" />
     <Compile Include="View\CustomerInfoView.xaml.cs">
       <DependentUpon>CustomerInfoView.xaml</DependentUpon>

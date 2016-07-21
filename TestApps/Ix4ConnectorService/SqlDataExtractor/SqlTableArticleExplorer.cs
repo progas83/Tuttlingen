@@ -13,7 +13,7 @@ namespace SqlDataExtractor
     {
 
         public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = NavisionArticleTest; Integrated Security = True";
-        public const string MsSqlDataTableArticlesName = "ArticlesExport";
+        //public const string MsSqlDataTableArticlesName = "ArticlesExport";
 
         public SqlTableArticleExplorer()
         {

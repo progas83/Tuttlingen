@@ -1,6 +1,8 @@
 ﻿using Ix4Models;
 using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
+using SqlDataExtractor.DatabaseSettings.View;
+using SqlDataExtractor.DatabaseSettings.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -24,12 +26,15 @@ namespace SqlDataExtractor
                 return CustomDataSourceTypes.MsSql ;
             }
         }
-
+        MainDBSettingsViewModel _msSqlPluginSettingsViewModel;
         public UserControl GetControlForSettings(PluginsSettings settings)
         {
-            ManualMaping.View.ManualMappingView view = new ManualMaping.View.ManualMappingView();
-            view.DataContext = new ManualMaping.ViewModel.ManualMapperViewModel();
-            return view;
+            //ManualMaping.View.ManualMappingView view = new ManualMaping.View.ManualMappingView();
+            //view.DataContext = new ManualMaping.ViewModel.ManualMapperViewModel();
+            MainDBSettindsView msSqlPluginSettingsView = new MainDBSettindsView();
+            _msSqlPluginSettingsViewModel = new MainDBSettingsViewModel(settings.MsSqlSettings);
+            msSqlPluginSettingsView.DataContext = _msSqlPluginSettingsViewModel;
+            return msSqlPluginSettingsView;
         }
 
         public string GetCustomerData()
@@ -44,7 +49,10 @@ namespace SqlDataExtractor
 
         public void SaveSettings(PluginsSettings settings)
         {
-           
+            if (_msSqlPluginSettingsViewModel.CurrentPluginSettings.IsActivated)
+            {
+                settings.MsSqlSettings = _msSqlPluginSettingsViewModel.CurrentPluginSettings;
+            }
         }
 
         public LICSRequestArticle[] GetRequestArticles()

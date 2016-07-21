@@ -17,12 +17,12 @@
             
         </ObjectDataProvider>
     </Window.Resources>
-    <DockPanel Margin="5,10,10,5" x:Name="UIMainDockPanel">
+    <StackPanel Margin="5,10,10,5" x:Name="UIMainDockPanel">
         
         <controls:CustomerInfoControl DockPanel.Dock="Top" DataContext="{Binding Customer}"/>
         <ComboBox Width="100" Margin="10,10,0,10" ItemsSource="{Binding Source={StaticResource DataSourceType}}" SelectedItem="{Binding Path=SelectedDataSource}" DockPanel.Dock="Top" HorizontalAlignment="Left"/>
         <Button Height="50" IsDefault="True" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Command="{Binding}" Content="Save Information"/>
-        <ContentControl MaxHeight="400" x:Name="UiPlaceHolder" Content="{Binding PluginControl}" DockPanel.Dock="Top"/>
+        <ContentControl SnapsToDevicePixels="True" Height="Auto" ScrollViewer.CanContentScroll="True" x:Name="UiPlaceHolder" Content="{Binding PluginControl}" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
         
-    </DockPanel>
+    </StackPanel>
 </Window>

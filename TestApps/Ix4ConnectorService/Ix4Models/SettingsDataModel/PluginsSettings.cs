@@ -9,6 +9,10 @@ namespace Ix4Models.SettingsDataModel
     [Serializable]
     public class PluginsSettings
     {
+        public PluginsSettings()
+        {
+            MsSqlSettings = new MsSqlPluginSettings();
+        }
         public XmlPluginSettings XmlSettings { get; set; }
 
         public CsvPluginSettings CsvSettings { get; set; }

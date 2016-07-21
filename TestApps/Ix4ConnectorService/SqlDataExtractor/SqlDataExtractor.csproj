@@ -46,6 +46,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseSettings\ViewModel\MainDBSettingsViewModel.cs" />
+    <Compile Include="DatabaseSettings\View\MainDBSettindsView.xaml.cs">
+      <DependentUpon>MainDBSettindsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ManualMaping\ViewModel\ManualMapperViewModel.cs" />
     <Compile Include="ManualMaping\View\ManualMappingView.xaml.cs">
       <DependentUpon>ManualMappingView.xaml</DependentUpon>
@@ -65,6 +69,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DatabaseSettings\View\MainDBSettindsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ManualMaping\View\ManualMappingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
