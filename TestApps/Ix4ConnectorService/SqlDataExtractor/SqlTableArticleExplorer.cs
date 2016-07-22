@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Ix4Models;
+using Ix4Models.Interfaces;
+using Ix4Models.SettingsDataModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,31 +15,32 @@ namespace SqlDataExtractor
     public class SqlTableArticleExplorer
     {
 
-        public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = NavisionArticleTest; Integrated Security = True";
+       
         //public const string MsSqlDataTableArticlesName = "ArticlesExport";
-
-        public SqlTableArticleExplorer()
+        private MsSqlPluginSettings _pluginSettings;
+        public SqlTableArticleExplorer(IPluginSettings pluginSettings)
         {
+            _pluginSettings = pluginSettings as MsSqlPluginSettings;
         }
-        private string selectAllArticlesSql = @"SELECT Nr_ AS ArticleNo,
-                                                [Nummer 2] AS ArticleNo2, 
-                                                Beschreibung AS ArticleDescription, 
-                                                [Beschreibung 2] AS ArticleDescription2,
-                                                [EAN VPE] AS EAN,
-                                                Basiseinheitencode AS ProductCode,
-                                                Artikelgruppe AS ArticleGroup,
-                                                Stammnummer AS ArticleGroupFactor,
-                                                [VPE Gewicht] AS Weight
-                                        FROM ArticlesExport";
+   //     private string selectAllArticlesSql = @"SELECT Nr_ AS ArticleNo, [Nummer 2] AS ArticleNo2, Beschreibung AS ArticleDescription, [Beschreibung 2] AS ArticleDescription2, [EAN VPE] AS EAN, Basiseinheitencode AS ProductCode, Artikelgruppe AS ArticleGroup, Stammnummer AS ArticleGroupFactor, [VPE Gewicht] AS Weight FROM ArticlesExport";
+        // .\MSSQLIX4TEST NavisionArticleTest
+
+        private string DbConnection
+        {
+            get
+            {
+                return string.Format(CurrentServiceInformation.MsSqlDatabaseArticleTestConnectionString, _pluginSettings.DbSettings.ServerAdress,_pluginSettings.DbSettings.DataBaseName);
+            }
+        }
         public LICSRequestArticle[] GetArticles()
         {
             LICSRequestArticle[] articles = null;
             try
             {
-                using (var connection = new SqlConnection(MsSqlDatabaseArticleTestConnectionString))
+                using (var connection = new SqlConnection(DbConnection))
                 {
                     connection.Open();
-                    var cmdText = selectAllArticlesSql;
+                    var cmdText = _pluginSettings.ArticlesQuery;
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     articles = LoadArticles(reader);

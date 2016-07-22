@@ -133,16 +133,17 @@ namespace CompositionHelper
             return request;
         }
 
-        public LICSRequestArticle[] GetRequestArticles()
+        public LICSRequestArticle[] GetRequestArticles(PluginsSettings msSqlPluginSettings)
         {
             LICSRequestArticle[] articles = new LICSRequestArticle[] { };
             if (CustomerDataPlagins != null)
             {
                 foreach (var plugin in CustomerDataPlagins)
                 {
-                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.MsSql)))
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), 
+                        CustomDataSourceTypes.MsSql)))
                     {
-                        articles = plugin.Value.GetRequestArticles();
+                        articles = plugin.Value.GetRequestArticles(msSqlPluginSettings.MsSqlSettings);
                         break;
                     }
                 }
@@ -151,7 +152,7 @@ namespace CompositionHelper
 
         }
 
-        public LICSRequestDelivery[] GetRequestDeliveries()
+        public LICSRequestDelivery[] GetRequestDeliveries(PluginsSettings msSqlPluginSettings)
         {
             LICSRequestDelivery[] deliveries = new LICSRequestDelivery[] { };
             if (CustomerDataPlagins != null)
@@ -160,7 +161,7 @@ namespace CompositionHelper
                 {
                     if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.MsSql)))
                     {
-                        deliveries = plugin.Value.GetRequestDeliveries();
+                        deliveries = plugin.Value.GetRequestDeliveries(msSqlPluginSettings.MsSqlSettings);
                         break;
                     }
                 }

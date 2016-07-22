@@ -69,18 +69,22 @@ namespace XmlDataExtractor
 
        public void SaveSettings(PluginsSettings settings)
         {
+            if(_viewModel==null)
+            {
+                return;
+            }
             if(_viewModel.CurrentPluginSettings.IsActivated)
             {
                 settings.XmlSettings = _viewModel.CurrentPluginSettings;
             }
         }
 
-        public LICSRequestArticle[] GetRequestArticles()
+        public LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings)
         {
             throw new NotImplementedException();
         }
 
-        public LICSRequestDelivery[] GetRequestDeliveries()
+        public LICSRequestDelivery[] GetRequestDeliveries(IPluginSettings pluginSettings)
         {
             throw new NotImplementedException();
         }

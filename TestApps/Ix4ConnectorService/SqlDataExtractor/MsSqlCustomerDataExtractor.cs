@@ -27,14 +27,22 @@ namespace SqlDataExtractor
             }
         }
         MainDBSettingsViewModel _msSqlPluginSettingsViewModel;
+        MainDBSettindsView _msSqlPluginSettingsView;
         public UserControl GetControlForSettings(PluginsSettings settings)
         {
             //ManualMaping.View.ManualMappingView view = new ManualMaping.View.ManualMappingView();
             //view.DataContext = new ManualMaping.ViewModel.ManualMapperViewModel();
-            MainDBSettindsView msSqlPluginSettingsView = new MainDBSettindsView();
-            _msSqlPluginSettingsViewModel = new MainDBSettingsViewModel(settings.MsSqlSettings);
-            msSqlPluginSettingsView.DataContext = _msSqlPluginSettingsViewModel;
-            return msSqlPluginSettingsView;
+            if(_msSqlPluginSettingsView==null)
+            {
+                _msSqlPluginSettingsView = new MainDBSettindsView();
+            }
+            if(_msSqlPluginSettingsViewModel==null)
+            {
+                _msSqlPluginSettingsViewModel = new MainDBSettingsViewModel(settings.MsSqlSettings);
+            }
+           
+            _msSqlPluginSettingsView.DataContext = _msSqlPluginSettingsViewModel;
+            return _msSqlPluginSettingsView;
         }
 
         public string GetCustomerData()
@@ -49,21 +57,25 @@ namespace SqlDataExtractor
 
         public void SaveSettings(PluginsSettings settings)
         {
+            if(_msSqlPluginSettingsViewModel == null)
+            {
+                return;
+            }
             if (_msSqlPluginSettingsViewModel.CurrentPluginSettings.IsActivated)
             {
                 settings.MsSqlSettings = _msSqlPluginSettingsViewModel.CurrentPluginSettings;
             }
         }
 
-        public LICSRequestArticle[] GetRequestArticles()
+        public LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings)
         {
-            SqlTableArticleExplorer articleExplorer = new SqlTableArticleExplorer();
+            SqlTableArticleExplorer articleExplorer = new SqlTableArticleExplorer(pluginSettings);
             return articleExplorer.GetArticles();
         }
 
-        public LICSRequestDelivery[] GetRequestDeliveries()
+        public LICSRequestDelivery[] GetRequestDeliveries(IPluginSettings pluginSettings)
         {
-            SqlTableDeliveryExplorer articleExplorer = new SqlTableDeliveryExplorer();
+            SqlTableDeliveryExplorer articleExplorer = new SqlTableDeliveryExplorer(pluginSettings);
             return articleExplorer.GetRequestDeliveries();
         }
     }

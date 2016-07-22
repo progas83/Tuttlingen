@@ -12,6 +12,7 @@ namespace Ix4Models.SettingsDataModel
         public PluginsSettings()
         {
             MsSqlSettings = new MsSqlPluginSettings();
+            XmlSettings = new XmlPluginSettings();
         }
         public XmlPluginSettings XmlSettings { get; set; }
 

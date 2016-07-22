@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Ix4Models;
+using Ix4Models.Interfaces;
+using Ix4Models.SettingsDataModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -11,40 +14,36 @@ namespace SqlDataExtractor
 {
     public class SqlTableDeliveryExplorer
     {
-        public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = NavisionArticleTest; Integrated Security = True";
-        public const string MsSqlDataTableRequestDelivery = "Ekkopf";
+        private MsSqlPluginSettings _pluginSettings;
+        public SqlTableDeliveryExplorer(IPluginSettings pluginSettings)
+        {
+            _pluginSettings = pluginSettings as MsSqlPluginSettings;
+        }
+      //  public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source =.\MSSQLIX4TEST;Initial Catalog = NavisionArticleTest; Integrated Security = True";
+      //  public const string MsSqlDataTableRequestDelivery = "Ekkopf";
 
-        private const string MsSqlDataTableDeliveryPositions = "Ekzeile";
+      //  private const string MsSqlDataTableDeliveryPositions = "Ekzeile";
 
-        private string selectAllDeliveriesSql = @"SELECT Nr_ AS DeliveryNo,
-                                                [Erwartetes Lieferdatum] AS DeliveryDate, 
-                                                Lagerortcode AS DeliveryArea, 
-                                                Spediteur AS DeliveryPlace,
-                                                Buchungsdatum AS OrderDate
-                                        FROM Ekkopf";
+     //   private string selectAllDeliveriesSql = @"SELECT Nr_ AS DeliveryNo, [Erwartetes Lieferdatum] AS DeliveryDate, Lagerortcode AS DeliveryArea, Spediteur AS DeliveryPlace, Buchungsdatum AS OrderDate FROM Ekkopf";
 
-        private string selectAllDeliveryPositionsSql = @"SELECT Zeilennr_ AS PositionNo,
-                                                            [Kred_-Artikelnr_] AS ReferenceNo, 
-                                                            Belegnr_ ,
-                                                            Nr_ AS ArticleNo, 
-                                                            [VPE Art] AS ArticleGroup,
-                                                            [Versandart (Palette)] AS LoadType,
-                                                            [Versandart (Palette) Anzahl] AS TargetLoadsCount,
-                                                            [VPE Anzahl] AS TargetQuantity,
-                                                            Buchungsgruppe AS ProjectNo,
-                                                            Beschreibung AS Comment
-                                                        FROM Ekzeile WHERE Belegnr_ = '{0}'";// equals {Nr_ from Ekkopf}";
+     //   private string selectAllDeliveryPositionsSql = @"SELECT Zeilennr_ AS PositionNo, [Kred_-Artikelnr_] AS ReferenceNo, Belegnr_ , Nr_ AS ArticleNo, [VPE Art] AS ArticleGroup, [Versandart (Palette)] AS LoadType, [Versandart (Palette) Anzahl] AS TargetLoadsCount, [VPE Anzahl] AS TargetQuantity, Buchungsgruppe AS ProjectNo, Beschreibung AS Comment FROM Ekzeile WHERE Belegnr_ = '{0}'";// equals {Nr_ from Ekkopf}";
 
-
+        private string DbConnection
+        {
+            get
+            {
+                return string.Format(CurrentServiceInformation.MsSqlDatabaseArticleTestConnectionString, _pluginSettings.DbSettings.ServerAdress, _pluginSettings.DbSettings.DataBaseName);
+            }
+        }
         public LICSRequestDelivery[] GetRequestDeliveries()
         {
             LICSRequestDelivery[] requestDeliveries = new LICSRequestDelivery[] { };
             try
             {
-                using (var connection = new SqlConnection(MsSqlDatabaseArticleTestConnectionString))
+                using (var connection = new SqlConnection(DbConnection))
                 {
                     connection.Open();
-                    var cmdText = selectAllDeliveriesSql;
+                    var cmdText = _pluginSettings.DeliveriesQuery;
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     requestDeliveries = LoadDeliveries(reader, connection);
@@ -103,7 +102,7 @@ namespace SqlDataExtractor
         {
             List<LICSRequestDeliveryPosition> deliveryPositions = new List<LICSRequestDeliveryPosition>();
 
-            string getPositionsCommand = string.Format(selectAllDeliveryPositionsSql, deliveryNo);
+            string getPositionsCommand = string.Format(_pluginSettings.PositionsQuery, deliveryNo);
             SqlCommand cmd = new SqlCommand(getPositionsCommand, connection);
             SqlDataReader reader = cmd.ExecuteReader();
             DataTable table = new DataTable();

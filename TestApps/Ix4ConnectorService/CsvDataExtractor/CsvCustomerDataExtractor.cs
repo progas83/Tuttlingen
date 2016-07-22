@@ -43,12 +43,12 @@ namespace CsvDataExtractor
             throw new NotImplementedException();
         }
 
-        public LICSRequestArticle[] GetRequestArticles()
+        public LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings)
         {
             throw new NotImplementedException();
         }
 
-        public LICSRequestDelivery[] GetRequestDeliveries()
+        public LICSRequestDelivery[] GetRequestDeliveries(IPluginSettings pluginSettings)
         {
             throw new NotImplementedException();
         }

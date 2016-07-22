@@ -176,8 +176,8 @@ namespace ConnectorWorkflowManager
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             // CheckXmlOrdersFolder();
-            //    CheckMsSqlArticles();
-            CheckMsSqlDeliveriew();
+                CheckMsSqlArticles();
+            //CheckMsSqlDeliveriew();
         }
 
         private void CheckMsSqlDeliveriew()
@@ -186,7 +186,7 @@ namespace ConnectorWorkflowManager
             LICSRequest request = new LICSRequest();
             request.ClientId = currentClientID;
             // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
-            LICSRequestDelivery[] deliveries = CustomerDataComposition.Instance.GetRequestDeliveries();
+            LICSRequestDelivery[] deliveries = CustomerDataComposition.Instance.GetRequestDeliveries(_customerInfo.PluginSettings);
             if (deliveries.Length == 0)
             {
                 return;
@@ -206,7 +206,7 @@ namespace ConnectorWorkflowManager
             LICSRequest request = new LICSRequest();
             request.ClientId = currentClientID;
            // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
-            LICSRequestArticle[] articles = CustomerDataComposition.Instance.GetRequestArticles();
+            LICSRequestArticle[] articles = CustomerDataComposition.Instance.GetRequestArticles(_customerInfo.PluginSettings);
             if(articles.Length == 0)
             {
                 return;
