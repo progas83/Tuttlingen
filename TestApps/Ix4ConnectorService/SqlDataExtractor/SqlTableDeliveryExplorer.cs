@@ -32,7 +32,10 @@ namespace SqlDataExtractor
         {
             get
             {
-                return string.Format(CurrentServiceInformation.MsSqlDatabaseArticleTestConnectionString, _pluginSettings.DbSettings.ServerAdress, _pluginSettings.DbSettings.DataBaseName);
+                return string.Format(CurrentServiceInformation.MsSqlDatabaseArticleTestConnectionString, _pluginSettings.DbSettings.ServerAdress,
+                                                                                                         _pluginSettings.DbSettings.DataBaseName,
+                                                                                                         _pluginSettings.DbSettings.DbUserName,
+                                                                                                         _pluginSettings.DbSettings.Password);
             }
         }
         public LICSRequestDelivery[] GetRequestDeliveries()

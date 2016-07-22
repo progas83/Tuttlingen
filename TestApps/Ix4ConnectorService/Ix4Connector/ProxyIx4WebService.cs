@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Ix4Connector.Args;
 using Ix4Connector.Ix4WebService;
+using System.Net;
 
 namespace Ix4Connector
 {
@@ -15,6 +16,7 @@ namespace Ix4Connector
 
         public ProxyIx4WebService(LBSoapAuthenticationHeader header)
         {
+            System.Net.ServicePointManager.Expect100Continue = false;
             this._header = header;
         }
 
@@ -49,6 +51,8 @@ namespace Ix4Connector
         {
             Ix4WebService.ix4PublicInterface ws = new Ix4WebService.ix4PublicInterface();
             ws.LBSoapAuthenticationHeaderValue = _header;
+            ws.Proxy = System.Net.HttpWebRequest.GetSystemWebProxy();
+            ws.Proxy.Credentials = CredentialCache.DefaultCredentials;
             return ws;
         }
     }

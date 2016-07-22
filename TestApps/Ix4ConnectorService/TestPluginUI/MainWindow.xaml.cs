@@ -37,5 +37,10 @@ namespace TestPluginUI
             //test.GetControlForSettings();
             //test.GetControlForSettings();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            WorkflowManager.Instance.Stop();
+        }
     }
 }

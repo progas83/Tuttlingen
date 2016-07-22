@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SinplestLogger
+{
+    public class Logger
+    {
+        private static Logger _logger;
+        private static object _padlock = new object();
+        private static StreamWriter _streamWriterFile;
+        private const string _logFilename = @"C:\ix4\logger.log";
+        private const string _newLine = "-------------Date: {0} | Time: {1}--------------------------------------------------------------------------";
+        private Logger()
+        {
+            _streamWriterFile = new StreamWriter(new FileStream(_logFilename, System.IO.FileMode.Append));
+        }
+
+        public static Logger GetLogger()
+        {
+
+                if (_logger == null)
+                {
+                    lock (_padlock)
+                    {
+                        if (_logger == null)
+                        {
+                            _logger = new Logger();
+                        }
+                    }
+                }
+
+                return _logger;
+        }
+
+        public void Log(string message)
+        {
+            _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+            _streamWriterFile.WriteLine(message);
+            _streamWriterFile.Flush();
+        }
+
+        public void Log(Exception exception)
+        {
+            Log(exception.ToString());
+            Log("Exception message");
+            Log(exception.Message);
+        }
+
+        public void Log(object o, string propertyName)
+        {
+            if(o == null)
+            {
+                string res = string.Format("This property {0} is null", propertyName);
+                Log(res);
+            }
+        }
+    }
+}

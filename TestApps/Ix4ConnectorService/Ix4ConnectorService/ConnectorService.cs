@@ -27,10 +27,11 @@ namespace Ix4ConnectorService
             base.OnStart(args);
         }
 
-        //protected override void OnStop()
-        //{
-        //    base.OnStop();
-        //}
+        protected override void OnStop()
+        {
+            WorkflowManager.Instance.Stop();
+            base.OnStop();
+        }
 
         //protected override void OnContinue()
         //{

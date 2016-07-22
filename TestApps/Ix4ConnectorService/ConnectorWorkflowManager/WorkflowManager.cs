@@ -4,6 +4,7 @@ using Ix4Models;
 using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
+using SinplestLogger;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +20,9 @@ namespace ConnectorWorkflowManager
     {
         private static WorkflowManager _manager;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 10000;
+        private static readonly long RElapsedEvery = 60000;
+
+        private static Logger _loger = Logger.GetLogger();
 
         private WorkflowManager()
         {
@@ -46,7 +49,7 @@ namespace ConnectorWorkflowManager
         }
         private CustomerInfo _customerInfo;
         private IProxyIx4WebService _ix4ServiceConnector;
-        private System.IO.StreamWriter _streamWriterFile;
+     //   private System.IO.StreamWriter _streamWriterFile;
 
         protected Timer _timer = new Timer(RElapsedEvery);
         
@@ -55,54 +58,68 @@ namespace ConnectorWorkflowManager
 
             try
             {
-                if (_streamWriterFile == null)
-                {
-                    _streamWriterFile = new StreamWriter(new FileStream("C:\\Ilya\\TestXmlFolder\\testService.log", System.IO.FileMode.Append));
-                }
-
-                _streamWriterFile.WriteLine(string.Format("Service has been started at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+                //if (_streamWriterFile == null)
+                //{
+                //    _streamWriterFile = new StreamWriter(new FileStream("C:\\Ilya\\TestXmlFolder\\testService.log", System.IO.FileMode.Append));
+                //}
+                _loger.Log("Service has been started at");
+               // _streamWriterFile.WriteLine(string.Format("Service has been started at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
 
                 _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
 
                 _ix4ServiceConnector = Ix4ConnectorManager.Instance.GetRegisteredIx4WebServiceInterface(_customerInfo.ClientID, _customerInfo.UserName, _customerInfo.Password);
+                _timer.Enabled = true;
+                _timer.AutoReset = true;
+                _timer.Elapsed += OnTimedEvent;
             }
             catch (Exception ex)
             {
-                _streamWriterFile.WriteLine(ex);// string.Format("Service has been started at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+                _loger.Log(ex);// _streamWriterFile.WriteLine(ex);// string.Format("Service has been started at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+                _loger.Log(_customerInfo, "_customerInfo");
+                _loger.Log(_ix4ServiceConnector, "_ix4ServiceConnector");
             }
-            finally
-            {
-                _streamWriterFile.Flush();
-            }
-
-            _timer.Enabled = true;
-            _timer.AutoReset = false;// true;
-            _timer.Elapsed += OnTimedEvent;
-
         }
-       
 
+        public void Stop()
+        {
+            _timer.Stop();
+            _timer.Enabled = false;
+            _timer.Dispose();
+            _timer = null;
+            WrightLog("Service has stopped");
+        }
+
+
+        private static object _o = new object();
         private bool SendLicsRequestToIx4(LICSRequest request, string fileName)
         {
             bool result = false;
-            try
+            lock (_o)
             {
-                if (_ix4ServiceConnector != null)
+                try
                 {
-                    XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
-                    Stream st = new FileStream("C:\\Ilya\\ServiceProgram\\tmp.xml", FileMode.OpenOrCreate);// Stream();
-                    serializator.Serialize(st, request);
-                    byte[] bytes = ReadToEnd(st);
-                    string resp = _ix4ServiceConnector.ImportXmlRequest(bytes, fileName);
+                    if (_ix4ServiceConnector != null)
+                    {
+                        XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
+                        Stream st = new FileStream("C:\\ix4\\tmp.xml", FileMode.OpenOrCreate);// Stream();
+                        serializator.Serialize(st, request);
+                        byte[] bytes = ReadToEnd(st);
+                        string resp = _ix4ServiceConnector.ImportXmlRequest(bytes, fileName);
+                        _loger.Log(resp);
+                        st.Flush();
+                        st.Dispose();
+                        File.Delete("C:\\ix4\\tmp.xml");
 
+                    }
                 }
-            }
-            catch(Exception ex)
-            {
-                WrightLog(ex.ToString());
+                catch (Exception ex)
+                {
+                    WrightLog(ex.ToString());
+                }
+
+
             }
 
-           
 
             return result;
         }
@@ -162,12 +179,7 @@ namespace ConnectorWorkflowManager
 
         private void WrightLog(string message)
         {
-            if (_streamWriterFile != null)
-            {
-                _streamWriterFile.WriteLine(message);
-
-                _streamWriterFile.Flush();
-            }
+            _loger.Log(message);
         }
 
 
@@ -176,48 +188,68 @@ namespace ConnectorWorkflowManager
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             // CheckXmlOrdersFolder();
-                CheckMsSqlArticles();
-            //CheckMsSqlDeliveriew();
+            WrightLog("Timer has elapsed");
+            CheckMsSqlArticles();
+            CheckMsSqlDeliveriew();
         }
 
         private void CheckMsSqlDeliveriew()
         {
-            int currentClientID = _customerInfo.ClientID;
-            LICSRequest request = new LICSRequest();
-            request.ClientId = currentClientID;
-            // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
-            LICSRequestDelivery[] deliveries = CustomerDataComposition.Instance.GetRequestDeliveries(_customerInfo.PluginSettings);
-            if (deliveries.Length == 0)
+            try
             {
-                return;
-            }
-            foreach (LICSRequestDelivery delivery in deliveries)
-            {
-                delivery.ClientNo = currentClientID;
-            }
-            request.DeliveryImport = new LICSRequestDelivery[] { deliveries[0], deliveries[1], deliveries[2] };
+                int currentClientID = _customerInfo.ClientID;
+                LICSRequest request = new LICSRequest();
+                request.ClientId = currentClientID;
+                // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
+                LICSRequestDelivery[] deliveries = CustomerDataComposition.Instance.GetRequestDeliveries(_customerInfo.PluginSettings);
+                _loger.Log(deliveries, "deliveries");
+                if (deliveries.Length == 0)
+                {
+                    return;
+                }
+                foreach (LICSRequestDelivery delivery in deliveries)
+                {
+                    delivery.ClientNo = currentClientID;
+                }
+                request.DeliveryImport = deliveries;// new LICSRequestDelivery[] { deliveries[0], deliveries[1], deliveries[2] };
 
-            var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
+                var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
+            }
+            catch(Exception ex)
+            {
+                _loger.Log(ex);
+            }
+            
         }
 
         private void CheckMsSqlArticles()
         {
-            int currentClientID = _customerInfo.ClientID;
-            LICSRequest request = new LICSRequest();
-            request.ClientId = currentClientID;
-           // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
-            LICSRequestArticle[] articles = CustomerDataComposition.Instance.GetRequestArticles(_customerInfo.PluginSettings);
-            if(articles.Length == 0)
+            try
             {
-                return;
-            }
-            foreach (LICSRequestArticle article in articles)
-            {
-                article.ClientNo = currentClientID;
-            }
-            request.ArticleImport = articles;
+                int currentClientID = _customerInfo.ClientID;
+                LICSRequest request = new LICSRequest();
+                request.ClientId = currentClientID;
+                // List<LICSRequestArticle> articlesRequest = new List<LICSRequestArticle>();
+                LICSRequestArticle[] articles = CustomerDataComposition.Instance.GetRequestArticles(_customerInfo.PluginSettings);
+                _loger.Log(articles, "articles");
+                if (articles== null || articles.Length == 0)
+                {
+                    return;
+                }
+                foreach (LICSRequestArticle article in articles)
+                {
+                    article.ClientNo = currentClientID;
+                }
+                request.ArticleImport = articles;
 
-            var res = SendLicsRequestToIx4(request, "articleFile.xml");
+                var res = SendLicsRequestToIx4(request, "articleFile.xml");
+
+            }
+            catch(Exception ex)
+            {
+                _loger.Log(ex);
+            }
+
 
         }
 
@@ -239,7 +271,8 @@ namespace ConnectorWorkflowManager
                 {
                     foreach (string file in xmlSourceFiles)
                     {
-                        _streamWriterFile.WriteLine(string.Format("Filename:  {0}", file));
+                        
+                    //    _streamWriterFile.WriteLine(string.Format("Filename:  {0}", file));
 
                         LICSRequest request = CustomerDataComposition.Instance.GetCustomerDataFromXml(file);// xmlDataConnector.GetCustomerDataFromXml(file);
                         request.ClientId = _customerInfo.ClientID;
@@ -262,13 +295,8 @@ namespace ConnectorWorkflowManager
             }
             catch (Exception ex)
             {
-                _streamWriterFile.WriteLine(ex);
+                WrightLog(ex.Message);
             }
-            finally
-            {
-                _streamWriterFile.Flush();
-            }
-
         }
     }
 }

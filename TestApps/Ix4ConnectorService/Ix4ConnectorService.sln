@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlDataExtractor", "XmlData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectorWorkflowManager", "ConnectorWorkflowManager\ConnectorWorkflowManager.csproj", "{A292C322-3104-47AF-AB47-1EDFE0F96EFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinplestLogger", "SinplestLogger\SinplestLogger.csproj", "{18B499E8-956D-45C0-A9F7-6314CC00B777}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{A292C322-3104-47AF-AB47-1EDFE0F96EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A292C322-3104-47AF-AB47-1EDFE0F96EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A292C322-3104-47AF-AB47-1EDFE0F96EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

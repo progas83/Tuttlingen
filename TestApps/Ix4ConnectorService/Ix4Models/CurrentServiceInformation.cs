@@ -30,8 +30,8 @@ namespace Ix4Models
         public const string CustomDataSourceTypeMsSql = "MsSql";
         public const string CustomDataSourceTypeCsv = "Csv";
         public const string CustomDataSourceTypeXml = "Xml";
-
-
-        public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source ={0};Initial Catalog = {1}; Integrated Security = True";
+       // =myServerAddress;Database=myDataBase;Trusted_Connection=True;
+       // public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source ={0};Initial Catalog = {1}; Integrated Security = True";
+        public const string MsSqlDatabaseArticleTestConnectionString = @"Server={0}; Database = {1}; User Id= {2}; Password={3};";
     }
 }

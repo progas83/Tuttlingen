@@ -38,8 +38,9 @@ namespace Ix4Connector
             header.ClientId = clientId;
             header.UserName = userName;
             header.Password = pwd;
-
-            return new ProxyIx4WebService(header);
+            ProxyIx4WebService client = new ProxyIx4WebService(header);
+            
+            return client;
         }
     }
 }
