@@ -1,6 +1,7 @@
 ﻿using Ix4Models;
 using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
+using SinplestLogger;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,6 +36,8 @@ namespace SqlDataExtractor
                                                                                                          _pluginSettings.DbSettings.Password);
             }
         }
+
+        Logger _logger = Logger.GetLogger();
         public LICSRequestArticle[] GetArticles()
         {
             LICSRequestArticle[] articles = null;
@@ -51,7 +54,7 @@ namespace SqlDataExtractor
             }
             catch (Exception ex)
             {
-
+                _logger.Log(ex);
             }
             return articles;
         }
@@ -91,7 +94,7 @@ namespace SqlDataExtractor
             }
             catch (Exception ex)
             {
-
+                _logger.Log(ex);
             }
             return articles.Where(i => !string.IsNullOrEmpty(i.ArticleNo)).ToArray();
         }

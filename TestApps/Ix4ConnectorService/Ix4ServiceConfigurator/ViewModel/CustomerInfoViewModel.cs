@@ -11,11 +11,12 @@ using CompositionHelper;
 using Ix4Models;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
+using System.Collections.ObjectModel;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
 
-    public class CustomerInfoViewModel : BaseViewModel, ICommand, IDisposable
+    internal class CustomerInfoViewModel : BaseViewModel, ICommand, IDisposable
     {
         CustomerDataComposition _compositor;
         private CustomerInfoView _view;
@@ -28,7 +29,7 @@ namespace Ix4ServiceConfigurator.ViewModel
             Customer = XmlConfigurationManager.Instance.GetCustomerInformation();
 
             _compositor = new CustomerDataComposition(Customer.PluginSettings);
-            _compositor.AssembleCustomerDataComponents();
+            //_compositor.AssembleCustomerDataComponents();
         }
 
         private CustomDataSourceTypes _selectedDataSource;
@@ -42,6 +43,28 @@ namespace Ix4ServiceConfigurator.ViewModel
             }
         }
 
+
+        private Ix4RequestProps _TabSelectedItem;
+
+        public Ix4RequestProps TabSelectedItem
+        {
+            get { return _TabSelectedItem; }
+            set { _TabSelectedItem = value; OnPropertyChanged("TabSelectedItem"); }
+        }
+
+        private int _TabSelectedIndex;
+
+        public int TabSelectedIndex
+        {
+            get { return _TabSelectedIndex; }
+            set { _TabSelectedIndex = value; OnPropertyChanged("TabSelectedIndex"); }
+        }
+        private UserControl _AvailableSettingsControls;
+
+        public ObservableCollection<UserControl> AvailableSettingsControls
+        {
+            get   { return new ObservableCollection < UserControl >(new UserControl[] { _compositor.GetDataSettingsControl(CustomDataSourceTypes.Csv), _compositor.GetDataSettingsControl(CustomDataSourceTypes.MsSql) }); }
+        }
 
         public UserControl PluginControl
         {

@@ -67,6 +67,10 @@
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
+    <ProjectReference Include="..\SinplestLogger\SinplestLogger.csproj">
+      <Project>{18B499E8-956D-45C0-A9F7-6314CC00B777}</Project>
+      <Name>SinplestLogger</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="DatabaseSettings\View\MainDBSettindsView.xaml">

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using Ix4Models;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.Interfaces;
+using SinplestLogger;
 
 namespace CompositionHelper
 {
@@ -49,15 +50,15 @@ namespace CompositionHelper
 
         //}
 
-        public CustomerDataComposition(PluginsSettings pluginSettings)
+        public CustomerDataComposition(PluginsSettings pluginSettings) : this()
         {
             this._pluginSettings = pluginSettings;
         }
 
         [ImportMany]
         public System.Lazy<ICustomerDataConnector,IDictionary<string,object>>[] CustomerDataPlagins { get; set; }
-
-        public void AssembleCustomerDataComponents()
+        Logger _logger = Logger.GetLogger();
+        private void AssembleCustomerDataComponents()
         {
             try
             {
@@ -75,51 +76,77 @@ namespace CompositionHelper
             }
             catch(Exception ex)
             {
-
+                _logger.Log(ex);
             }
         }
 
-        public string GetCustomerData()
+       private string GetCustomerData()
         {
             string resultData = string.Empty;
-            foreach(var plugin in CustomerDataPlagins)
+            try
             {
-                if(((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(CurrentServiceInformation.ServiceName))
+                foreach (var plugin in CustomerDataPlagins)
                 {
-                    resultData = plugin.Value.GetCustomerData();
-                    break;
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(CurrentServiceInformation.ServiceName))
+                    {
+                        resultData = plugin.Value.GetCustomerData();
+                        break;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+            }
+
+           
             return resultData;
         }
 
         public PluginsSettings SavePluginsSettings()
         {
             PluginsSettings ps = new PluginsSettings();
-            foreach (var plugin in CustomerDataPlagins)
+            try
             {
-                plugin.Value.SaveSettings(ps);
+                foreach (var plugin in CustomerDataPlagins)
+                {
+                    plugin.Value.SaveSettings(ps);
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+            }
+
+            
             return ps;
         }
 
         public UserControl GetDataSettingsControl(CustomDataSourceTypes dataSourceType)
         {
             UserControl uc = null;// resultData = string.Empty;
-            foreach (var plugin in CustomerDataPlagins)
+           
+            try
             {
-                if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
+                foreach (var plugin in CustomerDataPlagins)
                 {
-                    uc = plugin.Value.GetControlForSettings(_pluginSettings);
-                    break;
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
+                    {
+                        uc = plugin.Value.GetControlForSettings(_pluginSettings);
+                        break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
             }
             return uc;
         }
         public LICSRequest GetCustomerDataFromXml(string fileName)
         {
             LICSRequest request = new LICSRequest();
-            if (CustomerDataPlagins != null)
+            try
             {
                 foreach (var plugin in CustomerDataPlagins)
                 {
@@ -130,23 +157,31 @@ namespace CompositionHelper
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+            }
             return request;
         }
 
         public LICSRequestArticle[] GetRequestArticles(PluginsSettings msSqlPluginSettings)
         {
             LICSRequestArticle[] articles = new LICSRequestArticle[] { };
-            if (CustomerDataPlagins != null)
+            try
             {
                 foreach (var plugin in CustomerDataPlagins)
                 {
-                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), 
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes),
                         CustomDataSourceTypes.MsSql)))
                     {
                         articles = plugin.Value.GetRequestArticles(msSqlPluginSettings.MsSqlSettings);
                         break;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
             }
             return articles;
 
@@ -157,6 +192,11 @@ namespace CompositionHelper
             LICSRequestDelivery[] deliveries = new LICSRequestDelivery[] { };
             if (CustomerDataPlagins != null)
             {
+                
+            }
+
+            try
+            {
                 foreach (var plugin in CustomerDataPlagins)
                 {
                     if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.MsSql)))
@@ -165,6 +205,10 @@ namespace CompositionHelper
                         break;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
             }
             return deliveries;
 

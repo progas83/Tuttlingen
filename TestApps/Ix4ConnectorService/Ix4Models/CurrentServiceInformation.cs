@@ -33,5 +33,12 @@ namespace Ix4Models
        // =myServerAddress;Database=myDataBase;Trusted_Connection=True;
        // public const string MsSqlDatabaseArticleTestConnectionString = @"Data Source ={0};Initial Catalog = {1}; Integrated Security = True";
         public const string MsSqlDatabaseArticleTestConnectionString = @"Server={0}; Database = {1}; User Id= {2}; Password={3};";
+
+        private static readonly string _xmlFileName = string.Format("{0}{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\configuration.xml");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
+        public static string FileName { get { return _xmlFileName; } }
+
+        private static readonly string _loggerFileName = string.Format("{0}{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\logger.log");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
+        public static string LoggerFileName { get { return _loggerFileName; } }
+
     }
 }

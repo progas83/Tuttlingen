@@ -51,6 +51,7 @@
     <Compile Include="Interfaces\ICustomerDataConnector.cs" />
     <Compile Include="Interfaces\IPluginSettings.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
+    <Compile Include="Ix4RequestProps.cs" />
     <Compile Include="MappedItem.cs" />
     <Compile Include="SettingsDataModel\CsvPluginSettings.cs" />
     <Compile Include="SettingsDataModel\CustomerInfo.cs" />
@@ -70,7 +71,6 @@
     </Compile>
     <Compile Include="SettingsManager\CustomerInfoSerializer.cs" />
     <Compile Include="SettingsManager\XmlConfigurationManager.cs" />
-    <Compile Include="XmlFileData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\LICSRequest.xsd">

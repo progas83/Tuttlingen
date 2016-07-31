@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ix4Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,11 +13,11 @@ namespace SinplestLogger
         private static Logger _logger;
         private static object _padlock = new object();
         private static StreamWriter _streamWriterFile;
-        private const string _logFilename = @"C:\ix4\logger.log";
+     //   private static readonly _logFilename = CurrentServiceInformation.LoggerFileName;
         private const string _newLine = "-------------Date: {0} | Time: {1}--------------------------------------------------------------------------";
         private Logger()
         {
-            _streamWriterFile = new StreamWriter(new FileStream(_logFilename, System.IO.FileMode.Append));
+            _streamWriterFile = new StreamWriter(new FileStream(CurrentServiceInformation.LoggerFileName, System.IO.FileMode.Append));
         }
 
         public static Logger GetLogger()
@@ -35,12 +36,16 @@ namespace SinplestLogger
 
                 return _logger;
         }
-
+        private static object _streamLock = new object();
         public void Log(string message)
         {
-            _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
-            _streamWriterFile.WriteLine(message);
-            _streamWriterFile.Flush();
+            lock(_streamLock)
+            {
+                _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+                _streamWriterFile.WriteLine(message);
+                _streamWriterFile.Flush();
+            }
+            
         }
 
         public void Log(Exception exception)

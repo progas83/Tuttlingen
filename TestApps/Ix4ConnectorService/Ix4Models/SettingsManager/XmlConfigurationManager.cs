@@ -45,9 +45,9 @@ namespace Ix4Models.SettingsManager
         {
             CustomerInfo customerInfo = new CustomerInfo();
 
-            if (!File.Exists(XmlFileData.FileName))
+            if (!File.Exists(CurrentServiceInformation.FileName))
             {
-                using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.CreateNew))
+                using (FileStream fs = new FileStream(CurrentServiceInformation.FileName, FileMode.CreateNew))
                 {
                     _xmlSerializer.Serialize(fs, customerInfo);
                     fs.Flush(true);
@@ -55,7 +55,7 @@ namespace Ix4Models.SettingsManager
             }
             try
             {
-                using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.OpenOrCreate))
+                using (FileStream fs = new FileStream(CurrentServiceInformation.FileName, FileMode.OpenOrCreate))
                 {
                     customerInfo = _xmlSerializer.Deserialize(fs);
                 }
@@ -72,7 +72,7 @@ namespace Ix4Models.SettingsManager
         {
             try
             {
-                using (FileStream fs = new FileStream(XmlFileData.FileName, FileMode.Truncate))
+                using (FileStream fs = new FileStream(CurrentServiceInformation.FileName, FileMode.Truncate))
                 {
                     _xmlSerializer.Serialize(fs, customerInfo);
                     fs.Flush(true);

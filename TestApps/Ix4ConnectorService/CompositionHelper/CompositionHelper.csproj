@@ -51,6 +51,10 @@
       <Project>{fc7c4d19-401c-43b8-a054-1f4c1c6b8228}</Project>
       <Name>Ix4Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SinplestLogger\SinplestLogger.csproj">
+      <Project>{18B499E8-956D-45C0-A9F7-6314CC00B777}</Project>
+      <Name>SinplestLogger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
