@@ -1,15 +1,18 @@
 ﻿using Ix4Models;
+using Ix4ServiceConfigurator.EventArguments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Ix4ServiceConfigurator
 {
     class ServiceInfoWrapper
     {
+
         private static object _padlock = new object();
 
         private static object _singletoneLocker = new object();
@@ -19,11 +22,11 @@ namespace Ix4ServiceConfigurator
         {
             get
             {
-                if(_serviceInfoWrapper==null)
+                if (_serviceInfoWrapper == null)
                 {
-                    lock(_singletoneLocker)
+                    lock (_singletoneLocker)
                     {
-                        if(_serviceInfoWrapper==null)
+                        if (_serviceInfoWrapper == null)
                         {
                             _serviceInfoWrapper = new ServiceInfoWrapper();
                         }
@@ -32,63 +35,83 @@ namespace Ix4ServiceConfigurator
                 return _serviceInfoWrapper;
             }
         }
-
+       // System.Timers.Timer _checkServiceStatusTimer;
         private ServiceInfoWrapper()
         {
-            CheckCurrentService();
-        }
-        private CustomServiceController _currentService = null;
+          //  CheckCurrentService();
+            //_checkServiceStatusTimer = new System.Timers.Timer(10000);
+            //_checkServiceStatusTimer.AutoReset = true;
+            //_checkServiceStatusTimer.Elapsed += OnCheckServiceStatus;
+            //_checkServiceStatusTimer.Enabled = true;
 
-        private CustomServiceController CurrentService
+        }
+  //      public event EventHandler<ServiceControllerStatusEventArg> ServiceStatusChanged;
+        //private void OnCheckServiceStatus(object sender, ElapsedEventArgs e)
+        //{
+        //    if (ServiceExist)
+        //    {
+        //        ServiceControllerStatus currentServiceStatus = CurrentService.Status;
+        //        if (ServiceStatus != currentServiceStatus && ServiceStatusChanged != null)
+        //        {
+        //            ServiceStatusChanged(this, new ServiceControllerStatusEventArg(currentServiceStatus));
+        //        }
+
+        //    }
+        //}
+
+        private ServiceController _currentService = null;
+
+        private ServiceController CurrentService
         {
             get
             {
-                CheckCurrentService();
-                return _currentService;
+              //  CheckCurrentService();
+                return ServiceController.GetServices().FirstOrDefault(item => item.ServiceName.Equals(CurrentServiceInformation.ServiceName)); //_currentService;
             }
         }
 
-        private void CheckCurrentService()
-        {
-            lock (_padlock)
-            {
-                try
-                {
-                    CustomServiceController sc = new CustomServiceController(CurrentServiceInformation.ServiceName);
-                    
-                    if (!sc.Equals(_currentService))
-                    {
-                        _currentService = sc;
-                    }
+        //private void CheckCurrentService()
+        //{
+        //    lock (_padlock)
+        //    {
+        //        try
+        //        {
+        //            ServiceController sc = 
+
+        //            if (!sc.Equals(_currentService))
+        //            {
+                        
+        //                _currentService = sc;
+        //            }
 
 
-                    if (_currentService.ServiceName.Equals(CurrentServiceInformation.ServiceName))
-                    {
-                        _serviceExist = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _serviceExist = false;
-                }
-            }
-        }
+        //            if (_currentService.ServiceName.Equals(CurrentServiceInformation.ServiceName))
+        //            {
+        //                _serviceExist = true;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _serviceExist = false;
+        //        }
+        //    }
+      //  }
 
+      //  private ServiceControllerStatus _currentServiceStatus;
         public ServiceControllerStatus ServiceStatus
         {
             get
             {
-                 return CurrentService.Status;
+                return CurrentService!=null ? CurrentService.Status : ServiceControllerStatus.Stopped;
             }
         }
 
-        private bool _serviceExist = false;
+     
         public bool ServiceExist
         {
             get
             {
-                CheckCurrentService();
-                return _serviceExist;
+                return CurrentService != null;
             }
         }
 

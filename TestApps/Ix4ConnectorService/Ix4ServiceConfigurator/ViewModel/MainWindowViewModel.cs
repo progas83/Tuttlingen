@@ -7,15 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Ix4ServiceConfigurator.EventArguments;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
-    public class ServiceViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel, IDisposable
     {
-        public ServiceViewModel()
+        System.Timers.Timer _checkServiceStatusTimer;
+        public MainWindowViewModel()
         {
             InstallationCommand InstallationCommand = new InstallationCommand();
             InstallationCommand.ServiceInfoNeedToUpdate += OnServiceInfoNeedToUpdate;
@@ -24,7 +27,22 @@ namespace Ix4ServiceConfigurator.ViewModel
             MakeChangesCommad MakeChangesCommand = new MakeChangesCommad();
             MakeChangesCommand.CustomInformationSaved += OnCustomerInfoNeedToUpdate;
             MakeChangesCmd = MakeChangesCommand;
+            _checkServiceStatusTimer = new System.Timers.Timer(1000);
+            _checkServiceStatusTimer.AutoReset = true;
+            _checkServiceStatusTimer.Elapsed += OnCheckStatusTimerElapsed;
+            _checkServiceStatusTimer.Enabled = true;
         }
+        ServiceControllerStatus _previousServiceStatus = ServiceControllerStatus.Stopped;
+
+        private void OnCheckStatusTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if(_previousServiceStatus!=ServiceStatus)
+            {
+                OnPropertyChanged("ServiceStatus");
+                _previousServiceStatus = ServiceStatus;
+            }
+        }
+         
 
         private void OnCustomerInfoNeedToUpdate(object sender, EventArgs e)
         {
@@ -41,7 +59,19 @@ namespace Ix4ServiceConfigurator.ViewModel
         private void OnServiceInfoNeedToUpdate(object sender, EventArgs e)
         {
             OnPropertyChanged("ServiceExist");
+            OnPropertyChanged("ServiceStatus");
         }
+
+        public void Dispose()
+        {
+            if(_checkServiceStatusTimer!=null)
+            {
+                _checkServiceStatusTimer.Enabled = false;
+                _checkServiceStatusTimer.Dispose();
+                _checkServiceStatusTimer = null;
+            }
+        }
+
         CustomerInfo _customer;
         public CustomerInfo Customer
         {
@@ -65,6 +95,14 @@ namespace Ix4ServiceConfigurator.ViewModel
             get
             {
                 return CurrentServiceInformation.ServiceName;
+            }
+        }
+        public ServiceControllerStatus ServiceStatus
+        {
+            get
+            {
+                
+                return ServiceInfoWrapper.Instance.ServiceStatus;// ServiceExist ?_serviceStatus : ServiceControllerStatus.Stopped;
             }
         }
 

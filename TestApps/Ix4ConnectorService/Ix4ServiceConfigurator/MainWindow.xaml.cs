@@ -22,12 +22,14 @@ namespace Ix4ServiceConfigurator
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowViewModel _viewModel;
         public MainWindow()
         {
             InitResources();
             InitializeComponent();
-           
-            this.DataContext = new ServiceViewModel();
+
+            _viewModel = new MainWindowViewModel();
+            this.DataContext = _viewModel;
         }
 
         private void InitResources()
@@ -36,6 +38,14 @@ namespace Ix4ServiceConfigurator
             Uri url = new Uri("pack://application:,,,/Style/WindowsStyleDictionary.xaml", UriKind.Absolute);
             resource.Source = url;
             Application.Current.Resources.MergedDictionaries.Add(resource);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.Dispose();
+            }
         }
     }
 }

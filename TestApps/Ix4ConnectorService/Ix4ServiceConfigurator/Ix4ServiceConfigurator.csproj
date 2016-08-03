@@ -74,11 +74,10 @@
       <DependentUpon>CustomerInfoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToInstallStateConverter.cs" />
-    <Compile Include="CustomServiceController.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Converters\ServiceStatusToIconConverter.cs" />
+    <Compile Include="EventArguments\ServiceControllerStatusEventArg.cs" />
     <Compile Include="ServiceInfoWrapper.cs" />
-    <Compile Include="ViewModel\ServiceViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\CustomerInfoViewModel.cs" />
     <Compile Include="View\CustomerInfoView.xaml.cs">
       <DependentUpon>CustomerInfoView.xaml</DependentUpon>
@@ -99,6 +98,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Style\WindowsStyleDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\CustomerInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,9 +149,20 @@
       <Name>Ix4Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="EventHandlers\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Ix4Logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\green-ball.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\red-ball.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\yellow-ball.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
