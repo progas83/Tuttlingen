@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlDataExtractor", "XmlData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectorWorkflowManager", "ConnectorWorkflowManager\ConnectorWorkflowManager.csproj", "{A292C322-3104-47AF-AB47-1EDFE0F96EFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinplestLogger", "SinplestLogger\SinplestLogger.csproj", "{18B499E8-956D-45C0-A9F7-6314CC00B777}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplestLogger", "SinplestLogger\SimplestLogger.csproj", "{18B499E8-956D-45C0-A9F7-6314CC00B777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

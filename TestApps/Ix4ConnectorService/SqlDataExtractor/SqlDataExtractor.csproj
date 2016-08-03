@@ -67,9 +67,9 @@
       <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\SinplestLogger\SinplestLogger.csproj">
+    <ProjectReference Include="..\SinplestLogger\SimplestLogger.csproj">
       <Project>{18B499E8-956D-45C0-A9F7-6314CC00B777}</Project>
-      <Name>SinplestLogger</Name>
+      <Name>SimplestLogger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

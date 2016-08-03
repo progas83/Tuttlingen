@@ -56,9 +56,9 @@
       <Project>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</Project>
       <Name>Ix4Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SinplestLogger\SinplestLogger.csproj">
+    <ProjectReference Include="..\SinplestLogger\SimplestLogger.csproj">
       <Project>{18b499e8-956d-45c0-a9f7-6314cc00b777}</Project>
-      <Name>SinplestLogger</Name>
+      <Name>SimplestLogger</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

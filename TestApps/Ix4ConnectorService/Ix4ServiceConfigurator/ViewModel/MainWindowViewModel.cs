@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Ix4ServiceConfigurator.EventArguments;
+using RichTextContainer = SimplestLogger.VisualLogging.LogInfoArgs;
+using SimplestLogger.VisualLogging;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
@@ -31,6 +33,26 @@ namespace Ix4ServiceConfigurator.ViewModel
             _checkServiceStatusTimer.AutoReset = true;
             _checkServiceStatusTimer.Elapsed += OnCheckStatusTimerElapsed;
             _checkServiceStatusTimer.Enabled = true;
+
+            SimplestLogger.VisualLogging.VisualLogger.Instance.LogEvent += OnLoggingEvent;
+        }
+
+        private void OnLoggingEvent(object sender, LogInfoArgs e)
+        {
+            TextStatusContainer = e;
+        }
+        private RichTextContainer _textContainer;
+        public RichTextContainer TextStatusContainer
+        {
+            get
+            {
+                return _textContainer;
+            }
+            private set
+            {
+                _textContainer = value;
+                OnPropertyChanged("TextStatusContainer");
+            }
         }
         ServiceControllerStatus _previousServiceStatus = ServiceControllerStatus.Stopped;
 

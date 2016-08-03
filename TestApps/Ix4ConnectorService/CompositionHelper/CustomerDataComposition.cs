@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using Ix4Models;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.Interfaces;
-using SinplestLogger;
+using SimplestLogger;
 
 namespace CompositionHelper
 {

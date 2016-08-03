@@ -4,7 +4,7 @@ using Ix4Models;
 using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
-using SinplestLogger;
+using SimplestLogger;
 using System;
 using System.Collections.Generic;
 using System.IO;

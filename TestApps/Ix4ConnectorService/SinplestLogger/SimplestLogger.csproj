@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VisualLogging\LogInfoArgs.cs" />
+    <Compile Include="VisualLogging\LogStatus.cs" />
+    <Compile Include="VisualLogging\VisualLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">

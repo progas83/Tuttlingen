@@ -1,4 +1,5 @@
 ﻿using Ix4Models;
+using SimplestLogger.VisualLogging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SinplestLogger
+namespace SimplestLogger
 {
     public class Logger
     {
@@ -41,6 +42,7 @@ namespace SinplestLogger
         {
             lock(_streamLock)
             {
+                VisualLogger.Instance.Logging(LogStatus.Info, message);
                 _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
                 _streamWriterFile.WriteLine(message);
                 _streamWriterFile.Flush();

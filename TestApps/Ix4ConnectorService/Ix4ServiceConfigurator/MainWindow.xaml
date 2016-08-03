@@ -6,8 +6,9 @@
         xmlns:converters="clr-namespace:Ix4ServiceConfigurator.Converters"
         xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
         xmlns:local="clr-namespace:Ix4ServiceConfigurator"
-        mc:Ignorable="d"
-        Title="IX4-Agent Configurator" Height="350" Width="525"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight"
+        MaxWidth="900"
+        Title="IX4-Agent Configurator" 
         Closed="Window_Closed"
         Style="{StaticResource MainWondowsStyle}">
     <Window.Resources>
@@ -15,38 +16,7 @@
         <converters:ServiceStatusToIconConverter x:Key="StatusToImageConverter"/>
     </Window.Resources>
     <DockPanel >
-        <Border BorderThickness="5" BorderBrush="Red" HorizontalAlignment="Right" VerticalAlignment="Top" DockPanel.Dock="Right">
-            <DockPanel HorizontalAlignment="Right">
-                <Grid DockPanel.Dock="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Label Content="ServiceName: " HorizontalAlignment="Left" />
-                    <Label Content="{Binding ServiceName}" HorizontalAlignment="Left" Grid.Column="1"/>
-                    <Label Content="Status: " HorizontalAlignment="Left" Grid.Row="1"/>
-                    <StackPanel VerticalAlignment="Top" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="1" Grid.Row="1">
-                        <Image Source="{Binding ServiceStatus,Converter={StaticResource StatusToImageConverter}}" Width="19" Height="19" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <Label HorizontalAlignment="Left" VerticalContentAlignment="Center" Content="{Binding ServiceStatus}"/>
-                    </StackPanel>
-                    <Button  Width="100" Height="50"  Margin="10" DockPanel.Dock="Top" Grid.Column="2" Grid.RowSpan="2"
-                 Command="{Binding InstallServiceCommand}" CommandParameter="{Binding ServiceExist}" 
-                 Content="{Binding ServiceExist, Converter={StaticResource ExistServiceConverter}}"
-                     HorizontalAlignment="Left" VerticalAlignment="Top">
-
-                    </Button>
-                </Grid>
-                
-
-                
-        </DockPanel>
-        </Border>
-
+     
         <Border  BorderThickness="5" BorderBrush="Green" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Left" >
             <DockPanel>
                 <controls:CustomerInfoControl DataContext="{Binding Customer}" DockPanel.Dock="Top" IsEnabled="False"/>
@@ -57,6 +27,46 @@
 
            
         </Border>
+        <DockPanel DockPanel.Dock="Right" LastChildFill="True">
+
+            <Border BorderThickness="5" BorderBrush="Red" HorizontalAlignment="Stretch" VerticalAlignment="Top" DockPanel.Dock="Top">
+                <DockPanel HorizontalAlignment="Left">
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="ServiceName: " HorizontalAlignment="Left" />
+                        <Label Content="{Binding ServiceName}" HorizontalAlignment="Left" Grid.Column="1"/>
+                        <Label Content="Status: " HorizontalAlignment="Left" Grid.Row="1"/>
+                        <StackPanel VerticalAlignment="Top" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="1" Grid.Row="1">
+                            <Image Source="{Binding ServiceStatus,Converter={StaticResource StatusToImageConverter}}" Width="19" Height="19" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Label HorizontalAlignment="Left" VerticalContentAlignment="Center" Content="{Binding ServiceStatus}"/>
+                        </StackPanel>
+                        <Button  Width="100" Height="50"  Margin="10" DockPanel.Dock="Top" Grid.Column="2" Grid.RowSpan="2"
+                 Command="{Binding InstallServiceCommand}" CommandParameter="{Binding ServiceExist}" 
+                 Content="{Binding ServiceExist, Converter={StaticResource ExistServiceConverter}}"
+                     HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                        </Button>
+                    </Grid>
+
+
+
+                </DockPanel>
+            </Border>
+
+            <Border BorderThickness="5" BorderBrush="Red" DockPanel.Dock="Top">
+                <controls:RichTextBoxExtended VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" IsReadOnly="True" RichText="{Binding TextStatusContainer,UpdateSourceTrigger=PropertyChanged}"
+                                    ScrollViewer.VerticalScrollBarVisibility="Visible"  />
+            </Border>
+        </DockPanel>
+        
     </DockPanel>
    
 </Window>
