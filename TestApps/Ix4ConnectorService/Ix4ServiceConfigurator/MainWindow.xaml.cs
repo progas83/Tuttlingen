@@ -24,8 +24,18 @@ namespace Ix4ServiceConfigurator
     {
         public MainWindow()
         {
+            InitResources();
             InitializeComponent();
+           
             this.DataContext = new ServiceViewModel();
+        }
+
+        private void InitResources()
+        {
+            ResourceDictionary resource = new ResourceDictionary();
+            Uri url = new Uri("pack://application:,,,/Style/WindowsStyleDictionary.xaml", UriKind.Absolute);
+            resource.Source = url;
+            Application.Current.Resources.MergedDictionaries.Add(resource);
         }
     }
 }
