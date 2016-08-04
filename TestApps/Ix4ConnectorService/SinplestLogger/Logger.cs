@@ -42,7 +42,6 @@ namespace SimplestLogger
         {
             lock(_streamLock)
             {
-                VisualLogger.Instance.Logging(LogStatus.Info, message);
                 _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
                 _streamWriterFile.WriteLine(message);
                 _streamWriterFile.Flush();
