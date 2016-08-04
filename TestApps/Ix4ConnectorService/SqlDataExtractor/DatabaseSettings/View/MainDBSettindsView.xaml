@@ -46,10 +46,6 @@
         <DockPanel DockPanel.Dock="Top" VerticalAlignment="Top" IsEnabled="{Binding ElementName=UImsSqlActiveted,Path=IsChecked}">
             <DockPanel DockPanel.Dock="Top" Margin="0,5,0,5">
                 <CheckBox IsThreeState="False" Content="Articles" IsChecked="{Binding CheckArticles}" Name="UIcheckArticles" DockPanel.Dock="Left" HorizontalAlignment="Left"/>
-                <Border IsEnabled="{Binding ElementName=UIcheckArticles,Path=IsChecked}" Width="300" Height="50" VerticalAlignment="Top" BorderBrush="Red" BorderThickness="5" DockPanel.Dock="Top" HorizontalAlignment="Right">
-                    <Label VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                           Content="DateTime scheduling settings control"/>
-                </Border>
             </DockPanel>
             <DockPanel IsEnabled="{Binding ElementName=UIcheckArticles,Path=IsChecked}">
                 <Label Content="SQL query for getting all articles" 
@@ -66,10 +62,6 @@
         <DockPanel DockPanel.Dock="Top" Margin="0,5,0,5" VerticalAlignment="Top" IsEnabled="{Binding ElementName=UImsSqlActiveted,Path=IsChecked}">
             <DockPanel  DockPanel.Dock="Top" Margin="0,5,0,5">
                 <CheckBox IsThreeState="False" Content="Deliveries" IsChecked="{Binding CheckDeliveries}" Name="UIcheckDeliveries" DockPanel.Dock="Left" HorizontalAlignment="Left"/>
-                <Border IsEnabled="{Binding ElementName=UIcheckDeliveries,Path=IsChecked}" Width="300" Height="50" VerticalAlignment="Top" BorderBrush="Red" BorderThickness="5" DockPanel.Dock="Top" HorizontalAlignment="Right">
-                    <Label VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                           Content="DateTime scheduling settings control"/>
-                </Border>
             </DockPanel>
             <StackPanel Orientation="Vertical" IsEnabled="{Binding ElementName=UIcheckDeliveries,Path=IsChecked}">
                 <Label Content="SQL query for getting all deliveries" 
