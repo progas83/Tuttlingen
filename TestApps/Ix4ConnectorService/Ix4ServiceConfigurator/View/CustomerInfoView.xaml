@@ -7,8 +7,8 @@
         xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
         xmlns:core="clr-namespace:System;assembly=mscorlib"
         xmlns:dataModels="clr-namespace:Ix4Models;assembly=Ix4Models"
-        mc:Ignorable="d"
-        Title="CustomerInfoView" MinHeight="200" MinWidth="300" SizeToContent="WidthAndHeight">
+        mc:Ignorable="d" Style="{StaticResource MainWondowsStyle}"
+        Title="Ix4-Agent Settings" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <ObjectDataProvider x:Key="DataSourceType" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -23,134 +23,17 @@
 
         </ObjectDataProvider>
     </Window.Resources>
-    <StackPanel Margin="5,10,10,5" x:Name="UIMainDockPanel">
+    <StackPanel Margin="0,10,10,5" x:Name="UIMainDockPanel">
         
-        <controls:CustomerInfoControl DockPanel.Dock="Top" DataContext="{Binding Customer}"/>
+        <controls:CustomerInfoControl DockPanel.Dock="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" DataContext="{Binding Customer}"/>
         <ComboBox Width="100" Margin="10,10,0,10" ItemsSource="{Binding Source={StaticResource DataSourceType}}" SelectedItem="{Binding Path=SelectedDataSource}" DockPanel.Dock="Top" HorizontalAlignment="Left"/>
-        <Button Height="50" IsDefault="True" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Command="{Binding}" Content="Save Information"/>
-        <!--<TabPanel Width="400" Height="400">
-            <TabControl SelectedIndex="{Binding TabSelectedIndex}" SelectedItem="{Binding TabSelectedItem}" ItemsSource="{Binding Source={StaticResource Ix4InterfaceProperties}}">
-                <TabControl.ContentTemplate>
-                    <DataTemplate>
-                        <ContentControl SnapsToDevicePixels="True" Height="Auto" Content="{Binding /}" ScrollViewer.CanContentScroll="True" x:Name="UiPlaceHolder" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
-
-                                                --><!--<ListView ItemsSource="{Binding AvailableSettingsControls}">
-                            
-                        </ListView>-->
-                        <!--<Button Width="50" Height="45" Content="2222222"/>--><!--
-                    </DataTemplate>
-                </TabControl.ContentTemplate>
-               
-
-                --><!--<TabItem Name="tabItem1" Header="Articles" >
-                   
-                </TabItem>
-                    
-                <TabItem Name="tabItem21" Header="Articles" />
-                <TabItem Name="tabItem31" Header="Articles" />--><!--
-            </TabControl>
-        </TabPanel>-->
-       
-        <ListBox ItemsSource="{Binding  AvailableSettingsControls}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <ContentPresenter Content="{Binding}">
-                        
-                    </ContentPresenter>
-                    <!--<RadioButton>
-                        <ContentControl SnapsToDevicePixels="True" Height="Auto" Content="{Binding}" ScrollViewer.CanContentScroll="True" x:Name="UiPlaceHolder" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
-                    </RadioButton>-->
-                        
-                   
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-       
-        <!--<ListBox Name="lbTodoList" HorizontalContentAlignment="Stretch" ItemsSource="{Binding  AvailableSettingsControls}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                        <ContentControl SnapsToDevicePixels="True" Height="Auto" Content="{Binding /}" ScrollViewer.CanContentScroll="True" x:Name="UiPlaceHolder" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-        </ListBox>-->
-
-        <!--<TabPanel VerticalAlignment="Top" HorizontalAlignment="Stretch" Name="tabPanel1">
-            <TabControl ItemsSource="{Binding MyTabItems}">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid x:Name="GridSemestra">
-                               <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition  MinWidth="100"/>
-                                <ColumnDefinition  MinWidth="30"/>
-                            </Grid.ColumnDefinitions>
+        <Button Height="50" Margin="10,0,5,0" IsDefault="True" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Command="{Binding}" Content="Save Information"/>
 
 
-                            <Grid.Children>
-                                <ListBox x:Name="PredmetiLW" Grid.Row="0" BorderThickness="0" Grid.Column="0" ItemsSource="{Binding Predmeti}" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Naziv}" />
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <ListBox x:Name="RadioLW" Grid.Row="0" Grid.Column="1" BorderThickness="0" ItemsSource="{Binding Predmeti}" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock  Text="{Binding Ocjena}"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <Label Content="Prosjek Semestra :" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" />
-                                <Label x:Name="_prosjekSemestra"  Grid.Row="1" Grid.Column="1" ContentStringFormat="F2" Content="{Binding _prosjek, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <Label Content="Ostvareni ECTS-ovi :" HorizontalAlignment="right" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" />
-                                <Label x:Name="_ectsSemestra"  Grid.Row="2" Grid.Column="1" Content="{Binding _ectsovi, Mode=OneWay}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Grid.Children>
-
-
-                        </Grid>
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-            </TabControl>
-            <TabControl VerticalAlignment="Top" 
-                  HorizontalAlignment="Stretch" 
-                            
-                           Name="tabControl1" ItemsSource="{Binding TabItemsSource}" >
-                <TabItem Name="tabItem1" Header="Articles" />
-                Grid.Column="0" 
-              Grid.ColumnSpan="1" 
-              Grid.Row="0" 
-              Grid.RowSpan="1" 
-              Margin="0,29,0,0" 
-              Width="243" 
-              Height="195" 
-                            
-                  Grid.Column="0" 
-                  Grid.ColumnSpan="1" 
-                  Grid.Row="0" 
-                  Grid.RowSpan="1"
-                <StackPanel>
-                    <Button>Button1</Button>
-                    <Button>Button2</Button>
-                    <Label>Label1</Label>
-                </StackPanel>
-
-                <TabItem Name="tabItem2" Header="Orders">Item 2</TabItem>
-                    <TabItem Name="tabItem3" Header="Deliveries">Item 3</TabItem>
-                </TabControl>
-            </TabPanel>-->
-
-
-
-        <Button>
-            
-              
-        </Button>
-        <ContentControl SnapsToDevicePixels="True" Height="Auto" ScrollViewer.CanContentScroll="True" x:Name="UiPlaceHsolder" Content="{Binding PluginControl}" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
+        <WrapPanel>
+            <ContentControl Margin="0,5,0,0" SnapsToDevicePixels="True" Height="Auto" ScrollViewer.CanContentScroll="True" x:Name="UiPlaceHsolder" Content="{Binding PluginControl}" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
+        </WrapPanel>
+        
         
     </StackPanel>
 </Window>

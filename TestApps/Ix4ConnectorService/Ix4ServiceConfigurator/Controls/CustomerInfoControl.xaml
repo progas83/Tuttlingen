@@ -13,12 +13,12 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Content="ServiceName" Grid.Row="0"/>
             <Label Content="ClientID" Grid.Row="1"/>
@@ -31,7 +31,7 @@
             <TextBox Text="{Binding ClientID}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <TextBox Text="{Binding UserName}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <TextBox Text="{Binding Password}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-            <TextBox Text="{Binding ServiceEndpoint}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+            <TextBox Text="{Binding ServiceEndpoint}" TextWrapping="Wrap" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <CheckBox IsChecked="{Binding Default}" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
 
 
