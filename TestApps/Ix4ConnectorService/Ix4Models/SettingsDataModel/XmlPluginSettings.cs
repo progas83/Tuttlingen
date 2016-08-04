@@ -9,11 +9,11 @@ namespace Ix4Models.SettingsDataModel
     {
         public bool IsActivated { get; set; }
 
-        public string SourceFolder { get; set; }
+        public string XmlArticleSourceFolder { get; set; }
 
-        public string ProcessedFilesFolder { get; set; }
+        public string XmlOrdersSourceFolder { get; set; }
 
-        public string Ix4RequestFilesFolder { get; set; }
+        public string XmlDeliveriesSourceFolder { get; set; }
 
         [XmlIgnore]
         public CustomDataSourceTypes PluginType

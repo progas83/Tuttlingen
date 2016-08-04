@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:XmlDataExtractor.Settings.View"
-             xmlns:localVM="clr-namespace:XmlDataExtractor.Settings.ViewModel"
+             xmlns:ix4Model ="clr-namespace:Ix4Models;assembly=Ix4Models"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel Margin="5,10,5,10">
@@ -22,23 +22,24 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Height="30" Content="Select Xml source folder: " HorizontalAlignment="Left" VerticalContentAlignment="Center" />
-            <Label Height="30" Content="Select folder for processed files: " DockPanel.Dock="Left" Grid.Row="2" VerticalContentAlignment="Center"/>
-            <Label Height="30" Content="Select folder for Ix4 request files: " DockPanel.Dock="Left" Grid.Row="4" VerticalContentAlignment="Center"/>
+            <CheckBox x:Name="UICheckArticles" Content="Select Xml Articles source folder: "  IsChecked="{Binding CheckArticles}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <CheckBox x:Name="UICheckOrders"   Content="Select Xml Orders source folder: " IsChecked="{Binding CheckOrders}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center"/>
+            <CheckBox x:Name="UICheckDeliveries"  Content="Select Xml Deliveries source folder: " IsChecked="{Binding CheckDeliveries}" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center"/>
 
-            <TextBox VerticalAlignment="Center" 
-                    VerticalContentAlignment="Center" 
-                        Grid.Column="1"
-                     HorizontalAlignment="Stretch"
-                     HorizontalContentAlignment="Stretch" Height="30" Text="{Binding XmlSourceFolder}" ToolTip="{Binding XmlSourceFolder}"/>
-            <Button Height="30" Content=" ... " Width="30" Grid.Column="2" Command="{Binding}" CommandParameter="{x:Static localVM:XmlFolderTypes.SourceFolder}" DockPanel.Dock="Right"/>
+            <TextBox VerticalAlignment="Center"  VerticalContentAlignment="Center"  Grid.Column="1" HorizontalAlignment="Stretch" IsEnabled="{Binding ElementName=UICheckArticles,Path=IsChecked}"
+                     HorizontalContentAlignment="Stretch" Height="30" Text="{Binding XmlArticleSourceFolder}" ToolTip="{Binding XmlArticleSourceFolder}"/>
+            <Button Height="30" Content=" ... " Width="30" Grid.Column="2" Command="{Binding}" CommandParameter="{x:Static ix4Model:Ix4RequestProps.Articles}" DockPanel.Dock="Right" IsEnabled="{Binding ElementName=UICheckArticles,Path=IsChecked}"/>
 
 
-            <TextBox VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" Width="Auto"  Height="30" Text="{Binding XmlProcessedFilesFolder}" ToolTip="{Binding XmlProcessedFilesFolder}" />
-            <Button Height="30" Content=" ... " HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="2" Command="{Binding}" CommandParameter="{x:Static localVM:XmlFolderTypes.ProcessedFolder}"/>
+            <TextBox VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" Width="Auto"  Height="30" 
+                     Text="{Binding XmlOrdersSourceFolder}" ToolTip="{Binding XmlOrdersSourceFolder}" IsEnabled="{Binding ElementName=UICheckOrders,Path=IsChecked}" />
+            <Button Height="30" Content=" ... " HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="2" Command="{Binding}" CommandParameter="{x:Static ix4Model:Ix4RequestProps.Orders}"
+                    IsEnabled="{Binding ElementName=UICheckOrders,Path=IsChecked}"/>
 
-            <TextBox VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Stretch" Width="Auto"  Height="30" Text="{Binding XmlIx4RequestFilesFolder}" ToolTip="{Binding XmlIx4RequestFilesFolder}" />
-            <Button Height="30" Content=" ... " HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="4" Command="{Binding}" CommandParameter="{x:Static localVM:XmlFolderTypes.Ix4RequestFolder}"/>
+            <TextBox VerticalContentAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Stretch" Width="Auto"  Height="30" 
+                     Text="{Binding XmlDeliveriesSourceFolder}" ToolTip="{Binding XmlDeliveriesSourceFolder}" IsEnabled="{Binding ElementName=UICheckDeliveries,Path=IsChecked}" />
+            <Button Height="30" Content=" ... " HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="4" Command="{Binding}" CommandParameter="{x:Static ix4Model:Ix4RequestProps.Deliveries}"
+                    IsEnabled="{Binding ElementName=UICheckDeliveries,Path=IsChecked}"/>
 
         </Grid>
     </DockPanel>

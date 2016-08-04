@@ -52,8 +52,10 @@ namespace Ix4Models.SettingsDataModel
         {
             using (var cryptor = new Cryptor())
             {
-                _dbPassword = cryptor.Decrypt(_dbPassword);
-                _dbUserName = cryptor.Decrypt(_dbUserName);
+                if (!string.IsNullOrEmpty(_dbPassword))
+                    _dbPassword = cryptor.Decrypt(_dbPassword);
+                if (!string.IsNullOrEmpty(_dbUserName))
+                    _dbUserName = cryptor.Decrypt(_dbUserName);
 
             }
         }
@@ -62,8 +64,10 @@ namespace Ix4Models.SettingsDataModel
         {
             using (var cryptor = new Cryptor())
             {
-                _dbPassword = cryptor.Encrypt(_dbPassword);
-                _dbUserName = cryptor.Encrypt(_dbUserName);
+                if (!string.IsNullOrEmpty(_dbPassword))
+                    _dbPassword = cryptor.Encrypt(_dbPassword);
+                if (!string.IsNullOrEmpty(_dbUserName))
+                    _dbUserName = cryptor.Encrypt(_dbUserName);
             }
 
         }

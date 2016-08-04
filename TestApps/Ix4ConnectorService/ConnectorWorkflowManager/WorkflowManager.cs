@@ -262,7 +262,7 @@ namespace ConnectorWorkflowManager
                     return;
                 }
 
-                string[] xmlSourceFiles = Directory.GetFiles(_customerInfo.PluginSettings.XmlSettings.SourceFolder);
+                string[] xmlSourceFiles = Directory.GetFiles(_customerInfo.PluginSettings.XmlSettings.XmlOrdersSourceFolder);
                 if (xmlSourceFiles.Length > 0)
                 {
                     foreach (string file in xmlSourceFiles)
@@ -278,7 +278,7 @@ namespace ConnectorWorkflowManager
 
 
                 string mes1 = string.Format("Service Timer has been elapsed at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString());
-                string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.SourceFolder, xmlSourceFiles.Length);
+                string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.XmlArticleSourceFolder, xmlSourceFiles.Length);
                 WrightLog(mes1);
                 WrightLog(mes2);
             }

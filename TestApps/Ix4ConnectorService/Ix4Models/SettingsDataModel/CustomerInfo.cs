@@ -40,10 +40,7 @@ namespace Ix4Models.SettingsDataModel
             using (var cryptor = new Cryptor())
             {
                 _password = cryptor.Decrypt(_password);
-                if (PluginSettings.MsSqlSettings.DbSettings != null && !string.IsNullOrEmpty(PluginSettings.MsSqlSettings.DbSettings.DbUserName))
-                {
-
-                }
+                PluginSettings.MsSqlSettings.DbSettings.Decrypt();
             }
         }
 
@@ -52,6 +49,7 @@ namespace Ix4Models.SettingsDataModel
             using (var cryptor = new Cryptor())
             {
                 _password = cryptor.Encrypt(_password);
+                PluginSettings.MsSqlSettings.DbSettings.Encrypt();
             }
             
         }
