@@ -60,6 +60,7 @@
     <Compile Include="SqlTableArticleExplorer.cs" />
     <Compile Include="SqlTableDeliveryExplorer.cs" />
     <Compile Include="SqlTableHeaderExplorer.cs" />
+    <Compile Include="SqlTableOrdersExplorer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">

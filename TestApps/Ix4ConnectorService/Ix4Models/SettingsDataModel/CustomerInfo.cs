@@ -1,12 +1,6 @@
 ﻿using CryptoModule;
-using Ix4Models;
 using Ix4Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ix4Models.SettingsDataModel
 {
@@ -46,6 +40,10 @@ namespace Ix4Models.SettingsDataModel
             using (var cryptor = new Cryptor())
             {
                 _password = cryptor.Decrypt(_password);
+                if (PluginSettings.MsSqlSettings.DbSettings != null && !string.IsNullOrEmpty(PluginSettings.MsSqlSettings.DbSettings.DbUserName))
+                {
+
+                }
             }
         }
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ix4Models.Converters
 {
@@ -16,8 +13,7 @@ namespace Ix4Models.Converters
 
             LICSRequestOrder requestOrder = new LICSRequestOrder();
 
-            //17.05.16
-            requestOrder.ShipmentDate = DateTime.ParseExact(navisionOutputPayload.OrderHeader.Date, "dd.MM.yy", System.Globalization.CultureInfo.InvariantCulture);//.Parse(navisionOutputPayload.OrderHeader.Date); // STRONG TYPIZATION!!!!
+            requestOrder.ShipmentDate = DateTime.ParseExact(navisionOutputPayload.OrderHeader.Date, "dd.MM.yy", System.Globalization.CultureInfo.InvariantCulture);
             requestOrder.OrderNo = navisionOutputPayload.OrderHeader.OrderNumber;
             requestOrder.CustomerNo = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerNumber);
             requestOrder.DistributionCenter = navisionOutputPayload.OrderHeader.WarehouseOrder;
@@ -30,9 +26,6 @@ namespace Ix4Models.Converters
             orderRecipient.ZIPCode = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerZIP);
             orderRecipient.City = navisionOutputPayload.OrderHeader.CustomerTown;
 
-            
-            //  navisionOutputPayload.OrderHeader
-            // licsRequest.OrderImport
             foreach (OutputPayLoadOutputPosition outputPosition in navisionOutputPayload.Positions)
             {
 
@@ -61,34 +54,5 @@ namespace Ix4Models.Converters
             licsRequest.OrderImport = new LICSRequestOrder[] { requestOrder };
             return licsRequest;
         }
-
-        //public static LICSRequestOrderPosition ConvertTo(this OutputPayLoadOutputPosition navisionOutputPosition)
-        //{
-        //    LICSRequestOrderPosition orderPosition = new LICSRequestOrderPosition();
-        //    orderPosition.ArticleNo = navisionOutputPosition.ArticleNumber;
-        //    orderPosition.TargetQuantity =Convert.ToDouble(navisionOutputPosition.VPECount);
-        //    //navisionOutputPosition.ArticleRowNumber;
-        //    //navisionOutputPosition.AttachedToLineNo;
-        //    //navisionOutputPosition.BaseUnitQuantity;
-        //    //navisionOutputPosition.Description;
-        //    //navisionOutputPosition.Description2;
-        //    //navisionOutputPosition.VPECode;
-        //    //navisionOutputPosition.Warehouse;
-
-
-        //        return orderPosition;
-        //}
-
-        //public static LICSRequestOrderRecipient ConvertTo(this OutputPayLoadOrderHeader navisionOrderHeader)
-        //{
-        //    LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
-        //    orderRecipient.Name = navisionOrderHeader.CustomerName;
-        //    orderRecipient.AdditionalName = (string)navisionOrderHeader.CustomerName2;
-        //    orderRecipient.Street = navisionOrderHeader.CustomerStreet;
-        //    orderRecipient.ZIPCode =navisionOrderHeader.CustomerZIP.ToString();
-        //    orderRecipient.City = navisionOrderHeader.CustomerTown;
-
-        //    return orderRecipient;
-        //}
     }
 }

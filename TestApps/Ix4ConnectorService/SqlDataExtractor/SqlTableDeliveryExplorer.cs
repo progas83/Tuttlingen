@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SqlDataExtractor
 {
-    public class SqlTableDeliveryExplorer
+    class SqlTableDeliveryExplorer
     {
         private MsSqlPluginSettings _pluginSettings;
         public SqlTableDeliveryExplorer(IPluginSettings pluginSettings)

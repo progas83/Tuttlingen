@@ -96,5 +96,37 @@ namespace Ix4ServiceConfigurator
             }
 
         }
+
+        public void PauseService()
+        {
+            try
+            {
+                if (CurrentService != null)
+                {
+                    CurrentService.Pause();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        public void ContinueService()
+        {
+            try
+            {
+                if (CurrentService != null)
+                {
+                    CurrentService.Continue();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
     }
 }

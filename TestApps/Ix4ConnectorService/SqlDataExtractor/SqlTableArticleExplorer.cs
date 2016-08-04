@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SqlDataExtractor
 {
-    public class SqlTableArticleExplorer
+    class SqlTableArticleExplorer
     {
 
        
@@ -40,7 +40,7 @@ namespace SqlDataExtractor
             }
         }
 
-        Logger _logger = Logger.GetLogger();
+    //    Logger _logger = Logger.GetLogger();
         public LICSRequestArticle[] GetArticles()
         {
             LICSRequestArticle[] articles = null;
@@ -57,7 +57,7 @@ namespace SqlDataExtractor
             }
             catch (Exception ex)
             {
-                _logger.Log(ex);
+       //         _logger.Log(ex);
             }
             return articles;
         }
@@ -97,7 +97,7 @@ namespace SqlDataExtractor
             }
             catch (Exception ex)
             {
-                _logger.Log(ex);
+      //          _logger.Log(ex);
             }
             return articles.Where(i => !string.IsNullOrEmpty(i.ArticleNo)).ToArray();
         }

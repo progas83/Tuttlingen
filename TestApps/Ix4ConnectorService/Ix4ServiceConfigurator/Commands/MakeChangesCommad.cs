@@ -21,17 +21,20 @@ namespace Ix4ServiceConfigurator.Commands
 
         public void Execute(object parameter)
         {
+            ServiceInfoWrapper.Instance.PauseService();
             CustomerInfoViewModel customerChanges = new CustomerInfoViewModel();
             //  customerChanges.CustomInformationSaveComplete += OnCustomInfoSaveComplete;
             bool? customChangesResult = customerChanges.ShowCustomerInfoWindow();
             if (customChangesResult.HasValue && customChangesResult.Value)
             {
+                ServiceInfoWrapper.Instance.StopService();
                 if (CustomInformationSaved != null)
                 {
                     CustomInformationSaved(null, null);
                 }
+                ServiceInfoWrapper.Instance.StartService();
             }
-
+            ServiceInfoWrapper.Instance.ContinueService();
             customerChanges.Dispose();
             customerChanges = null;
 

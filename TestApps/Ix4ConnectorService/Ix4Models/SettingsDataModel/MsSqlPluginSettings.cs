@@ -1,9 +1,6 @@
 ﻿using Ix4Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Ix4Models.SettingsDataModel
 {
@@ -15,6 +12,8 @@ namespace Ix4Models.SettingsDataModel
             DbSettings = new MsSqlSettings();
         }
         public MsSqlSettings DbSettings { get; set; }
+
+
 
         public bool IsActivated
         {
@@ -42,6 +41,20 @@ namespace Ix4Models.SettingsDataModel
         }
 
         public string PositionsQuery
+        {
+            get; set;
+        }
+
+        [XmlIgnore]
+        public CustomDataSourceTypes PluginType
+        {
+            get
+            {
+                return CustomDataSourceTypes.MsSql;
+            }
+        }
+
+        public bool CheckOrders
         {
             get; set;
         }

@@ -1,24 +1,17 @@
 ﻿using ConnectorWorkflowManager;
 using Ix4Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ix4ConnectorService
 {
-   public class ConnectorService : ServiceBase
+    public class ConnectorService : ServiceBase
     {
         public ConnectorService()
         {
             AutoLog = true;
             CanPauseAndContinue = true;
             CanStop = true;
-          //  CanShutdown = true;
-            ServiceName =  CurrentServiceInformation.ServiceName; //"NavisionService";//
-            
+            ServiceName = CurrentServiceInformation.ServiceName;
         }
 
         protected override void OnStart(string[] args)
@@ -33,19 +26,16 @@ namespace Ix4ConnectorService
             base.OnStop();
         }
 
-        //protected override void OnContinue()
-        //{
-        //    base.OnContinue();
-        //}
+        protected override void OnContinue()
+        {
+            WorkflowManager.Instance.Continue();
+            base.OnContinue();
+        }
 
-        //protected override void OnPause()
-        //{
-        //    base.OnPause();
-        //}
-
-        //protected override void OnShutdown()
-        //{
-        //    base.OnShutdown();
-        //}
+        protected override void OnPause()
+        {
+            WorkflowManager.Instance.Pause();
+            base.OnPause();
+        }
     }
 }

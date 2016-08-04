@@ -1,24 +1,12 @@
-﻿using Ix4Models;
+﻿using Ix4Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Ix4Models.SettingsDataModel
 {
     [Serializable]
-    public class XmlPluginSettings
+    public class XmlPluginSettings : IPluginSettings
     {
-   
-   
-        //[XmlIgnore]
-        
-        //{
-        //    get { return CustomDataSourceTypes.Xml; }
-        //}
-
         public bool IsActivated { get; set; }
 
         public string SourceFolder { get; set; }
@@ -27,5 +15,28 @@ namespace Ix4Models.SettingsDataModel
 
         public string Ix4RequestFilesFolder { get; set; }
 
+        [XmlIgnore]
+        public CustomDataSourceTypes PluginType
+        {
+            get
+            {
+                return CustomDataSourceTypes.Xml;
+            }
+        }
+
+        public bool CheckArticles
+        {
+            get; set;
+        }
+
+        public bool CheckOrders
+        {
+            get; set;
+        }
+
+        public bool CheckDeliveries
+        {
+            get; set;
+        }
     }
 }

@@ -59,12 +59,6 @@ namespace Ix4ServiceConfigurator.ViewModel
             get { return _TabSelectedIndex; }
             set { _TabSelectedIndex = value; OnPropertyChanged("TabSelectedIndex"); }
         }
-        private UserControl _AvailableSettingsControls;
-
-        public ObservableCollection<UserControl> AvailableSettingsControls
-        {
-            get   { return new ObservableCollection < UserControl >(new UserControl[] { _compositor.GetDataSettingsControl(CustomDataSourceTypes.Csv), _compositor.GetDataSettingsControl(CustomDataSourceTypes.MsSql) }); }
-        }
 
         public UserControl PluginControl
         {

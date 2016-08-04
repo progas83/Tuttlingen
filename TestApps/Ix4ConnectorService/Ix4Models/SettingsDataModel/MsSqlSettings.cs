@@ -1,10 +1,6 @@
 ﻿using CryptoModule;
 using Ix4Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ix4Models.SettingsDataModel
 {
@@ -58,7 +54,7 @@ namespace Ix4Models.SettingsDataModel
             {
                 _dbPassword = cryptor.Decrypt(_dbPassword);
                 _dbUserName = cryptor.Decrypt(_dbUserName);
-                
+
             }
         }
 
