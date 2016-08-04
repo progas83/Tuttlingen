@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Linq;
-using Ix4Models;
 using Ix4Models.SettingsDataModel;
-using System.Reflection;
 
 namespace Ix4Models.SettingsManager
 {

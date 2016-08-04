@@ -49,6 +49,11 @@ namespace SqlDataExtractor.DatabaseSettings.ViewModel
             get { return _msSqlPluginSettings.DbSettings.DataBaseName; }
             set { _msSqlPluginSettings.DbSettings.DataBaseName = value; OnPropertyChanged("DbName"); }
         }
+        public bool UseSqlServierAuth
+        {
+            get { return _msSqlPluginSettings.DbSettings.UseSqlServerAuth; }
+            set { _msSqlPluginSettings.DbSettings.UseSqlServerAuth = value; OnPropertyChanged("UseSqlServierAuth"); }
+        }
 
         public string DbUserName
         {

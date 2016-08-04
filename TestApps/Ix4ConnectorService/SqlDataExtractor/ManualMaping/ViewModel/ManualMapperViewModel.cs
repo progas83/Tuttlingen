@@ -24,7 +24,7 @@ namespace SqlDataExtractor.ManualMaping.ViewModel
             }
             Ix4Properties = Ix4ComplexModel.GetPropertiesList();
             SourceMapCollection = new ObservableCollection<DataSourceInfo>(
-                (new SqlTableHeaderExplorer(CurrentServiceInformation.MsSqlDatabaseConnectionString)).
+                (new SqlTableHeaderExplorer(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth)).
                 GetTabelHeader(CurrentServiceInformation.MsSqlDataTableName));
         }
 

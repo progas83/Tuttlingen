@@ -20,6 +20,14 @@ namespace Ix4Models.SettingsDataModel
             set { _dbPassword = value; }
         }
 
+        private bool _useSqlServerAuth;
+
+        public bool UseSqlServerAuth
+        {
+            get { return _useSqlServerAuth; }
+            set { _useSqlServerAuth = value; }
+        }
+
         private string _dbUserName;
 
         public string DbUserName
