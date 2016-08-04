@@ -46,6 +46,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DbConnectionCommand.cs" />
     <Compile Include="DatabaseSettings\ViewModel\MainDBSettingsViewModel.cs" />
     <Compile Include="DatabaseSettings\View\MainDBSettindsView.xaml.cs">
       <DependentUpon>MainDBSettindsView.xaml</DependentUpon>

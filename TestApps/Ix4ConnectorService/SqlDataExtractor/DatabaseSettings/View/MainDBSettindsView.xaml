@@ -26,6 +26,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -41,8 +42,9 @@
 
 
                 <CheckBox x:Name="UISqlAuth" Content="Use SQL Server Authentication" IsChecked="{Binding UseSqlServierAuth}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding DbUserName}" IsEnabled="{Binding ElementName=UISqlAuth,Path=IsChecked}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="3"/>
+                <TextBox Text="{Binding DbUserName}" IsEnabled="{Binding ElementName=UISqlAuth,Path=IsChecked}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="3"/>
                 <TextBox Text="{Binding DbPassword}" IsEnabled="{Binding ElementName=UISqlAuth,Path=IsChecked}" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="4"/>
+                <Button Content="{Binding DbConnectionStatus}" Command="{Binding TestConnectionCommand}" Grid.Column="1" Grid.Row="5"/>
             </Grid>
           
 
