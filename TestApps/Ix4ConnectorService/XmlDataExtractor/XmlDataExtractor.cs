@@ -130,5 +130,53 @@ namespace XmlDataExtractor
             
             return requests.ToArray();
         }
+
+
+
+        private void CheckXmlOrdersFolder(IPluginSettings pluginSettings)
+        {
+            try
+            {
+
+                XmlPluginSettings xmlSettings = pluginSettings as XmlPluginSettings;
+                if (xmlSettings == null)
+                {
+                    return;
+                }
+
+                // string[] xmlSourceFiles = Directory.GetFiles("C:\\Ilya\\TestXmlFolder\\XmlSource");// _customerInfo.PluginSettings.XmlSettings.SourceFolder);
+                // ICustomerDataConnector xmlDataConnector = CustomerDataComposition.Instance.GetDataConnector(CustomDataSourceTypes.Xml);
+                string[] xmlSourceFiles = Directory.GetFiles(xmlSettings.XmlArticleSourceFolder,"*.xml");
+                if (xmlSourceFiles.Length > 0)
+                {
+                    foreach (string file in xmlSourceFiles)
+                    {
+
+                        //    _streamWriterFile.WriteLine(string.Format("Filename:  {0}", file));
+
+                        LICSRequest request = CustomerDataComposition.Instance.GetCustomerDataFromXml(file);// xmlDataConnector.GetCustomerDataFromXml(file);
+                        request.ClientId = _customerInfo.ClientID;
+                        SendLicsRequestToIx4(request, Path.GetFileName(file));
+                    }
+                }
+
+
+                string mes1 = string.Format("Service Timer has been elapsed at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString());
+                string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.SourceFolder, xmlSourceFiles.Length);
+                WrightLog(mes1);
+                WrightLog(mes2);
+
+
+                //foreach (string file in xmlSourceFiles)
+                //{
+
+
+                //}
+            }
+            catch (Exception ex)
+            {
+                WrightLog(ex.Message);
+            }
+        }
     }
 }
