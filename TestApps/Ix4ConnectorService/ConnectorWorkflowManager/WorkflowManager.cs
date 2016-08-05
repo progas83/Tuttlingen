@@ -202,7 +202,11 @@ namespace ConnectorWorkflowManager
             LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType,ix4Property);
             if(requests.Length>0)
             {
-
+                foreach(var item in requests)
+                {
+                    item.ClientId = _customerInfo.ClientID;
+                    SendLicsRequestToIx4(item, "deliveryFile.xml");
+                }
             }
         }
 

@@ -81,8 +81,15 @@ namespace XmlDataExtractor
         private readonly int _deliveriesLimit = 20;
         public LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property)
         {
+
             List<LICSRequest> requests = new List<LICSRequest>();
-            if(pluginSettings.CheckArticles)
+            XmlPluginSettings xmlSettings = pluginSettings as XmlPluginSettings;
+            if (xmlSettings == null)
+            {
+                return requests.ToArray();
+            }
+
+            if (pluginSettings.CheckArticles)
             {
                 LICSRequest request = new LICSRequest();
                 switch (ix4Property)
@@ -93,9 +100,31 @@ namespace XmlDataExtractor
                         requests.Add(request);
                         break;
                     case Ix4RequestProps.Orders:
-                        request.ArticleImport = GetRequestArticles(pluginSettings);
-                        request.OrderImport = GetRequestOrders(pluginSettings);
-                        requests.Add(request);
+                        //request.ArticleImport = GetRequestArticles(pluginSettings);
+                        //request.OrderImport = GetRequestOrders(pluginSettings);
+                        //requests.Add(request);
+
+
+                        {
+                            
+                            
+
+                            // string[] xmlSourceFiles = Directory.GetFiles("C:\\Ilya\\TestXmlFolder\\XmlSource");// _customerInfo.PluginSettings.XmlSettings.SourceFolder);
+                            // ICustomerDataConnector xmlDataConnector = CustomerDataComposition.Instance.GetDataConnector(CustomDataSourceTypes.Xml);
+                            string[] xmlSourceFiles = Directory.GetFiles(xmlSettings.XmlArticleSourceFolder, "*.xml");
+                            if (xmlSourceFiles.Length > 0)
+                            {
+                                foreach (string file in xmlSourceFiles)
+                                {
+
+                                    //    _streamWriterFile.WriteLine(string.Format("Filename:  {0}", file));
+
+                                    LICSRequest req = GetCustomerDataFromXml(file);// CustomerDataComposition.Instance.GetCustomerDataFromXml(file);// xmlDataConnector.GetCustomerDataFromXml(file);
+                                    requests.Add(req);
+
+                                }
+                            }
+                        }
                         break;
                     case Ix4RequestProps.Deliveries:
                       //  LICSRequestDelivery[] deliveries = GetRequestDeliveries(pluginSettings);
@@ -182,22 +211,20 @@ namespace XmlDataExtractor
             return requests;
         }
 
-
         public LICSRequest GetCustomerDataFromXml(string fileName)
         {
-            LICSRequest request = new LICSRequest();
-            if (CustomerDataPlagins != null)
+
+            XmlSerializer xS = new XmlSerializer(typeof(OutputPayLoad));
+            LICSRequest licsRequest = new LICSRequest();
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
             {
-                foreach (var plugin in CustomerDataPlagins)
-                {
-                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.Xml)))
-                    {
-                        request = plugin.Value.GetCustomerDataFromXml(fileName);
-                        break;
-                    }
-                }
+
+                OutputPayLoad customerInfo = (OutputPayLoad)xS.Deserialize(fs);
+                licsRequest = customerInfo.ConvertToLICSRequest();
             }
-            return request;
+
+            return licsRequest;
         }
+      
     }
 }
