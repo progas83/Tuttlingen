@@ -22,10 +22,10 @@ namespace XmlDataExtractor
     {
         XamlFolderSettingsControl _xamlUserControl;
         XamlFolderSettingsViewModel _viewModel;
-        XmlPluginSettings _xmlSettings;
+       
         public UserControl GetControlForSettings(PluginsSettings settings)
         {
-            _xmlSettings = settings.XmlSettings;
+            XmlPluginSettings _xmlSettings = settings.XmlSettings;
             if(_xamlUserControl == null)
             {
                 _xamlUserControl = new XamlFolderSettingsControl();
@@ -77,6 +77,58 @@ namespace XmlDataExtractor
         public LICSRequestOrder[] GetRequestOrders(IPluginSettings pluginSettings)
         {
             throw new NotImplementedException();
+        }
+        private readonly int _deliveriesLimit = 20;
+        public LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property)
+        {
+            List<LICSRequest> requests = new List<LICSRequest>();
+            if(pluginSettings.CheckArticles)
+            {
+                LICSRequest request = new LICSRequest();
+                switch (ix4Property)
+                {
+                    
+                    case Ix4RequestProps.Articles:
+                        request.ArticleImport = GetRequestArticles(pluginSettings);
+                        requests.Add(request);
+                        break;
+                    case Ix4RequestProps.Orders:
+                        request.ArticleImport = GetRequestArticles(pluginSettings);
+                        request.OrderImport = GetRequestOrders(pluginSettings);
+                        requests.Add(request);
+                        break;
+                    case Ix4RequestProps.Deliveries:
+                      //  LICSRequestDelivery[] deliveries = GetRequestDeliveries(pluginSettings);
+                      //  List<LICSRequestDelivery> deliveryList = new List<LICSRequestDelivery>();
+                      //  if(deliveries.Length>_deliveriesLimit)
+                      //  {
+                      //      int i = 0;
+                      //      foreach(var deliv in deliveries)
+                      //      {
+                      //          if(i<=_deliveriesLimit)
+                      //          {
+                      //              deliveryList.Add(deliv);
+                      //              i++;
+                      //          }
+                      //          else
+                      //          {
+                      //              i = 0;
+                      //              request.DeliveryImport = deliveryList.ToArray();
+                      //              requests.Add(request);
+                      //              deliveryList = new List<LICSRequestDelivery>();
+                      //          }
+                      //      }
+                      //  }
+                      //  request.ArticleImport = GetRequestArticles(pluginSettings);
+                      ////  request.OrderImport = GetRequestOrders(pluginSettings);
+                      //  requests.Add(request);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            return requests.ToArray();
         }
     }
 }

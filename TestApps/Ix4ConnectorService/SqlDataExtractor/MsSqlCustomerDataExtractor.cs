@@ -3,6 +3,7 @@ using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
 using SqlDataExtractor.DatabaseSettings.View;
 using SqlDataExtractor.DatabaseSettings.ViewModel;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
 
@@ -60,6 +61,13 @@ namespace SqlDataExtractor
         {
             SqlTableOrdersExplorer ordersExplorer = new SqlTableOrdersExplorer(pluginSettings);
             return ordersExplorer.GetRequestOrders();
+        }
+
+        public LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property)
+        {
+            List<LICSRequest> requests = new List<LICSRequest>();
+
+            return requests.ToArray();
         }
     }
 }

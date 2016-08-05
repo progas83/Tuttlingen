@@ -1,5 +1,6 @@
 ﻿using CompositionHelper;
 using Ix4Connector;
+using Ix4Models;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
 using SimplestLogger;
@@ -189,10 +190,20 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
+            CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
             // CheckXmlOrdersFolder();
             WrightLog("Timer has elapsed");
             //    CheckMsSqlArticles();
             //    CheckMsSqlDeliveriew();
+        }
+
+        private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
+        {
+            LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType,ix4Property);
+            if(requests.Length>0)
+            {
+
+            }
         }
 
         private void CheckDeliveries()

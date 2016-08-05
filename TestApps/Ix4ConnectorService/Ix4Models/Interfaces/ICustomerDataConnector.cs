@@ -12,5 +12,7 @@ namespace Ix4Models.Interfaces
         LICSRequestOrder[] GetRequestOrders(IPluginSettings pluginSettings);
         LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings);
         LICSRequestDelivery[] GetRequestDeliveries(IPluginSettings pluginSettings);
+
+        LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property);
     }
 }

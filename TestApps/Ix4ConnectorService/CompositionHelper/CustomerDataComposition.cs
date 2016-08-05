@@ -178,5 +178,62 @@ namespace CompositionHelper
             }
             return requestOrders;
         }
+
+        public LICSRequest[] GetPreparedRequests(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
+        {
+            LICSRequest[] requests = new LICSRequest[] { };
+            IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings.FirstOrDefault(pl => pl.PluginType == dataSourceType);
+            if(plugingSettings==null)
+            {
+                return requests;
+            }
+
+            foreach (var plugin in CustomerDataPlugins)
+            {
+                if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
+                {
+                    requests = plugin.Value.GetRequestsWithArticles(plugingSettings, ix4Property);
+                    break;
+                }
+            }
+
+         
+            //if(plugingSettings!=null)
+            //{
+            //    bool currentRequestDataPairActive = false;
+            //    if (ix4Property == Ix4RequestProps.Deliveries)
+            //    {
+            //        currentRequestDataPairActive = plugingSettings.CheckDeliveries;
+            //    }
+            //    if (ix4Property == Ix4RequestProps.Orders)
+            //    {
+            //        currentRequestDataPairActive = plugingSettings.CheckOrders;
+            //    }
+
+            //    if(currentRequestDataPairActive)
+            //    {
+
+            //    }
+            //}
+           
+
+          
+           
+            //switch (dataSourceType)
+            //{
+            //    case CustomDataSourceTypes.MsSql:
+
+            //        break;
+            //    case CustomDataSourceTypes.Xml:
+
+            //        break;
+            //    case CustomDataSourceTypes.Csv:
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            return requests;
+        }
     }
 }

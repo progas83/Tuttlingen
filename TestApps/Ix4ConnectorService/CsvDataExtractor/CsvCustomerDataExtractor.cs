@@ -2,6 +2,7 @@
 using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
 
@@ -34,6 +35,13 @@ namespace CsvDataExtractor
         public void SaveSettings(PluginsSettings settings)
         {
             
+        }
+
+        public LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property)
+        {
+            List<LICSRequest> requests = new List<LICSRequest>();
+
+            return requests.ToArray();
         }
     }
 }
