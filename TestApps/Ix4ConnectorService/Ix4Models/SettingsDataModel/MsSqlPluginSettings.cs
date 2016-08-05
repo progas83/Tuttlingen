@@ -1,5 +1,6 @@
 ﻿using Ix4Models.Interfaces;
 using System;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace Ix4Models.SettingsDataModel
@@ -57,6 +58,21 @@ namespace Ix4Models.SettingsDataModel
         public bool CheckOrders
         {
             get; set;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(string.Format("IsActivated = {0}", IsActivated));
+            sb.Append(string.Format("CheckArticles = {0}", CheckArticles));
+            sb.Append(string.Format("ArticlesQuery = {0}", ArticlesQuery));
+            sb.Append(string.Format(" CheckDeliveries= {0}", CheckDeliveries)); sb.Append(string.Format("DeliveriesQuery = {0}", DeliveriesQuery));
+            sb.Append(string.Format("PositionsQuery = {0}", PositionsQuery));
+            sb.Append(string.Format("CheckOrders = {0}", CheckOrders));
+            sb.Append(string.Format("DbSettings  = {0}", DbSettings.ToString()));
+
+
+            return sb.ToString();// base.ToString();
         }
     }
 }

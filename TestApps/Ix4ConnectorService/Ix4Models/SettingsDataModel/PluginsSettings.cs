@@ -7,14 +7,19 @@ namespace Ix4Models.SettingsDataModel
     [Serializable]
     public class PluginsSettings
     {
-        [XmlIgnore]
-        public IPluginSettings[] AllAvailablePluginSettings { get; set; }
+        //[XmlIgnore]
+        public IPluginSettings[] AllAvailablePluginSettings()
+        {
+            return new IPluginSettings[] {this. MsSqlSettings, this.XmlSettings,this.CsvSettings };
+        }
+
+
         public PluginsSettings()
         {
             MsSqlSettings = new MsSqlPluginSettings();
             XmlSettings = new XmlPluginSettings();
             CsvSettings = new CsvPluginSettings();
-            AllAvailablePluginSettings = new IPluginSettings[] { MsSqlSettings, XmlSettings, CsvSettings };
+          //  AllAvailablePluginSettings = 
         }
         public XmlPluginSettings XmlSettings { get; set; }
 

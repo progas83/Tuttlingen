@@ -75,6 +75,17 @@ namespace ConnectorWorkflowManager
             }
         }
 
+        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+            WrightLog("Timer has elapsed");
+            WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
+            CheckArticles();
+            WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
+            CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+            WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
+            CheckDeliveries();
+        }
+
         public void Pause()
         {
             if (_timer != null && _timer.Enabled)
@@ -112,14 +123,14 @@ namespace ConnectorWorkflowManager
                     if (_ix4ServiceConnector != null)
                     {
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
-                        Stream st = new FileStream("C:\\ix4\\tmp.xml", FileMode.OpenOrCreate);
+                        Stream st = new FileStream("D:\\ix4\\tmp.xml", FileMode.OpenOrCreate);
                         serializator.Serialize(st, request);
                         byte[] bytes = ReadToEnd(st);
                         string resp = _ix4ServiceConnector.ImportXmlRequest(bytes, fileName);
                         _loger.Log(resp);
                         st.Flush();
                         st.Dispose();
-                        File.Delete("C:\\ix4\\tmp.xml");
+                        File.Delete("D:\\ix4\\tmp.xml");
 
                     }
                 }
@@ -188,14 +199,7 @@ namespace ConnectorWorkflowManager
             _loger.Log(message);
         }
 
-        private void OnTimedEvent(object sender, ElapsedEventArgs e)
-        {
-            CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
-            // CheckXmlOrdersFolder();
-            WrightLog("Timer has elapsed");
-            //    CheckMsSqlArticles();
-            //    CheckMsSqlDeliveriew();
-        }
+       
 
         private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
@@ -205,7 +209,7 @@ namespace ConnectorWorkflowManager
                 foreach(var item in requests)
                 {
                     item.ClientId = _customerInfo.ClientID;
-                    SendLicsRequestToIx4(item, "deliveryFile.xml");
+                  var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
                 }
             }
         }
@@ -226,10 +230,12 @@ namespace ConnectorWorkflowManager
                 foreach (LICSRequestDelivery delivery in deliveries)
                 {
                     delivery.ClientNo = currentClientID;
+                    request.DeliveryImport = new LICSRequestDelivery[] { delivery };
+                    var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
                 }
-                request.DeliveryImport = deliveries;
+                //request.DeliveryImport = deliveries;
 
-                var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
+                //var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
             }
             catch (Exception ex)
             {

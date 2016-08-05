@@ -1,6 +1,7 @@
 ﻿using Ix4Models;
 using Ix4Models.Interfaces;
 using Ix4Models.SettingsDataModel;
+using SimplestLogger;
 using SqlDataExtractor.DatabaseSettings.View;
 using SqlDataExtractor.DatabaseSettings.ViewModel;
 using System.Collections.Generic;
@@ -44,10 +45,13 @@ namespace SqlDataExtractor
                 settings.MsSqlSettings = _msSqlPluginSettingsViewModel.CurrentPluginSettings;
             }
         }
-
+        private static Logger _loger = Logger.GetLogger();
         public LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings)
         {
-            SqlTableArticleExplorer articleExplorer = new SqlTableArticleExplorer(pluginSettings);
+            MsSqlPluginSettings settings = pluginSettings as MsSqlPluginSettings;
+            _loger.Log("Pluging settings for SQL:");
+            _loger.Log(settings.ToString());
+        SqlTableArticleExplorer articleExplorer = new SqlTableArticleExplorer(pluginSettings);
             return articleExplorer.GetArticles();
         }
 

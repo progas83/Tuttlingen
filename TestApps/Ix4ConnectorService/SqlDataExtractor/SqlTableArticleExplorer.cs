@@ -30,17 +30,20 @@ namespace SqlDataExtractor
         {
             get
             {
-                return _pluginSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _pluginSettings.DbSettings.ServerAdress,
-                                                                                                         _pluginSettings.DbSettings.DataBaseName,
-                                                                                                         _pluginSettings.DbSettings.DbUserName,
-                                                                                                         _pluginSettings.DbSettings.Password) :
-                                                                    string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
-                                                                                                         _pluginSettings.DbSettings.DataBaseName);
+                //return _pluginSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _pluginSettings.DbSettings.ServerAdress,
+                //                                                                                         _pluginSettings.DbSettings.DataBaseName,
+                //                                                                                         _pluginSettings.DbSettings.DbUserName,
+                //                                                                                         _pluginSettings.DbSettings.Password) :
+                //                                                    string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+                //                                                                                         _pluginSettings.DbSettings.DataBaseName);
+
+              return   string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+                                                                                                    _pluginSettings.DbSettings.DataBaseName);
 
             }
         }
-
-    //    Logger _logger = Logger.GetLogger();
+        private static Logger _loger = Logger.GetLogger();
+        //    Logger _logger = Logger.GetLogger();
         public LICSRequestArticle[] GetArticles()
         {
             LICSRequestArticle[] articles = null;
@@ -57,7 +60,7 @@ namespace SqlDataExtractor
             }
             catch (Exception ex)
             {
-       //         _logger.Log(ex);
+                _loger.Log(ex);
             }
             return articles;
         }

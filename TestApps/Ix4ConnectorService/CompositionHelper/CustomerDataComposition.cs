@@ -97,7 +97,7 @@ namespace CompositionHelper
             LICSRequestArticle[] articles = new LICSRequestArticle[] { };
             try
             {
-                IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings.FirstOrDefault(pl => pl.CheckArticles);
+                IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.CheckArticles);
 
                 if (plugingSettings == null)
                 {
@@ -125,7 +125,7 @@ namespace CompositionHelper
         public LICSRequestDelivery[] GetRequestDeliveries()
         {
             LICSRequestDelivery[] deliveries = new LICSRequestDelivery[] { };
-            IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings.FirstOrDefault(pl => pl.CheckDeliveries);
+            IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.CheckDeliveries);
 
             if (plugingSettings == null)
             {
@@ -157,7 +157,7 @@ namespace CompositionHelper
             LICSRequestOrder[] requestOrders = new LICSRequestOrder[] { };
             try
             {
-                IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings.FirstOrDefault(pl => pl.CheckOrders);
+                IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.CheckOrders);
                 if(plugingSettings==null)
                 {
                     //_logger.Log("There was not adjusted any orders setting");
@@ -182,7 +182,7 @@ namespace CompositionHelper
         public LICSRequest[] GetPreparedRequests(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
             LICSRequest[] requests = new LICSRequest[] { };
-            IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings.FirstOrDefault(pl => pl.PluginType == dataSourceType);
+            var plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.PluginType == dataSourceType);
             if(plugingSettings==null)
             {
                 return requests;
