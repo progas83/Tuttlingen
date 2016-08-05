@@ -133,15 +133,16 @@ namespace XmlDataExtractor
 
 
 
-        private void CheckXmlOrdersFolder(IPluginSettings pluginSettings)
+        private List<LICSRequest>  CheckXmlOrdersFolder(IPluginSettings pluginSettings)
         {
+            List<LICSRequest> requests = new List<LICSRequest>();
             try
             {
 
                 XmlPluginSettings xmlSettings = pluginSettings as XmlPluginSettings;
                 if (xmlSettings == null)
                 {
-                    return;
+                    return requests;
                 }
 
                 // string[] xmlSourceFiles = Directory.GetFiles("C:\\Ilya\\TestXmlFolder\\XmlSource");// _customerInfo.PluginSettings.XmlSettings.SourceFolder);
@@ -154,17 +155,17 @@ namespace XmlDataExtractor
 
                         //    _streamWriterFile.WriteLine(string.Format("Filename:  {0}", file));
 
-                        LICSRequest request = CustomerDataComposition.Instance.GetCustomerDataFromXml(file);// xmlDataConnector.GetCustomerDataFromXml(file);
-                        request.ClientId = _customerInfo.ClientID;
-                        SendLicsRequestToIx4(request, Path.GetFileName(file));
+                        LICSRequest request = GetCustomerDataFromXml(file);// CustomerDataComposition.Instance.GetCustomerDataFromXml(file);// xmlDataConnector.GetCustomerDataFromXml(file);
+                        requests.Add(request);
+                     
                     }
                 }
 
 
-                string mes1 = string.Format("Service Timer has been elapsed at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString());
-                string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.SourceFolder, xmlSourceFiles.Length);
-                WrightLog(mes1);
-                WrightLog(mes2);
+                //string mes1 = string.Format("Service Timer has been elapsed at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString());
+                //string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.SourceFolder, xmlSourceFiles.Length);
+                //WrightLog(mes1);
+                //WrightLog(mes2);
 
 
                 //foreach (string file in xmlSourceFiles)
@@ -175,8 +176,28 @@ namespace XmlDataExtractor
             }
             catch (Exception ex)
             {
-                WrightLog(ex.Message);
+               // WrightLog(ex.Message);
             }
+
+            return requests;
+        }
+
+
+        public LICSRequest GetCustomerDataFromXml(string fileName)
+        {
+            LICSRequest request = new LICSRequest();
+            if (CustomerDataPlagins != null)
+            {
+                foreach (var plugin in CustomerDataPlagins)
+                {
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), CustomDataSourceTypes.Xml)))
+                    {
+                        request = plugin.Value.GetCustomerDataFromXml(fileName);
+                        break;
+                    }
+                }
+            }
+            return request;
         }
     }
 }
