@@ -10,6 +10,7 @@ using System.IO;
 using System.Timers;
 using System.Xml.Serialization;
 using System.Linq;
+using Ix4Models.Converters;
 
 namespace ConnectorWorkflowManager
 {
@@ -146,14 +147,14 @@ namespace ConnectorWorkflowManager
                     if (_ix4ServiceConnector != null)
                     {
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
-                        Stream st = new FileStream("C:\\ix4\\tmp.xml", FileMode.OpenOrCreate);
+                        Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate);
                         serializator.Serialize(st, request);
                         byte[] bytes = ReadToEnd(st);
                         string resp = _ix4ServiceConnector.ImportXmlRequest(bytes, fileName);
                         _loger.Log(resp);
                         st.Flush();
                         st.Dispose();
-                        File.Delete("C:\\ix4\\tmp.xml");
+                        File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
                         result = true;
                     }
                 }
@@ -290,7 +291,7 @@ namespace ConnectorWorkflowManager
                             if (findArticle == null)
                             {
                                 _loger.Log("Cannot find article with no:  " + position.ArticleNo);
-                                _loger.Log("Delivery eith wrong article position:  " + delivery);
+                                _loger.Log("Delivery with wrong article position:  " + delivery);
                                 deliveryHasErrors = true;
                             }
                             else
@@ -306,6 +307,12 @@ namespace ConnectorWorkflowManager
                         else
                         {
                             request.ArticleImport = articlesByDelliveries.ToArray();
+                            _loger.Log("Delivery before sending: ");
+                            foreach(LICSRequestDelivery item in request.DeliveryImport)
+                            {
+                                _loger.Log(item.SerializeObjectToString<LICSRequestDelivery>());
+                            }
+                           
                             var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
                             _loger.Log("Delivery result: " + res);
                         }

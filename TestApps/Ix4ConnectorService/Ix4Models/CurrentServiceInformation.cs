@@ -25,5 +25,8 @@
         private static readonly string _loggerFileName = string.Format("{0}{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\logger.log");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
         public static string LoggerFileName { get { return _loggerFileName; } }
 
+        private static readonly string _temporaryXmlFileName = string.Format("{0}{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\tmp.xml");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
+        public static string TemporaryXmlFileName { get { return _temporaryXmlFileName; } }
+
     }
 }

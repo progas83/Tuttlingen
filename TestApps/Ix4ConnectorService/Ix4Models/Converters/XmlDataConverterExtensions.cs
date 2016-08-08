@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Ix4Models.Converters
 {
@@ -53,6 +55,18 @@ namespace Ix4Models.Converters
             licsRequest.ArticleImport = listLicsRequestArticles.ToArray();
             licsRequest.OrderImport = new LICSRequestOrder[] { requestOrder };
             return licsRequest;
+        }
+
+
+        public static string SerializeObjectToString<T>(this T toSerialize)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
+
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, toSerialize);
+                return textWriter.ToString();
+            }
         }
     }
 }
