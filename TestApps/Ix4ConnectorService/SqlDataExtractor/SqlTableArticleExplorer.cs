@@ -30,15 +30,15 @@ namespace SqlDataExtractor
         {
             get
             {
-                //return _pluginSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _pluginSettings.DbSettings.ServerAdress,
-                //                                                                                         _pluginSettings.DbSettings.DataBaseName,
-                //                                                                                         _pluginSettings.DbSettings.DbUserName,
-                //                                                                                         _pluginSettings.DbSettings.Password) :
-                //                                                    string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
-                //                                                                                         _pluginSettings.DbSettings.DataBaseName);
+                return _pluginSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _pluginSettings.DbSettings.ServerAdress,
+                                                                                                         _pluginSettings.DbSettings.DataBaseName,
+                                                                                                         _pluginSettings.DbSettings.DbUserName,
+                                                                                                         _pluginSettings.DbSettings.Password) :
+                                                                    string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+                                                                                                         _pluginSettings.DbSettings.DataBaseName);
 
-              return   string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
-                                                                                                    _pluginSettings.DbSettings.DataBaseName);
+                //return   string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+                //                                                                                    _pluginSettings.DbSettings.DataBaseName);
 
             }
         }

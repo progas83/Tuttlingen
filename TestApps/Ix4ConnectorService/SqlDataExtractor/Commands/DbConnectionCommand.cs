@@ -45,8 +45,9 @@ namespace SqlDataExtractor.Commands
                     connection.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                _viewModel.ConnectionStatusError = ex.Message;
                 _viewModel.DbConnectionStatus = "Connection Failed";
             }
             

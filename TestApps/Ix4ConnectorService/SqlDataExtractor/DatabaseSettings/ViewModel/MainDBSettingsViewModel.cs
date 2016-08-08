@@ -59,6 +59,14 @@ namespace SqlDataExtractor.DatabaseSettings.ViewModel
             set { _dbConnectionStatus = value; OnPropertyChanged("DbConnectionStatus"); }
         }
 
+        private string _connectionStatusError;
+
+        public string ConnectionStatusError
+        {
+            get { return _connectionStatusError; }
+            set { _connectionStatusError = value; OnPropertyChanged("ConnectionStatusError"); }
+        }
+
 
         public string ServerAdress
         {
