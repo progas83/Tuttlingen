@@ -5,6 +5,7 @@ using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
 using SimplestLogger;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Timers;
 using System.Xml.Serialization;
@@ -20,7 +21,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 60000;
+        private static readonly long RElapsedEvery = 3000;
 
         private static Logger _loger = Logger.GetLogger();
 
@@ -77,13 +78,27 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            WrightLog("Timer has elapsed");
-            WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
-            CheckArticles();
-            WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-            CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
-            WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
-            CheckDeliveries();
+            _timer.Enabled = false;
+            try
+            {
+                WrightLog("Timer has elapsed");
+                WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
+      //       CheckArticles();
+                WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
+      //       CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+                WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
+                CheckDeliveries();
+            }
+            catch (Exception ex)
+            {
+                _loger.Log(ex.Message);
+            }
+            finally
+            {
+                _timer.Enabled = true;
+            }
+
+
         }
 
         public void Pause()
@@ -123,15 +138,15 @@ namespace ConnectorWorkflowManager
                     if (_ix4ServiceConnector != null)
                     {
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
-                        Stream st = new FileStream("D:\\ix4\\tmp.xml", FileMode.OpenOrCreate);
+                        Stream st = new FileStream("C:\\ix4\\tmp.xml", FileMode.OpenOrCreate);
                         serializator.Serialize(st, request);
                         byte[] bytes = ReadToEnd(st);
                         string resp = _ix4ServiceConnector.ImportXmlRequest(bytes, fileName);
                         _loger.Log(resp);
                         st.Flush();
                         st.Dispose();
-                        File.Delete("D:\\ix4\\tmp.xml");
-
+                        File.Delete("C:\\ix4\\tmp.xml");
+                        result = true;
                     }
                 }
                 catch (Exception ex)
@@ -199,19 +214,29 @@ namespace ConnectorWorkflowManager
             _loger.Log(message);
         }
 
-       
+
 
         private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
-            LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType,ix4Property);
-            if(requests.Length>0)
+            try
             {
-                foreach(var item in requests)
+                LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
+                _loger.Log("Count of available orders = " + requests.Length);
+                if (requests.Length > 0)
                 {
-                    item.ClientId = _customerInfo.ClientID;
-                  var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                    foreach (var item in requests)
+                    {
+                        item.ClientId = _customerInfo.ClientID;
+                        var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                        _loger.Log("Orders result: " + res);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _loger.Log(ex);
+            }
+
         }
 
         private void CheckDeliveries()
@@ -222,26 +247,36 @@ namespace ConnectorWorkflowManager
                 LICSRequest request = new LICSRequest();
                 request.ClientId = currentClientID;
                 LICSRequestDelivery[] deliveries = _dataCompositor.GetRequestDeliveries();
+                List<LICSRequestArticle> articlesByDelliveries = new List<LICSRequestArticle>();
                 _loger.Log(deliveries, "deliveries");
                 if (deliveries.Length == 0)
                 {
+                    _loger.Log("There is no deliveries");
                     return;
                 }
                 foreach (LICSRequestDelivery delivery in deliveries)
                 {
+                    articlesByDelliveries = new List<LICSRequestArticle>();
                     delivery.ClientNo = currentClientID;
                     request.DeliveryImport = new LICSRequestDelivery[] { delivery };
+                    foreach(var position in delivery.Positions)
+                    {
+                        articlesByDelliveries.Add(GetArticleByNumber(position.ArticleNo));
+                    }
                     var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
+                    _loger.Log("Delivery result: " + res);
                 }
-                //request.DeliveryImport = deliveries;
-
-                //var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
             }
             catch (Exception ex)
             {
                 _loger.Log(ex);
             }
 
+        }
+
+        private LICSRequestArticle GetArticleByNumber(string articleNo)
+        {
+            
         }
 
         private void CheckArticles()
@@ -252,9 +287,11 @@ namespace ConnectorWorkflowManager
                 LICSRequest request = new LICSRequest();
                 request.ClientId = currentClientID;
                 LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
-                _loger.Log(articles, "articles");
+                _loger.Log("Got ARTICLES");
+               
                 if (articles == null || articles.Length == 0)
                 {
+                    _loger.Log("There is no available articles");
                     return;
                 }
                 foreach (LICSRequestArticle article in articles)
@@ -264,6 +301,7 @@ namespace ConnectorWorkflowManager
                 request.ArticleImport = articles;
 
                 var res = SendLicsRequestToIx4(request, "articleFile.xml");
+                _loger.Log("Articles result: " + res);
 
             }
             catch (Exception ex)

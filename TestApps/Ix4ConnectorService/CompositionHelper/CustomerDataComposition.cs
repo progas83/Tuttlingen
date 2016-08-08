@@ -92,6 +92,36 @@ namespace CompositionHelper
             return uc;
         }
 
+        public LICSRequestArticle GetArticleByNumber(string articleNumber)
+        {
+            LICSRequestArticle article = new LICSRequestArticle();
+            try
+            {
+                IPluginSettings plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.CheckArticles);
+
+                if (plugingSettings == null)
+                {
+                    //_logger.Log("There was not adjusted any article setting");
+                    return null;// articles;
+                }
+                foreach (var plugin in CustomerDataPlugins)
+                {
+                    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes),
+                        plugingSettings.PluginType)))
+                    {
+                        article = plugin.Value.GetRequestArticles(plugingSettings);
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //         _logger.Log(ex);
+            }
+            return article;
+
+        }
+
         public LICSRequestArticle[] GetRequestArticles()
         {
             LICSRequestArticle[] articles = new LICSRequestArticle[] { };
