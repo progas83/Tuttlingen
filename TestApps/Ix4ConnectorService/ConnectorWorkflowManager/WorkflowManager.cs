@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Timers;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace ConnectorWorkflowManager
 {
@@ -21,7 +22,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 3000;
+        private static readonly long RElapsedEvery = 60000;
 
         private static Logger _loger = Logger.GetLogger();
 
@@ -75,7 +76,14 @@ namespace ConnectorWorkflowManager
                 _loger.Log(_ix4ServiceConnector, "_ix4ServiceConnector");
             }
         }
+        private long _articlesLastUpdate = 0;
+        private long _ordersLastUpdate = 0;
+        private long _deliveriesLastUpdate = 0;
 
+        private long GetTimeStamp()
+        {
+            return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
@@ -83,9 +91,9 @@ namespace ConnectorWorkflowManager
             {
                 WrightLog("Timer has elapsed");
                 WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
-      //       CheckArticles();
+                CheckArticles();
                 WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-      //       CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+                CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
                 WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                 CheckDeliveries();
             }
@@ -220,52 +228,92 @@ namespace ConnectorWorkflowManager
         {
             try
             {
-                LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-                _loger.Log("Count of available orders = " + requests.Length);
-                if (requests.Length > 0)
+                if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
                 {
-                    foreach (var item in requests)
+                    LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
+                    _loger.Log("Count of available orders = " + requests.Length);
+                    if (requests.Length > 0)
                     {
-                        item.ClientId = _customerInfo.ClientID;
-                        var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
-                        _loger.Log("Orders result: " + res);
+                        foreach (var item in requests)
+                        {
+                            item.ClientId = _customerInfo.ClientID;
+                            var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                            _loger.Log("Orders result: " + res);
+                        }
                     }
+                    _ordersLastUpdate = GetTimeStamp();
                 }
+               
             }
             catch (Exception ex)
             {
                 _loger.Log(ex);
             }
-
         }
 
         private void CheckDeliveries()
         {
             try
             {
-                int currentClientID = _customerInfo.ClientID;
-                LICSRequest request = new LICSRequest();
-                request.ClientId = currentClientID;
-                LICSRequestDelivery[] deliveries = _dataCompositor.GetRequestDeliveries();
-                List<LICSRequestArticle> articlesByDelliveries = new List<LICSRequestArticle>();
-                _loger.Log(deliveries, "deliveries");
-                if (deliveries.Length == 0)
+                if(_deliveriesLastUpdate==0 || (GetTimeStamp() - _deliveriesLastUpdate) >7200)
                 {
-                    _loger.Log("There is no deliveries");
-                    return;
-                }
-                foreach (LICSRequestDelivery delivery in deliveries)
-                {
-                    articlesByDelliveries = new List<LICSRequestArticle>();
-                    delivery.ClientNo = currentClientID;
-                    request.DeliveryImport = new LICSRequestDelivery[] { delivery };
-                    foreach(var position in delivery.Positions)
+                    if (_cachedArticles == null)
                     {
-                        articlesByDelliveries.Add(GetArticleByNumber(position.ArticleNo));
+                        _loger.Log("There is no cheched articles for filling deliveries");
+                        CheckArticles();
+                        if (_cachedArticles == null)
+                        {
+                            _loger.Log("WE CANNOT GET DELIVERIES WITHOUT ARTICLES");
+                            return;
+                        }
                     }
-                    var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
-                    _loger.Log("Delivery result: " + res);
+                    int currentClientID = _customerInfo.ClientID;
+                    LICSRequest request = new LICSRequest();
+                    request.ClientId = currentClientID;
+                    LICSRequestDelivery[] deliveries = _dataCompositor.GetRequestDeliveries();
+                    List<LICSRequestArticle> articlesByDelliveries = new List<LICSRequestArticle>();
+                    _loger.Log(deliveries, "deliveries");
+                    if (deliveries.Length == 0)
+                    {
+                        _loger.Log("There is no deliveries");
+                        return;
+                    }
+                    foreach (LICSRequestDelivery delivery in deliveries)
+                    {
+                        bool deliveryHasErrors = false;
+                        articlesByDelliveries = new List<LICSRequestArticle>();
+                        delivery.ClientNo = currentClientID;
+                        request.DeliveryImport = new LICSRequestDelivery[] { delivery };
+                        foreach (var position in delivery.Positions)
+                        {
+                            LICSRequestArticle findArticle = GetArticleByNumber(position.ArticleNo);
+                            if (findArticle == null)
+                            {
+                                _loger.Log("Cannot find article with no:  " + position.ArticleNo);
+                                _loger.Log("Delivery eith wrong article position:  " + delivery);
+                                deliveryHasErrors = true;
+                            }
+                            else
+                            {
+                                articlesByDelliveries.Add(findArticle);
+                            }
+                        }
+                        if (deliveryHasErrors)
+                        {
+                            _loger.Log("Delivery " + delivery + "WAS NOT SEND");
+                            continue;
+                        }
+                        else
+                        {
+                            request.ArticleImport = articlesByDelliveries.ToArray();
+                            var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
+                            _loger.Log("Delivery result: " + res);
+                        }
+
+                    }
+                    _deliveriesLastUpdate = GetTimeStamp();
                 }
+               
             }
             catch (Exception ex)
             {
@@ -276,33 +324,50 @@ namespace ConnectorWorkflowManager
 
         private LICSRequestArticle GetArticleByNumber(string articleNo)
         {
+            if(_cachedArticles!=null)
+                return _cachedArticles.FirstOrDefault(item => item.ArticleNo.Equals(articleNo));
+            else
+            {
+                _loger.Log("There is no CACHED ARTICLES!!!!!!!!!!");
+                return null;
+            }
             
         }
-
+        LICSRequestArticle[] _cachedArticles;
         private void CheckArticles()
         {
             try
             {
-                int currentClientID = _customerInfo.ClientID;
-                LICSRequest request = new LICSRequest();
-                request.ClientId = currentClientID;
-                LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
-                _loger.Log("Got ARTICLES");
-               
-                if (articles == null || articles.Length == 0)
-                {
-                    _loger.Log("There is no available articles");
-                    return;
-                }
-                foreach (LICSRequestArticle article in articles)
-                {
-                    article.ClientNo = currentClientID;
-                }
-                request.ArticleImport = articles;
 
-                var res = SendLicsRequestToIx4(request, "articleFile.xml");
-                _loger.Log("Articles result: " + res);
+                if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200)
+                {
 
+
+                    int currentClientID = _customerInfo.ClientID;
+                    LICSRequest request = new LICSRequest();
+                    request.ClientId = currentClientID;
+                    LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
+                    _loger.Log("Got ARTICLES");
+
+                    if (articles == null || articles.Length == 0)
+                    {
+                        _loger.Log("There is no available articles");
+                        return;
+                    }
+                    foreach (LICSRequestArticle article in articles)
+                    {
+                        article.ClientNo = currentClientID;
+                    }
+                    request.ArticleImport = articles;
+
+                    var res = SendLicsRequestToIx4(request, "articleFile.xml");
+                    if (res)
+                    {
+                        _cachedArticles = articles;
+                        _articlesLastUpdate = GetTimeStamp();
+                    }
+                    _loger.Log("Articles result: " + res);
+                }
             }
             catch (Exception ex)
             {
