@@ -87,8 +87,8 @@ namespace SqlDataExtractor
                     {
                         DeliveryNo = deliveryNo,
                         DeliveryDate = deliveryDate,
-                        DeliveryArea = (row["DeliveryArea"] ?? string.Empty).ToString(),
-                        DeliveryPlace = (row["DeliveryPlace"] ?? string.Empty).ToString(),
+                        DeliveryArea = string.Empty,//(row["DeliveryArea"] ?? string.Empty).ToString(), According to sebastian's comments
+                        DeliveryPlace = string.Empty,// (row["DeliveryPlace"] ?? string.Empty).ToString(),  According to sebastian's comments
                         OrderDate = orderDate
                     };
 
