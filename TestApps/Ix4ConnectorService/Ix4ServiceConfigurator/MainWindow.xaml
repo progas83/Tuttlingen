@@ -8,6 +8,7 @@
         xmlns:dataModels="clr-namespace:Ix4Models;assembly=Ix4Models"
         xmlns:core="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Ix4ServiceConfigurator"
+        xmlns:locale="clr-namespace:Locale;assembly=Locale"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
         mc:Ignorable="d"
@@ -18,14 +19,10 @@
     <Window.Resources>
         <converters:BoolToInstallStateConverter x:Key="ExistServiceConverter"/>
         <converters:ServiceStatusToIconConverter x:Key="StatusToImageConverter"/>
-        <converters:LanguagesToStringConverter x:Key="LanguageConverter"/>
-
-        <ObjectDataProvider x:Key="Languages" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dataModels:Languages"/>
-            </ObjectDataProvider.MethodParameters>
-
-        </ObjectDataProvider>
+       
+        
+        <locale:CultureResources x:Key="Languages"/>
+       
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -42,7 +39,7 @@
                 <controls:CustomerInfoControl DataContext="{Binding Customer}" DockPanel.Dock="Top" IsEnabled="False"/>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                     <Label Content="{Binding Source={StaticResource Localization},Path=SelectLanguage}"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource Languages}}" SelectionChanged="OnLanguageSelect" SelectedItem="{Binding SelectedLanguage,Converter={StaticResource LanguageConverter}}"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource Languages},Path=SupportedCultures}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedLanguage}"/>
                 </StackPanel>
                 <Button Height="50" HorizontalAlignment="Stretch" Content="{Binding Source={StaticResource Localization},Path=SettingsButton}" 
                         Command="{Binding MakeChangesCmd}" DockPanel.Dock="Top"/>

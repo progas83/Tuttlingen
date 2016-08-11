@@ -30,6 +30,8 @@ namespace Ix4ServiceConfigurator
 
             _viewModel = new MainWindowViewModel();
             this.DataContext = _viewModel;
+
+            
         }
 
         private void InitResources()
@@ -46,13 +48,6 @@ namespace Ix4ServiceConfigurator
             {
                 _viewModel.Dispose();
             }
-        }
-
-
-
-        private void OnLanguageSelect(object sender, SelectionChangedEventArgs e)
-        {
-            InitializeComponent();
         }
     }
 }

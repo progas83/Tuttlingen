@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using Ix4Models.SettingsDataModel;
+using System.Xml;
+using System.Linq;
 
 namespace Ix4Models.SettingsManager
 {
@@ -51,7 +53,7 @@ namespace Ix4Models.SettingsManager
                     customerInfo = _xmlSerializer.Deserialize(fs);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 customerInfo = new CustomerInfo();
             }
@@ -74,6 +76,27 @@ namespace Ix4Models.SettingsManager
 
             }
 
+        }
+
+        public void SaveLocalization(string selectedLanguage)
+        {
+            if (File.Exists(CurrentServiceInformation.FileName))
+            {
+                try
+                {
+                    XmlDocument configDoc = new XmlDocument();
+                    configDoc.Load(CurrentServiceInformation.FileName);
+                    XmlNode root = configDoc.DocumentElement;//.GetElementsByTagName("LanguageCulture");
+                    XmlNode node = root.SelectSingleNode("descendant::LanguageCulture");
+                    node.FirstChild.Value = selectedLanguage;
+                   // node.Value = selectedLanguage;
+                    configDoc.Save(CurrentServiceInformation.FileName);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
     }
 }

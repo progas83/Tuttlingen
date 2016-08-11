@@ -7,6 +7,8 @@ using System.ServiceProcess;
 using System.Windows.Input;
 using RichTextContainer = SimplestLogger.VisualLogging.LogInfoArgs;
 using SimplestLogger.VisualLogging;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
@@ -19,6 +21,7 @@ namespace Ix4ServiceConfigurator.ViewModel
             InstallationCommand.ServiceInfoNeedToUpdate += OnServiceInfoNeedToUpdate;
             InstallServiceCommand = InstallationCommand;
             UpdateCustomerInfo();
+            UpdateLocalization();
             MakeChangesCommad MakeChangesCommand = new MakeChangesCommad();
             MakeChangesCommand.CustomInformationSaved += OnCustomerInfoNeedToUpdate;
             MakeChangesCmd = MakeChangesCommand;
@@ -28,7 +31,11 @@ namespace Ix4ServiceConfigurator.ViewModel
             _checkServiceStatusTimer.Enabled = true;
 
             SimplestLogger.VisualLogging.VisualLogger.Instance.LogEvent += OnLoggingEvent;
+
+            
         }
+
+        
 
         private void OnLoggingEvent(object sender, LogInfoArgs e)
         {
@@ -112,15 +119,34 @@ namespace Ix4ServiceConfigurator.ViewModel
                 return CurrentServiceInformation.ServiceName;
             }
         }
-        public string SelectedLanguage
+
+        private void SaveLocalizationConfiguration()
         {
-            get {return  Customer.LanguageCulture; }
+            XmlConfigurationManager.Instance.SaveLocalization(SelectedLanguage.Name);//.UpdateCustomerInformation(Customer);
+        }
+        public CultureInfo SelectedLanguage
+        {
+            get {return CultureInfo.GetCultureInfo(Customer.LanguageCulture); }
             set
             {
-                Customer.LanguageCulture = value;
-                Locale.Properties.Resources.Culture = new System.Globalization.CultureInfo(Customer.LanguageCulture);
-                OnPropertyChanged("SelectedLanguage");
+                if(value.Name!= Customer.LanguageCulture)
+                {
+                    Customer.LanguageCulture = value.Name;
+                    OnPropertyChanged("SelectedLanguage");
+                    UpdateLocalization();
+                 //   SaveLocalizationConfiguration();
+                }
             }
+        }
+
+        private void UpdateLocalization()
+        {
+            if(Customer!=null)
+            {
+                Locale.CultureResources.ChangeCulture(new System.Globalization.CultureInfo(Customer.LanguageCulture));
+                ((ObjectDataProvider)App.Current.FindResource("Localization")).Refresh();
+            }
+           
         }
         public ServiceControllerStatus ServiceStatus
         {
