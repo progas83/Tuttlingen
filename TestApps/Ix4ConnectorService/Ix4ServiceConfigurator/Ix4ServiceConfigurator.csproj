@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="Controls\RichTextBoxExtended.cs" />
     <Compile Include="Converters\BoolToInstallStateConverter.cs" />
+    <Compile Include="Converters\LanguagesToStringConverter.cs" />
     <Compile Include="Converters\ServiceStatusToIconConverter.cs" />
     <Compile Include="EventArguments\ServiceControllerStatusEventArg.cs" />
     <Compile Include="ServiceInfoWrapper.cs" />
@@ -148,6 +149,10 @@
     <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">
       <Project>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</Project>
       <Name>Ix4Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Locale\Locale.csproj">
+      <Project>{1472928b-5220-4fe4-9f54-84f28052f4ae}</Project>
+      <Name>Locale</Name>
     </ProjectReference>
     <ProjectReference Include="..\SinplestLogger\SimplestLogger.csproj">
       <Project>{18B499E8-956D-45C0-A9F7-6314CC00B777}</Project>

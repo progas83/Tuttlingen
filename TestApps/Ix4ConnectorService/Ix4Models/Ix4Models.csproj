@@ -52,6 +52,7 @@
     <Compile Include="Interfaces\IPluginSettings.cs" />
     <Compile Include="Ix4ComplexModel.cs" />
     <Compile Include="Ix4RequestProps.cs" />
+    <Compile Include="Languages.cs" />
     <Compile Include="MappedItem.cs" />
     <Compile Include="SettingsDataModel\CsvPluginSettings.cs" />
     <Compile Include="SettingsDataModel\CustomerInfo.cs" />

@@ -2,16 +2,9 @@
 using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
 using Ix4ServiceConfigurator.Commands;
-using Ix4ServiceConfigurator.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Ix4ServiceConfigurator.EventArguments;
 using RichTextContainer = SimplestLogger.VisualLogging.LogInfoArgs;
 using SimplestLogger.VisualLogging;
 
@@ -117,6 +110,16 @@ namespace Ix4ServiceConfigurator.ViewModel
             get
             {
                 return CurrentServiceInformation.ServiceName;
+            }
+        }
+        public string SelectedLanguage
+        {
+            get {return  Customer.LanguageCulture; }
+            set
+            {
+                Customer.LanguageCulture = value;
+                Locale.Properties.Resources.Culture = new System.Globalization.CultureInfo(Customer.LanguageCulture);
+                OnPropertyChanged("SelectedLanguage");
             }
         }
         public ServiceControllerStatus ServiceStatus

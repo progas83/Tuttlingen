@@ -47,5 +47,12 @@ namespace Ix4ServiceConfigurator
                 _viewModel.Dispose();
             }
         }
+
+
+
+        private void OnLanguageSelect(object sender, SelectionChangedEventArgs e)
+        {
+            InitializeComponent();
+        }
     }
 }

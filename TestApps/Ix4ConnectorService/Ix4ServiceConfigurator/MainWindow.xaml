@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:Ix4ServiceConfigurator.Converters"
         xmlns:controls="clr-namespace:Ix4ServiceConfigurator.Controls"
+        xmlns:dataModels="clr-namespace:Ix4Models;assembly=Ix4Models"
+        xmlns:core="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Ix4ServiceConfigurator"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
@@ -16,6 +18,14 @@
     <Window.Resources>
         <converters:BoolToInstallStateConverter x:Key="ExistServiceConverter"/>
         <converters:ServiceStatusToIconConverter x:Key="StatusToImageConverter"/>
+        <converters:LanguagesToStringConverter x:Key="LanguageConverter"/>
+
+        <ObjectDataProvider x:Key="Languages" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dataModels:Languages"/>
+            </ObjectDataProvider.MethodParameters>
+
+        </ObjectDataProvider>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -30,8 +40,12 @@
                 HorizontalAlignment="Left" VerticalAlignment="Top">
             <DockPanel>
                 <controls:CustomerInfoControl DataContext="{Binding Customer}" DockPanel.Dock="Top" IsEnabled="False"/>
-
-                <Button Height="50" HorizontalAlignment="Stretch" Content="Make changes" Command="{Binding MakeChangesCmd}" DockPanel.Dock="Top"/>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                    <Label Content="{Binding Source={StaticResource Localization},Path=SelectLanguage}"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource Languages}}" SelectionChanged="OnLanguageSelect" SelectedItem="{Binding SelectedLanguage,Converter={StaticResource LanguageConverter}}"/>
+                </StackPanel>
+                <Button Height="50" HorizontalAlignment="Stretch" Content="{Binding Source={StaticResource Localization},Path=SettingsButton}" 
+                        Command="{Binding MakeChangesCmd}" DockPanel.Dock="Top"/>
             </DockPanel>
         </Border>
 
@@ -47,9 +61,9 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Content="ServiceName: " HorizontalAlignment="Left" />
+                    <Label Content="{Binding Source={StaticResource ResourceKey=Localization},Path=ServiceName}" HorizontalAlignment="Left"  />
                     <Label Content="{Binding ServiceName}" HorizontalAlignment="Left" Grid.Column="1"/>
-                    <Label Content="Status: " HorizontalAlignment="Left" Grid.Row="1"/>
+                    <Label  Content="{Binding Source={StaticResource ResourceKey=Localization},Path=ServiceStatus}" HorizontalAlignment="Left" Grid.Row="1"/>
                     <StackPanel VerticalAlignment="Top" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="1" Grid.Row="1">
                         <Image Source="{Binding ServiceStatus,Converter={StaticResource StatusToImageConverter}}" Width="19" Height="19" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         <Label HorizontalAlignment="Left" VerticalContentAlignment="Center" Content="{Binding ServiceStatus}"/>
@@ -72,17 +86,4 @@
                                     ScrollViewer.VerticalScrollBarVisibility="Visible"  />
         </Border>
     </Grid>
-    
-    <!--<DockPanel >
-     
-       
-        <DockPanel DockPanel.Dock="Right" LastChildFill="True">
-
-          
-
-          
-        </DockPanel>
-        
-    </DockPanel>-->
-   
 </Window>

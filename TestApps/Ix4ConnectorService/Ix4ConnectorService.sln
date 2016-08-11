@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectorWorkflowManager", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplestLogger", "SinplestLogger\SimplestLogger.csproj", "{18B499E8-956D-45C0-A9F7-6314CC00B777}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locale", "Locale\Locale.csproj", "{1472928B-5220-4FE4-9F54-84F28052F4AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18B499E8-956D-45C0-A9F7-6314CC00B777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1472928B-5220-4FE4-9F54-84F28052F4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1472928B-5220-4FE4-9F54-84F28052F4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1472928B-5220-4FE4-9F54-84F28052F4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1472928B-5220-4FE4-9F54-84F28052F4AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

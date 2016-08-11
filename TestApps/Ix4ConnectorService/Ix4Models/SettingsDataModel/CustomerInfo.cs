@@ -18,7 +18,7 @@ namespace Ix4Models.SettingsDataModel
             };
         }
 
-
+        public string LanguageCulture { get; set; }
 
         public string ServiceName { get; set; }
         public string UserName { get; set; }
