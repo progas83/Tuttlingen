@@ -185,10 +185,10 @@ namespace IX4InterfaceExample
 
 
             //Authentication
-            ix4WebReference.LBSoapAuthenticationHeader head = new ix4WebReference.LBSoapAuthenticationHeader();
-            head.UserName = "wsbio";// tbUsername.Text;
-            head.Password = "bon8s2a5w2";// tbPassword.Text;
-            head.ClientId = 1000001;
+            ix4WebReference.LBSoapAuthenticationHeader head = GetHeader(false);// new ix4WebReference.LBSoapAuthenticationHeader();
+          //  head.UserName = "wsbio";// tbUsername.Text;
+          //  head.Password = "bon8s2a5w2";// tbPassword.Text;
+          //  head.ClientId = 1000001;
             //head.ClientId = int.Parse(tbClientId.Text);
             //head.UserName = tbUsername.Text;
             //head.Password = tbPassword.Text;
@@ -330,9 +330,13 @@ namespace IX4InterfaceExample
             }
             else
             {
-                header.UserName = "wsbio"; //"bionisys";// 
-                header.Password = "bon8s2a5w2";
-                header.ClientId = 1000001;
+                header.UserName = "wwinterface"; //"bionisys";// 
+                header.Password = "Lat6MNEwAd45";
+                header.ClientId = 1000090;
+
+           //     header.UserName = "wsbio"; //"bionisys";// 
+            //    header.Password = "bon8s2a5w2";
+            //    header.ClientId = 1000001;
 
             }
 

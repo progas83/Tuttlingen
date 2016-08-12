@@ -56,6 +56,7 @@ namespace SqlDataExtractor
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     articles = LoadArticles(reader);
+                    _loger.Log(string.Format("Article no in SQL Extractor = {0}",articles.Length));
                 }
             }
             catch (Exception ex)
@@ -75,6 +76,7 @@ namespace SqlDataExtractor
                 {
                     double currentArticleGroupFactor = 0;
                     double currentWeight = 0;
+                    int identityNo = 0;
                     if (!string.IsNullOrEmpty(Convert.ToString(row["ArticleGroupFactor"])))
                     {
                         currentArticleGroupFactor = double.Parse(Convert.ToString(row["ArticleGroupFactor"]), CultureInfo.InvariantCulture);
@@ -84,12 +86,19 @@ namespace SqlDataExtractor
                     {
                         currentWeight = double.Parse(Convert.ToString(row["Weight"]), CultureInfo.InvariantCulture);
                     }
+                    if (!string.IsNullOrEmpty(Convert.ToString(row["IdentityNo"])))
+                    {
+                       identityNo = Int32.Parse(Convert.ToString(row["IdentityNo"]), CultureInfo.InvariantCulture);
+                    }
+
                     articles.Add(new LICSRequestArticle
                     {
                         ArticleNo = (row["ArticleNo"] ?? string.Empty).ToString(),
                         ArticleNo2 = (row["ArticleNo2"] ?? string.Empty).ToString(),
                         ArticleDescription = (row["ArticleDescription"] ?? string.Empty).ToString(),
                         ArticleDescription2 = (row["ArticleDescription2"] ?? string.Empty).ToString(),
+                        IdentityNo = identityNo,
+                        QuantityUnit = (row["QuantityUnit"] ?? string.Empty).ToString(),
                         EAN = (row["EAN"] ?? string.Empty).ToString(),
                         ProductCode = (row["ProductCode"] ?? string.Empty).ToString(),
                         ArticleGroup = (row["ArticleGroup"] ?? string.Empty).ToString(),
@@ -100,7 +109,7 @@ namespace SqlDataExtractor
             }
             catch (Exception ex)
             {
-      //          _logger.Log(ex);
+                _loger.Log(ex);
             }
             return articles.Where(i => !string.IsNullOrEmpty(i.ArticleNo)).ToArray();
         }

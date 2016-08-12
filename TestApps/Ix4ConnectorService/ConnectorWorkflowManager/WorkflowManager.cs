@@ -91,15 +91,16 @@ namespace ConnectorWorkflowManager
             try
             {
 
-              //  CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
-                WrightLog("Timer has elapsed");
-                WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
-               
+                CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
+                //CheckArticles();
+                //WrightLog("Timer has elapsed");
+                //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
+
                 CheckArticles();
-                WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-                CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
-                WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
-                CheckDeliveries();
+                //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
+                //CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+                //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
+                //CheckDeliveries();
             }
             catch (Exception ex)
             {
@@ -230,19 +231,20 @@ namespace ConnectorWorkflowManager
 
         private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
+            _loger.Log("============================ CheckPreparedRequest============================================");
             try
             {
                 if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
                 {
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-                    _loger.Log("Count of available orders = " + requests.Length);
+                    _loger.Log(string.Format("Count of available {0} = {1}",ix4Property, requests.Length));
                     if (requests.Length > 0)
                     {
                         foreach (var item in requests)
                         {
                             item.ClientId = _customerInfo.ClientID;
                             var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
-                            _loger.Log("Orders result: " + res);
+                            _loger.Log(string.Format("{0} result: {1}",ix4Property, res));
                         }
                     }
                     _ordersLastUpdate = GetTimeStamp();
