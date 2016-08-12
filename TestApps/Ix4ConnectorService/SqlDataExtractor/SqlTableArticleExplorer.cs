@@ -74,22 +74,22 @@ namespace SqlDataExtractor
                 table.Load(reader);
                 foreach (DataRow row in table.AsEnumerable())
                 {
-                    double currentArticleGroupFactor = 0;
-                    double currentWeight = 0;
-                    int identityNo = 0;
-                    if (!string.IsNullOrEmpty(Convert.ToString(row["ArticleGroupFactor"])))
-                    {
-                        currentArticleGroupFactor = double.Parse(Convert.ToString(row["ArticleGroupFactor"]), CultureInfo.InvariantCulture);
-                    }
+                    //double currentArticleGroupFactor = 0;
+                    //double currentWeight = 0;
+                    //int identityNo = 0;
+                    //if (!string.IsNullOrEmpty(Convert.ToString(row["ArticleGroupFactor"])))
+                    //{
+                    //    currentArticleGroupFactor = double.Parse(Convert.ToString(row["ArticleGroupFactor"]), CultureInfo.InvariantCulture);
+                    //}
                    
-                    if (!string.IsNullOrEmpty(Convert.ToString(row["Weight"])))
-                    {
-                        currentWeight = double.Parse(Convert.ToString(row["Weight"]), CultureInfo.InvariantCulture);
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(row["IdentityNo"])))
-                    {
-                       identityNo = Int32.Parse(Convert.ToString(row["IdentityNo"]), CultureInfo.InvariantCulture);
-                    }
+                    //if (!string.IsNullOrEmpty(Convert.ToString(row["Weight"])))
+                    //{
+                    //    currentWeight = double.Parse(Convert.ToString(row["Weight"]), CultureInfo.InvariantCulture);
+                    //}
+                    //if (!string.IsNullOrEmpty(Convert.ToString(row["IdentityNo"])))
+                    //{
+                    //   identityNo = Int32.Parse(Convert.ToString(row["IdentityNo"]), CultureInfo.InvariantCulture);
+                    //}
 
                     articles.Add(new LICSRequestArticle
                     {
@@ -97,13 +97,13 @@ namespace SqlDataExtractor
                         ArticleNo2 = (row["ArticleNo2"] ?? string.Empty).ToString(),
                         ArticleDescription = (row["ArticleDescription"] ?? string.Empty).ToString(),
                         ArticleDescription2 = (row["ArticleDescription2"] ?? string.Empty).ToString(),
-                        IdentityNo = identityNo,
+                      //  IdentityNo = identityNo,
                         QuantityUnit = (row["QuantityUnit"] ?? string.Empty).ToString(),
-                        EAN = (row["EAN"] ?? string.Empty).ToString(),
-                        ProductCode = (row["ProductCode"] ?? string.Empty).ToString(),
-                        ArticleGroup = (row["ArticleGroup"] ?? string.Empty).ToString(),
-                        ArticleGroupFactor = currentArticleGroupFactor,
-                        Weight = currentWeight
+                       // EAN = (row["EAN"] ?? string.Empty).ToString(),
+                      //  ProductCode = (row["ProductCode"] ?? string.Empty).ToString(),
+                      //  ArticleGroup = (row["ArticleGroup"] ?? string.Empty).ToString(),
+                      //  ArticleGroupFactor = currentArticleGroupFactor,
+                     //   Weight = currentWeight
                     });
                 }
             }
