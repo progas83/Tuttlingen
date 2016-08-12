@@ -120,10 +120,4 @@
   <data name="SelectLanguage" xml:space="preserve">
     <value>Wählen Sie die Sprache</value>
   </data>
-  <data name="ServiceName" xml:space="preserve">
-    <value>Service name: Deutch</value>
-  </data>
-  <data name="ServiceStatus" xml:space="preserve">
-    <value>Status: Deutch</value>
-  </data>
 </root>
