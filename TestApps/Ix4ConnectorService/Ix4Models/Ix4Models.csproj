@@ -58,6 +58,9 @@
     <Compile Include="SettingsDataModel\MsSqlPluginSettings.cs" />
     <Compile Include="SettingsDataModel\MsSqlSettings.cs" />
     <Compile Include="SettingsDataModel\PluginsSettings.cs" />
+    <Compile Include="SettingsDataModel\ScheduledItem.cs" />
+    <Compile Include="SettingsDataModel\SchedulerSettings.cs" />
+    <Compile Include="SettingsDataModel\TimeSign.cs" />
     <Compile Include="SettingsDataModel\XmlPluginSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schema\LICSRequest.cs">

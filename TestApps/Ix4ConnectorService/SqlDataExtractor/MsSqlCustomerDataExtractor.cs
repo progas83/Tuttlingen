@@ -70,7 +70,23 @@ namespace SqlDataExtractor
         public LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property)
         {
             List<LICSRequest> requests = new List<LICSRequest>();
+            LICSRequest request = new LICSRequest();
+            switch(ix4Property)
+            {
+                case Ix4RequestProps.Articles:
+                    request.ArticleImport = GetRequestArticles(pluginSettings);
+                    break;
+                case Ix4RequestProps.Deliveries:
+                    request.DeliveryImport = GetRequestDeliveries(pluginSettings);
+                    break;
+                case Ix4RequestProps.Orders:
+                    request.OrderImport = GetRequestOrders(pluginSettings);
+                    break;
+                default:
+                    break;
 
+            }
+            requests.Add(request);
             return requests.ToArray();
         }
     }

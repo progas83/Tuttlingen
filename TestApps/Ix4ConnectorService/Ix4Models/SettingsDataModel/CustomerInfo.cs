@@ -1,6 +1,7 @@
 ﻿using CryptoModule;
 using Ix4Models.Interfaces;
 using System;
+using System.Xml.Serialization;
 
 namespace Ix4Models.SettingsDataModel
 {
@@ -10,12 +11,13 @@ namespace Ix4Models.SettingsDataModel
         public CustomerInfo()
         {
             ServiceName = CurrentServiceInformation.ServiceName;
-            PluginSettings = new PluginsSettings()
-            {
-                CsvSettings = new CsvPluginSettings(),
-                MsSqlSettings = new MsSqlPluginSettings(),
-                XmlSettings = new XmlPluginSettings()
-            };
+            PluginSettings = new PluginsSettings();
+            ScheduleSettings = new SchedulerSettings();
+            //{
+            //    CsvSettings = new CsvPluginSettings(),
+            //    MsSqlSettings = new MsSqlPluginSettings(),
+            //    XmlSettings = new XmlPluginSettings()
+            //};
         }
 
         public string LanguageCulture { get; set; }
@@ -57,5 +59,8 @@ namespace Ix4Models.SettingsDataModel
         #region PluginsSettings
         public PluginsSettings PluginSettings { get; set; }
         #endregion
+
+ 
+        public SchedulerSettings ScheduleSettings { get; set; }
     }
 }

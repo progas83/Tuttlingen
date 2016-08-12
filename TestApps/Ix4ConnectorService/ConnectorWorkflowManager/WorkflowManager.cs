@@ -90,8 +90,11 @@ namespace ConnectorWorkflowManager
             _timer.Enabled = false;
             try
             {
+
+              //  CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 WrightLog("Timer has elapsed");
                 WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
+               
                 CheckArticles();
                 WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
                 CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
@@ -403,7 +406,7 @@ namespace ConnectorWorkflowManager
                         LICSRequestOrder[] requestOrders = _dataCompositor.GetRequestOrders();
                         request.OrderImport = requestOrders;
                         request.ClientId = _customerInfo.ClientID;
-                        SendLicsRequestToIx4(request, Path.GetFileName(file));
+                        var res = SendLicsRequestToIx4(request, Path.GetFileName(file));
                     }
                 }
 

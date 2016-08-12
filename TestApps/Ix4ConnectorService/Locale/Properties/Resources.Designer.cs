@@ -29,7 +29,7 @@ namespace Locale.Properties {
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public Resources() {
+        internal Resources() {
         }
         
         /// <summary>
@@ -57,6 +57,33 @@ namespace Locale.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check {0} Articles every.
+        /// </summary>
+        public static string ScheduleArticles {
+            get {
+                return ResourceManager.GetString("ScheduleArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check {0} deliveries every.
+        /// </summary>
+        public static string ScheduleDeliveries {
+            get {
+                return ResourceManager.GetString("ScheduleDeliveries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check {0} Orders every.
+        /// </summary>
+        public static string ScheduleOrders {
+            get {
+                return ResourceManager.GetString("ScheduleOrders", resourceCulture);
             }
         }
         

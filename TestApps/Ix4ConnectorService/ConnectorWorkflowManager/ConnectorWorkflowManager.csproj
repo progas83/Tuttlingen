@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeGapKeeper.cs" />
-    <Compile Include="TimeSign.cs" />
+    <Compile Include="RequestSender.cs" />
+    <Compile Include="RequestWorker.cs" />
     <Compile Include="WorkflowManager.cs" />
   </ItemGroup>
   <ItemGroup>

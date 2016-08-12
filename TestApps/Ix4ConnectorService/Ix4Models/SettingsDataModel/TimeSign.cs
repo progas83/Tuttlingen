@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConnectorWorkflowManager
+namespace Ix4Models.SettingsDataModel
 {
+    [Serializable]
     public enum TimeSign
     {
-        sec = 0,
-        min =1,
-        hour = 2,
-        day = 3
+        sec = 1,
+        min = 60,
+        hour = 3600,
+        day = 86400
     }
 }

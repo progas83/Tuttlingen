@@ -90,7 +90,17 @@ namespace Ix4ServiceConfigurator.ViewModel
         public void Execute(object parameter)
         {
             Customer.PluginSettings = _compositor.SavePluginsSettings();
+            if(Customer.ScheduleSettings.ScheduledIssues==null)
+            {
+                Customer.ScheduleSettings.ScheduledIssues = new ScheduledItem[] {   new ScheduledItem(Ix4RequestProps.Articles, 0),
+                                                                                    new ScheduledItem(Ix4RequestProps.Orders, 0),
+                                                                                    new ScheduledItem(Ix4RequestProps.Deliveries, 0)};
+            }
+         //   Customer.ScheduleSettings.Schedule.Add(Ix4RequestProps.Articles, 1000);
+         //   Customer.ScheduleSettings.Schedule.Add(Ix4RequestProps.Deliveries, 2000);
+          //  Customer.ScheduleSettings.Schedule.Add(Ix4RequestProps.Orders, 3000);
             XmlConfigurationManager.Instance.UpdateCustomerInformation(Customer);
+
             _view.DialogResult = true;
             _view.Close();
             //if(CustomInformationSaveComplete!=null)
@@ -120,5 +130,17 @@ namespace Ix4ServiceConfigurator.ViewModel
                 OnPropertyChanged("Customer");
             }
         }
+        //public SchedulerSettings ScheduledSettings
+        //{
+        //    get
+        //    {
+        //        return Customer.ScheduleSettings;
+        //    }
+        //    set
+        //    {
+        //        Customer.ScheduleSettings = value;
+        //        OnPropertyChanged("ScheduledSettings");
+        //    }
+        //}
     }
 }

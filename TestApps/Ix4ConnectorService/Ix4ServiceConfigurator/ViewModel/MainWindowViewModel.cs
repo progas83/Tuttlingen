@@ -134,7 +134,7 @@ namespace Ix4ServiceConfigurator.ViewModel
                     Customer.LanguageCulture = value.Name;
                     OnPropertyChanged("SelectedLanguage");
                     UpdateLocalization();
-                 //   SaveLocalizationConfiguration();
+                    SaveLocalizationConfiguration();
                 }
             }
         }
