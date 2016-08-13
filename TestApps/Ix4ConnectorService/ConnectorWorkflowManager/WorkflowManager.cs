@@ -366,8 +366,8 @@ namespace ConnectorWorkflowManager
             int countA = 0;
             try
             {
-
-                if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200)
+               var timegap = (GetTimeStamp() - _articlesLastUpdate);
+                if (_articlesLastUpdate == 0 || timegap > 43200)
                 {
 
 
@@ -401,7 +401,7 @@ namespace ConnectorWorkflowManager
                             }
                         }
                     }
-
+                    _articlesLastUpdate = GetTimeStamp();
                     //foreach (LICSRequestArticle article in articles)
                     //{
                     // //   article.ClientNo = currentClientID;
@@ -424,7 +424,7 @@ namespace ConnectorWorkflowManager
                     //if (res)
                     //{
                     //    _cachedArticles = articles;
-                    //    _articlesLastUpdate = GetTimeStamp();
+                        
                     //}
                     //   _loger.Log("Articles result: " + res);
                 }

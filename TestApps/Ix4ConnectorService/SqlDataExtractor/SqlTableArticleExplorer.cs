@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,6 +66,15 @@ namespace SqlDataExtractor
             }
             return articles;
         }
+
+        private object GetDefaultValue(Type t)
+        {
+            if (t.IsValueType)
+                return Activator.CreateInstance(t);
+
+            return null;
+        }
+
         private LICSRequestArticle[] LoadArticles(IDataReader reader)
         {
             DataTable table = new DataTable();
@@ -75,6 +85,26 @@ namespace SqlDataExtractor
             {
                 try
                 {
+                    LICSRequestArticle articleItem = new LICSRequestArticle();
+                 //   articleItem.GetType().GetProperty(propertyName).SetValue.GetValue((car, null);
+
+                  //  var r = table.AsEnumerable();
+                    foreach(DataColumn column in  row.Table.Columns)
+                    {
+                        var res = row[column.ColumnName];
+                        PropertyInfo propertyInfo = articleItem.GetType().GetProperty(column.ColumnName);
+                        if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
+                        {
+                            propertyInfo.SetValue(articleItem, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
+                        }
+                        else
+                        {
+                            propertyInfo.SetValue(articleItem, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                        }
+                      
+                       
+                    }
+                    articles.Add(articleItem);
                     //double currentArticleGroupFactor = 0;
                     //double currentWeight = 0;
                     //int identityNo = 0;
@@ -92,24 +122,25 @@ namespace SqlDataExtractor
                     //   identityNo = Int32.Parse(Convert.ToString(row["IdentityNo"]), CultureInfo.InvariantCulture);
                     //}
 
-                    articles.Add(new LICSRequestArticle
-                    {
-                        ArticleNo = (row["ArticleNo"] ?? string.Empty).ToString().Trim(),
-                        ArticleNo2 = (row["ArticleNo2"] ?? string.Empty).ToString().Trim(),
-                        ArticleDescription = (row["ArticleDescription"] ?? string.Empty).ToString().Trim(),
-                        ArticleDescription2 = (row["ArticleDescription2"] ?? string.Empty).ToString().Trim(),
-                        //  IdentityNo = identityNo,
-                        QuantityUnit = (row["QuantityUnit"] ?? string.Empty).ToString().Trim(),
-                        // EAN = (row["EAN"] ?? string.Empty).ToString(),
-                        //  ProductCode = (row["ProductCode"] ?? string.Empty).ToString(),
-                        //  ArticleGroup = (row["ArticleGroup"] ?? string.Empty).ToString(),
-                        //  ArticleGroupFactor = currentArticleGroupFactor,
-                        //   Weight = currentWeight
-                    });
+                    //articles.Add(new LICSRequestArticle
+                    //{
+                    //    ArticleNo = (row["ArticleNo"] ?? string.Empty).ToString().Trim(),
+                    //    ArticleNo2 = (row["ArticleNo2"] ?? string.Empty).ToString().Trim(),
+                    //    ArticleDescription = (row["ArticleDescription"] ?? string.Empty).ToString().Trim(),
+                    //    ArticleDescription2 = (row["ArticleDescription2"] ?? string.Empty).ToString().Trim(),
+                    //    //  IdentityNo = identityNo,
+                    //    QuantityUnit = (row["QuantityUnit"] ?? string.Empty).ToString().Trim(),
+                    //    // EAN = (row["EAN"] ?? string.Empty).ToString(),
+                    //    //  ProductCode = (row["ProductCode"] ?? string.Empty).ToString(),
+                    //    //  ArticleGroup = (row["ArticleGroup"] ?? string.Empty).ToString(),
+                    //    //  ArticleGroupFactor = currentArticleGroupFactor,
+                    //    //   Weight = currentWeight
+                    //});
 
                 }
                 catch (Exception ex)
                 {
+                    _loger.Log("Exception while reflect DataColumn values using Reflection");
                     _loger.Log(ex);
                 }
             }
