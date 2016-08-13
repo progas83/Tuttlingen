@@ -49,8 +49,8 @@ namespace SqlDataExtractor
         public LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings)
         {
             MsSqlPluginSettings settings = pluginSettings as MsSqlPluginSettings;
-            _loger.Log("Pluging settings for SQL:");
-            _loger.Log(settings.ToString());
+      //      _loger.Log("Pluging settings for SQL:");
+       //     _loger.Log(settings.ToString());
         SqlTableArticleExplorer articleExplorer = new SqlTableArticleExplorer(pluginSettings);
             return articleExplorer.GetArticles();
         }

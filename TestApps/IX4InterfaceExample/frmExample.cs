@@ -126,30 +126,30 @@ namespace IX4InterfaceExample
                  * 2. Use XmlSerializer to parse the response into object
                  * 
                  */
-                XmlSerializer ResponseSerializer = new XmlSerializer(typeof(LICSResponse));
-                LICSResponse objResponse;
-                using (TextReader tr = new StringReader(rtbXMLResponse.Text))
-                {
-                    objResponse = (LICSResponse)ResponseSerializer.Deserialize(tr);
-                }
+                //XmlSerializer ResponseSerializer = new XmlSerializer(typeof(LICSResponse));
+                //LICSResponse objResponse;
+                //using (TextReader tr = new StringReader(rtbXMLResponse.Text))
+                //{
+                //    objResponse = (LICSResponse)ResponseSerializer.Deserialize(tr);
+                //}
 
-                //Validate the results
-                if (objResponse.ArticleImport != null && objResponse.ArticleImport.CountOfFailed > 0)
-                {
-                    //Handle ArticleImportErrors
-                }
+                ////Validate the results
+                //if (objResponse.ArticleImport != null && objResponse.ArticleImport.CountOfFailed > 0)
+                //{
+                //    //Handle ArticleImportErrors
+                //}
 
-                if (objResponse.DeliveryImport != null && objResponse.DeliveryImport.CountOfFailed > 0)
-                {
-                    //Handle DeliveryImportErrors
-                }
+                //if (objResponse.DeliveryImport != null && objResponse.DeliveryImport.CountOfFailed > 0)
+                //{
+                //    //Handle DeliveryImportErrors
+                //}
 
-                if (objResponse.OrderImport != null && objResponse.OrderImport.CountOfFailed > 0)
-                {
-                    //Handle OrderImportErrors
-                }
+                //if (objResponse.OrderImport != null && objResponse.OrderImport.CountOfFailed > 0)
+                //{
+                //    //Handle OrderImportErrors
+                //}
 
-                MessageBox.Show("Request done.", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show("Request done.", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -167,6 +167,7 @@ namespace IX4InterfaceExample
         /// <param name="password">WCFUserpassword</param>
         /// <param name="file">RequestFile</param>
         /// <returns></returns>
+        ix4WebReference.ix4PublicInterface wsProxy;
         private string GetXMLResponse(int clientId, string username, string password, string file)
         {
             //Get bytes of file
@@ -180,8 +181,8 @@ namespace IX4InterfaceExample
             }
 
             //Webservice
-            ix4WebReference.ix4PublicInterface wsProxy = new ix4WebReference.ix4PublicInterface();
-            wsProxy.Url = tbEndpoint.Text;
+            wsProxy = new ix4WebReference.ix4PublicInterface();
+            wsProxy.Url = @"https://schuon.logistic-cloud.com/system/webservices/wspickpublic.asmx";// tbEndpoint.Text;
 
 
             //Authentication
@@ -195,8 +196,18 @@ namespace IX4InterfaceExample
             wsProxy.LBSoapAuthenticationHeaderValue = head;
 
             //Call
-            return wsProxy.LICSImportXMLRequest(fileContent, Path.GetFileName(file));
+            wsProxy.Timeout = 600*1000;
+          string resu =  wsProxy.LICSImportXMLRequest(fileContent, Path.GetFileName(file));
+           //wsProxy.LICSImportXMLRequestCompleted += WsProxy_LICSImportXMLRequestCompleted;
+           //  wsProxy.LICSImportXMLRequestAsync(fileContent, Path.GetFileName(file));
+            return resu;// "wait";
 
+        }
+
+        private void WsProxy_LICSImportXMLRequestCompleted(object sender, ix4WebReference.LICSImportXMLRequestCompletedEventArgs e)
+        {
+            rtbXMLResponse.Text = e.Result;
+            wsProxy.LICSImportXMLRequestCompleted -= WsProxy_LICSImportXMLRequestCompleted;
         }
 
         #endregion

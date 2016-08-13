@@ -1,6 +1,7 @@
 ﻿using CryptoModule;
 using Ix4Models.Interfaces;
 using System;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace Ix4Models.SettingsDataModel
@@ -62,5 +63,16 @@ namespace Ix4Models.SettingsDataModel
 
  
         public SchedulerSettings ScheduleSettings { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(string.Format(" UserName = {0} ", UserName));
+            sb.Append(string.Format(" ClientID = {0} ", ClientID));
+            sb.Append(string.Format(" Password= {0} ", Password));
+            sb.Append(string.Format(" ServiceEndpoint= {0} ", ServiceEndpoint));
+
+            return sb.ToString();
+        }
     }
 }

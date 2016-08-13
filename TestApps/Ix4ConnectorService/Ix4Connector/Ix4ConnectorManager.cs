@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimplestLogger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,12 +33,16 @@ namespace Ix4Connector
         {
 
         }
+        private static Logger _loger = Logger.GetLogger();
         public IProxyIx4WebService GetRegisteredIx4WebServiceInterface(int clientId, string userName, string pwd)
         {
             Ix4WebService.LBSoapAuthenticationHeader header = new Ix4WebService.LBSoapAuthenticationHeader();
             header.ClientId = clientId;
             header.UserName = userName;
             header.Password = pwd;
+            //_loger.Log("" + );
+            //_loger.Log("" + );
+            //_loger.Log("" + );
             ProxyIx4WebService client = new ProxyIx4WebService(header);
             
             return client;

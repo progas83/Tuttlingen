@@ -10,6 +10,7 @@ namespace Ix4Connector
     {
         Stock = 0,
         IncomingGoods = 1,
-        OutgoingGoods = 2
+        OutgoingGoods = 2,
+        TrackingNo =3
     }
 }

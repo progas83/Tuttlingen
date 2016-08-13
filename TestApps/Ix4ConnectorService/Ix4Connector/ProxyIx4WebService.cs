@@ -16,7 +16,7 @@ namespace Ix4Connector
 
         public ProxyIx4WebService(LBSoapAuthenticationHeader header)
         {
-            System.Net.ServicePointManager.Expect100Continue = false;
+             System.Net.ServicePointManager.Expect100Continue = false;
             this._header = header;
         }
 
@@ -53,6 +53,7 @@ namespace Ix4Connector
             ws.LBSoapAuthenticationHeaderValue = _header;
             ws.Proxy = System.Net.HttpWebRequest.GetSystemWebProxy();
             ws.Proxy.Credentials = CredentialCache.DefaultCredentials;
+            ws.Url = @"https://schuon.logistic-cloud.com/system/webservices/wspickpublic.asmx";
             return ws;
         }
     }

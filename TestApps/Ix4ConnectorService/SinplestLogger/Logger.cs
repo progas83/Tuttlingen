@@ -20,7 +20,7 @@ namespace SimplestLogger
         private const string _newLine = "-------------Date: {0} | Time: {1}--------------------------------------------------------------------------";
         private Logger()
         {
-            _streamWriterFile = new StreamWriter(new FileStream(CurrentServiceInformation.LoggerFileName, System.IO.FileMode.Append));
+           
         }
 
         public static Logger GetLogger()
@@ -45,9 +45,23 @@ namespace SimplestLogger
         {
             lock (_streamLock)
             {
-                _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
-                _streamWriterFile.WriteLine(message);
-                _streamWriterFile.Flush();
+                try
+                {
+                    _streamWriterFile = new StreamWriter(new FileStream(CurrentServiceInformation.LoggerFileName, System.IO.FileMode.Append));
+                    _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
+                    _streamWriterFile.WriteLine(message);
+                    _streamWriterFile.Flush();
+                    
+                }
+                finally
+                {
+                    if(_streamWriterFile!=null)
+                    {
+                        _streamWriterFile.Dispose();
+                        _streamWriterFile = null;
+                    }
+                }
+              
               //  SendMail(_mailToAdress, "WeinWelt", message);
             }
 

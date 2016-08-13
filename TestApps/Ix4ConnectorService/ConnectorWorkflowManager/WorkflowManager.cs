@@ -66,6 +66,7 @@ namespace ConnectorWorkflowManager
                 _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
                 _dataCompositor = new CustomerDataComposition(_customerInfo.PluginSettings);
                 _ix4ServiceConnector = Ix4ConnectorManager.Instance.GetRegisteredIx4WebServiceInterface(_customerInfo.ClientID, _customerInfo.UserName, _customerInfo.Password);
+             //   _loger.Log("CUSTOMER INFO = "+ _customerInfo.ToString());
                 _timer.Enabled = true;
                 _timer.AutoReset = true;
                 _timer.Elapsed += OnTimedEvent;
@@ -91,9 +92,9 @@ namespace ConnectorWorkflowManager
             try
             {
 
-                CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
+               // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 //CheckArticles();
-                //WrightLog("Timer has elapsed");
+                WrightLog("Timer has elapsed");
                 //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
 
                 CheckArticles();
@@ -148,16 +149,17 @@ namespace ConnectorWorkflowManager
             {
                 try
                 {
+                   
                     if (_ix4ServiceConnector != null)
                     {
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
-                        Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate);
-                        serializator.Serialize(st, request);
-                        byte[] bytes = ReadToEnd(st);
-                        string resp = _ix4ServiceConnector.ImportXmlRequest(bytes, fileName);
-                        _loger.Log(resp);
-                        st.Flush();
-                        st.Dispose();
+                        using (Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate))
+                        {
+                            serializator.Serialize(st, request);
+                            byte[] bytesRequest = ReadToEnd(st);
+                            string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
+                            _loger.Log(resp);
+                        }
                         File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
                         result = true;
                     }
@@ -165,6 +167,10 @@ namespace ConnectorWorkflowManager
                 catch (Exception ex)
                 {
                     WrightLog(ex.ToString());
+                }
+                finally
+                {
+                   //File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
                 }
             }
             return result;
@@ -234,8 +240,8 @@ namespace ConnectorWorkflowManager
             _loger.Log("============================ CheckPreparedRequest============================================");
             try
             {
-                if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
-                {
+               // if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
+               // {
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
                     _loger.Log(string.Format("Count of available {0} = {1}",ix4Property, requests.Length));
                     if (requests.Length > 0)
@@ -247,8 +253,8 @@ namespace ConnectorWorkflowManager
                             _loger.Log(string.Format("{0} result: {1}",ix4Property, res));
                         }
                     }
-                    _ordersLastUpdate = GetTimeStamp();
-                }
+               //     _ordersLastUpdate = GetTimeStamp();
+                //}
                
             }
             catch (Exception ex)
@@ -348,6 +354,7 @@ namespace ConnectorWorkflowManager
         LICSRequestArticle[] _cachedArticles;
         private void CheckArticles()
         {
+            int countA = 0;
             try
             {
 
@@ -359,31 +366,47 @@ namespace ConnectorWorkflowManager
                     LICSRequest request = new LICSRequest();
                     request.ClientId = currentClientID;
                     LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
-                    _loger.Log("Got ARTICLES");
+                    _loger.Log(string.Format("Got ARTICLES {0}",articles!=null ? articles.Length : 0));
 
                     if (articles == null || articles.Length == 0)
                     {
                         _loger.Log("There is no available articles");
                         return;
                     }
+
+                List<LICSRequestArticle> tempAtricles = new List<LICSRequestArticle>();
                     foreach (LICSRequestArticle article in articles)
                     {
                         article.ClientNo = currentClientID;
-                    }
-                    request.ArticleImport = articles;
-
-                    var res = SendLicsRequestToIx4(request, "articleFile.xml");
-                    if (res)
+                    tempAtricles.Add(article);
+                    if (tempAtricles.Count > 20)
                     {
-                        _cachedArticles = articles;
-                        _articlesLastUpdate = GetTimeStamp();
+                        request.ArticleImport = tempAtricles.ToArray();
+                        var resSent = SendLicsRequestToIx4(request, "articleFile.xml");
+                        if (resSent)
+                        {
+                            countA++;
+                            _loger.Log(string.Format("Was sent {0}", countA));
+                            tempAtricles = new List<LICSRequestArticle>();
+                        }
                     }
-                    _loger.Log("Articles result: " + res);
+                }
+                  //  request.ArticleImport = articles;
+
+               //     var res = SendLicsRequestToIx4(request, "articleFile.xml");
+                    //if (res)
+                    //{
+                    //    _cachedArticles = articles;
+                    //    _articlesLastUpdate = GetTimeStamp();
+                    //}
+                //   _loger.Log("Articles result: " + res);
                 }
             }
             catch (Exception ex)
             {
                 _loger.Log(ex);
+                _loger.Log("Inner excep " +ex.InnerException);
+                _loger.Log("Inner excep MESSAGE" + ex.InnerException.Message);
             }
 
 
