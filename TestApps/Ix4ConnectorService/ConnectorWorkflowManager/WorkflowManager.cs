@@ -21,9 +21,11 @@ namespace ConnectorWorkflowManager
         private CustomerDataComposition _dataCompositor;
         private IProxyIx4WebService _ix4ServiceConnector;
 
-        protected Timer _timer = new Timer(RElapsedEvery);
+        protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
         private static readonly long RElapsedEvery = 60000;
+        private static readonly int _articlesPerRequest = 20;
+
 
         private static Logger _loger = Logger.GetLogger();
 
@@ -59,17 +61,19 @@ namespace ConnectorWorkflowManager
                 if (_timer == null)
                 {
                     _timer = new Timer(RElapsedEvery);
+                    _timer.AutoReset = true;
+                    _timer.Elapsed += OnTimedEvent;
                 }
 
                 _loger.Log("Service has been started at");
 
                 _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
                 _dataCompositor = new CustomerDataComposition(_customerInfo.PluginSettings);
-                _ix4ServiceConnector = Ix4ConnectorManager.Instance.GetRegisteredIx4WebServiceInterface(_customerInfo.ClientID, _customerInfo.UserName, _customerInfo.Password);
-             //   _loger.Log("CUSTOMER INFO = "+ _customerInfo.ToString());
+                _ix4ServiceConnector = Ix4ConnectorManager.Instance.GetRegisteredIx4WebServiceInterface(_customerInfo.ClientID, _customerInfo.UserName, _customerInfo.Password, _customerInfo.ServiceEndpoint);
+                //   _loger.Log("CUSTOMER INFO = "+ _customerInfo.ToString());
+
+
                 _timer.Enabled = true;
-                _timer.AutoReset = true;
-                _timer.Elapsed += OnTimedEvent;
             }
             catch (Exception ex)
             {
@@ -92,7 +96,7 @@ namespace ConnectorWorkflowManager
             try
             {
 
-               // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
+                // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 //CheckArticles();
                 WrightLog("Timer has elapsed");
                 //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
@@ -133,10 +137,15 @@ namespace ConnectorWorkflowManager
 
         public void Stop()
         {
-            _timer.Stop();
-            _timer.Enabled = false;
-            _timer.Dispose();
-            _timer = null;
+            if (_timer != null)
+            {
+                _timer.Elapsed -= OnTimedEvent;
+                _timer.Stop();
+                _timer.Enabled = false;
+                _timer.Dispose();
+                _timer = null;
+            }
+
             WrightLog("Service has stopped");
         }
 
@@ -149,7 +158,7 @@ namespace ConnectorWorkflowManager
             {
                 try
                 {
-                   
+
                     if (_ix4ServiceConnector != null)
                     {
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
@@ -170,7 +179,7 @@ namespace ConnectorWorkflowManager
                 }
                 finally
                 {
-                   //File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
+                    //File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
                 }
             }
             return result;
@@ -240,22 +249,22 @@ namespace ConnectorWorkflowManager
             _loger.Log("============================ CheckPreparedRequest============================================");
             try
             {
-               // if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
-               // {
-                    LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-                    _loger.Log(string.Format("Count of available {0} = {1}",ix4Property, requests.Length));
-                    if (requests.Length > 0)
+                // if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
+                // {
+                LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
+                _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, requests.Length));
+                if (requests.Length > 0)
+                {
+                    foreach (var item in requests)
                     {
-                        foreach (var item in requests)
-                        {
-                            item.ClientId = _customerInfo.ClientID;
-                            var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
-                            _loger.Log(string.Format("{0} result: {1}",ix4Property, res));
-                        }
+                        item.ClientId = _customerInfo.ClientID;
+                        var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                        _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
                     }
-               //     _ordersLastUpdate = GetTimeStamp();
+                }
+                //     _ordersLastUpdate = GetTimeStamp();
                 //}
-               
+
             }
             catch (Exception ex)
             {
@@ -267,7 +276,7 @@ namespace ConnectorWorkflowManager
         {
             try
             {
-                if(_deliveriesLastUpdate==0 || (GetTimeStamp() - _deliveriesLastUpdate) >7200)
+                if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
                 {
                     if (_cachedArticles == null)
                     {
@@ -319,11 +328,11 @@ namespace ConnectorWorkflowManager
                         {
                             request.ArticleImport = articlesByDelliveries.ToArray();
                             _loger.Log("Delivery before sending: ");
-                            foreach(LICSRequestDelivery item in request.DeliveryImport)
+                            foreach (LICSRequestDelivery item in request.DeliveryImport)
                             {
                                 _loger.Log(item.SerializeObjectToString<LICSRequestDelivery>());
                             }
-                           
+
                             var res = SendLicsRequestToIx4(request, "deliveryFile.xml");
                             _loger.Log("Delivery result: " + res);
                         }
@@ -331,7 +340,7 @@ namespace ConnectorWorkflowManager
                     }
                     _deliveriesLastUpdate = GetTimeStamp();
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -342,14 +351,14 @@ namespace ConnectorWorkflowManager
 
         private LICSRequestArticle GetArticleByNumber(string articleNo)
         {
-            if(_cachedArticles!=null)
+            if (_cachedArticles != null)
                 return _cachedArticles.FirstOrDefault(item => item.ArticleNo.Equals(articleNo));
             else
             {
                 _loger.Log("There is no CACHED ARTICLES!!!!!!!!!!");
                 return null;
             }
-            
+
         }
         LICSRequestArticle[] _cachedArticles;
         private void CheckArticles()
@@ -366,7 +375,7 @@ namespace ConnectorWorkflowManager
                     LICSRequest request = new LICSRequest();
                     request.ClientId = currentClientID;
                     LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
-                    _loger.Log(string.Format("Got ARTICLES {0}",articles!=null ? articles.Length : 0));
+                    _loger.Log(string.Format("Got ARTICLES {0}", articles != null ? articles.Length : 0));
 
                     if (articles == null || articles.Length == 0)
                     {
@@ -374,42 +383,58 @@ namespace ConnectorWorkflowManager
                         return;
                     }
 
-                List<LICSRequestArticle> tempAtricles = new List<LICSRequestArticle>();
-                    foreach (LICSRequestArticle article in articles)
+                    List<LICSRequestArticle> tempAtricles = new List<LICSRequestArticle>();
+
+                    for(int i=0;i< articles.Length;i++)
                     {
-                        article.ClientNo = currentClientID;
-                    tempAtricles.Add(article);
-                    if (tempAtricles.Count > 20)
-                    {
-                        request.ArticleImport = tempAtricles.ToArray();
-                        var resSent = SendLicsRequestToIx4(request, "articleFile.xml");
-                        if (resSent)
+                        articles[i].ClientNo = currentClientID;
+                        tempAtricles.Add(articles[i]);
+                        if (tempAtricles.Count >= _articlesPerRequest || i==articles.Length-1)
                         {
-                            countA++;
-                            _loger.Log(string.Format("Was sent {0}", countA));
-                            tempAtricles = new List<LICSRequestArticle>();
+                            request.ArticleImport = tempAtricles.ToArray();
+                            var resSent = SendLicsRequestToIx4(request, "articleFile.xml");
+                            if (resSent)
+                            {
+                                countA++;
+                                _loger.Log(string.Format("Was sent {0} request with {1} articles", countA, tempAtricles.Count));
+                                tempAtricles = new List<LICSRequestArticle>();
+                            }
                         }
                     }
-                }
-                  //  request.ArticleImport = articles;
 
-               //     var res = SendLicsRequestToIx4(request, "articleFile.xml");
+                    //foreach (LICSRequestArticle article in articles)
+                    //{
+                    // //   article.ClientNo = currentClientID;
+                    // //   tempAtricles.Add(article);
+                    //    //if (tempAtricles.Count > 20)
+                    //    //{
+                    //    //    request.ArticleImport = tempAtricles.ToArray();
+                    //    //    var resSent = SendLicsRequestToIx4(request, "articleFile.xml");
+                    //    //    if (resSent)
+                    //    //    {
+                    //    //        countA++;
+                    //    //        _loger.Log(string.Format("Was sent {0}", countA));
+                    //    //        tempAtricles = new List<LICSRequestArticle>();
+                    //    //    }
+                    //    //}
+                    //}
+                    //  request.ArticleImport = articles;
+
+                    //     var res = SendLicsRequestToIx4(request, "articleFile.xml");
                     //if (res)
                     //{
                     //    _cachedArticles = articles;
                     //    _articlesLastUpdate = GetTimeStamp();
                     //}
-                //   _loger.Log("Articles result: " + res);
+                    //   _loger.Log("Articles result: " + res);
                 }
             }
             catch (Exception ex)
             {
                 _loger.Log(ex);
-                _loger.Log("Inner excep " +ex.InnerException);
+                _loger.Log("Inner excep " + ex.InnerException);
                 _loger.Log("Inner excep MESSAGE" + ex.InnerException.Message);
             }
-
-
         }
 
         private void CheckOrders()

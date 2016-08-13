@@ -93,12 +93,6 @@
   <ItemGroup>
     <None Include="Web References\Ix4WebService\wspickpublic.disco" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SinplestLogger\SimplestLogger.csproj">
-      <Project>{18B499E8-956D-45C0-A9F7-6314CC00B777}</Project>
-      <Name>SimplestLogger</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

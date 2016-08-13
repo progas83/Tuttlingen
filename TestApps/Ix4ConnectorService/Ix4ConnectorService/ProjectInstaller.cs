@@ -28,7 +28,6 @@ namespace Ix4ConnectorService
 
 
 
-
             _processInstaller = new ServiceProcessInstaller();
             _processInstaller.Password = null;
             _processInstaller.Username = null;
@@ -37,6 +36,7 @@ namespace Ix4ConnectorService
             Installers.Add(_serviceInstaller);
             Installers.Add(_processInstaller);
         }
+
 
         private void OnBeforeServiceInstall(object sender, InstallEventArgs e)
         {
@@ -57,5 +57,6 @@ namespace Ix4ConnectorService
             }
            
         }
+        
     }
 }

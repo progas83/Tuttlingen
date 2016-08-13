@@ -13,11 +13,12 @@ namespace Ix4Connector
     internal class ProxyIx4WebService : IProxyIx4WebService
     {
         private LBSoapAuthenticationHeader _header;
-
-        public ProxyIx4WebService(LBSoapAuthenticationHeader header)
+        private string _endPoint;
+        public ProxyIx4WebService(LBSoapAuthenticationHeader header,string endpoint)
         {
              System.Net.ServicePointManager.Expect100Continue = false;
             this._header = header;
+            this._endPoint = endpoint;
         }
 
         public event ExportDataAsyncCompletedEventHandler ExportDataAsyncCompleted;
@@ -53,7 +54,7 @@ namespace Ix4Connector
             ws.LBSoapAuthenticationHeaderValue = _header;
             ws.Proxy = System.Net.HttpWebRequest.GetSystemWebProxy();
             ws.Proxy.Credentials = CredentialCache.DefaultCredentials;
-            ws.Url = @"https://schuon.logistic-cloud.com/system/webservices/wspickpublic.asmx";
+            ws.Url = _endPoint;
             return ws;
         }
     }
