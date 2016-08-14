@@ -23,7 +23,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 60000;
+        private static readonly long RElapsedEvery = 6000;
         private static readonly int _articlesPerRequest = 20;
 
 
@@ -103,7 +103,7 @@ namespace ConnectorWorkflowManager
 
            //     CheckArticles();
                 //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-                CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+                CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
                 //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                 //CheckDeliveries();
             }
