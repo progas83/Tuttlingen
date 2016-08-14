@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,10 +13,11 @@ using System.Threading.Tasks;
 
 namespace SqlDataExtractor
 {
-    class SqlTableArticleExplorer
+    public class SqlTableExplorer<T>
     {
         private MsSqlPluginSettings _pluginSettings;
-        public SqlTableArticleExplorer(IPluginSettings pluginSettings)
+        private static Logger _loger = Logger.GetLogger();
+        public SqlTableExplorer(IPluginSettings pluginSettings)
         {
             _pluginSettings = pluginSettings as MsSqlPluginSettings;
         }
@@ -38,11 +38,11 @@ namespace SqlDataExtractor
 
             }
         }
-        private static Logger _loger = Logger.GetLogger();
-        //    Logger _logger = Logger.GetLogger();
-        public LICSRequestArticle[] GetArticles()
+
+
+        public T[] GetArticles()
         {
-            LICSRequestArticle[] articles = null;
+            T[] articles = null;
             try
             {
                 using (var connection = new SqlConnection(DbConnection))
@@ -70,21 +70,21 @@ namespace SqlDataExtractor
             return null;
         }
 
-        private LICSRequestArticle[] LoadArticles(IDataReader reader)
+        private T[] LoadArticles(IDataReader reader)
         {
             DataTable table = new DataTable();
-            List<LICSRequestArticle> articles = new List<LICSRequestArticle>();
+            List<T> articles = new List<T>();
 
             table.Load(reader);
             foreach (DataRow row in table.AsEnumerable())
             {
                 try
                 {
-                    LICSRequestArticle articleItem = new LICSRequestArticle();
-                 //   articleItem.GetType().GetProperty(propertyName).SetValue.GetValue((car, null);
+                    T articleItem =(T) Activator.CreateInstance(typeof(T)); 
+                    //   articleItem.GetType().GetProperty(propertyName).SetValue.GetValue((car, null);
 
-                  //  var r = table.AsEnumerable();
-                    foreach(DataColumn column in  row.Table.Columns)
+                    //  var r = table.AsEnumerable();
+                    foreach (DataColumn column in row.Table.Columns)
                     {
                         var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = articleItem.GetType().GetProperty(column.ColumnName);
@@ -96,8 +96,8 @@ namespace SqlDataExtractor
                         {
                             propertyInfo.SetValue(articleItem, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
                         }
-                      
-                       
+
+
                     }
                     articles.Add(articleItem);
                     //double currentArticleGroupFactor = 0;
@@ -139,7 +139,7 @@ namespace SqlDataExtractor
                     _loger.Log(ex);
                 }
             }
-            return articles.Where(i => !string.IsNullOrEmpty(i.ArticleNo)).ToArray();
+            return articles.ToArray();
         }
     }
 }

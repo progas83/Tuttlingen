@@ -41,7 +41,7 @@ namespace Ix4Models.SettingsDataModel
             get; set;
         }
 
-        public string PositionsQuery
+        public string DeliveryPositionsQuery
         {
             get; set;
         }
@@ -59,6 +59,9 @@ namespace Ix4Models.SettingsDataModel
         {
             get; set;
         }
+        public string OrderRecipientQuery { get; set; }
+        public string OrderPositionsQuery { get; set; }
+        public string OrdersQuery { get; set; }
 
         public override string ToString()
         {
@@ -67,7 +70,7 @@ namespace Ix4Models.SettingsDataModel
             sb.Append(string.Format("CheckArticles = {0}", CheckArticles));
             sb.Append(string.Format("ArticlesQuery = {0}", ArticlesQuery));
             sb.Append(string.Format(" CheckDeliveries= {0}", CheckDeliveries)); sb.Append(string.Format("DeliveriesQuery = {0}", DeliveriesQuery));
-            sb.Append(string.Format("PositionsQuery = {0}", PositionsQuery));
+            sb.Append(string.Format("DelivarePositionsQuery = {0}", DeliveryPositionsQuery));
             sb.Append(string.Format("CheckOrders = {0}", CheckOrders));
             sb.Append(string.Format("DbSettings  = {0}", DbSettings.ToString()));
 

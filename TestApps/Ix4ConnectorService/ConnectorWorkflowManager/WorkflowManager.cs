@@ -101,9 +101,9 @@ namespace ConnectorWorkflowManager
                 WrightLog("Timer has elapsed");
                 //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
 
-                CheckArticles();
+           //     CheckArticles();
                 //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-                //CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+                CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
                 //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                 //CheckDeliveries();
             }

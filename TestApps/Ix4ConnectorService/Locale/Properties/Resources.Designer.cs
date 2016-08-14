@@ -61,6 +61,42 @@ namespace Locale.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SQL query for getting positions of particular Order.
+        /// </summary>
+        public static string OrderPositionsSettingsPanel {
+            get {
+                return ResourceManager.GetString("OrderPositionsSettingsPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQL query for getting order recipient.
+        /// </summary>
+        public static string OrderRecipientSettingsPanel {
+            get {
+                return ResourceManager.GetString("OrderRecipientSettingsPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Orders.
+        /// </summary>
+        public static string Orders {
+            get {
+                return ResourceManager.GetString("Orders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQL query for getting all orders.
+        /// </summary>
+        public static string OrdersSettingsPanel {
+            get {
+                return ResourceManager.GetString("OrdersSettingsPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check {0} Articles every.
         /// </summary>
         public static string ScheduleArticles {

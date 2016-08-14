@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="OrderPositionsSettingsPanel" xml:space="preserve">
+    <value>SQL query for getting positions of particular Order</value>
+  </data>
+  <data name="OrderRecipientSettingsPanel" xml:space="preserve">
+    <value>SQL query for getting order recipient</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="OrdersSettingsPanel" xml:space="preserve">
+    <value>SQL query for getting all orders</value>
+  </data>
   <data name="ScheduleArticles" xml:space="preserve">
     <value>Check {0} Articles every</value>
   </data>

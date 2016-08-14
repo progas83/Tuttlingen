@@ -107,7 +107,7 @@ namespace SqlDataExtractor
         {
             List<LICSRequestDeliveryPosition> deliveryPositions = new List<LICSRequestDeliveryPosition>();
 
-            string getPositionsCommand = string.Format(_pluginSettings.PositionsQuery, deliveryNo);
+            string getPositionsCommand = string.Format(_pluginSettings.DeliveryPositionsQuery, deliveryNo);
             SqlCommand cmd = new SqlCommand(getPositionsCommand, connection);
             SqlDataReader reader = cmd.ExecuteReader();
             DataTable table = new DataTable();

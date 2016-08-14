@@ -126,12 +126,35 @@ namespace SqlDataExtractor.DatabaseSettings.ViewModel
             set { _msSqlPluginSettings.DeliveriesQuery = value; OnPropertyChanged("DeliveriesQuery"); }
         }
 
-        public string PositionsQuery
+        public string DeliveryPositionsQuery
         {
-            get { return _msSqlPluginSettings.PositionsQuery; }
-            set { _msSqlPluginSettings.PositionsQuery = value; OnPropertyChanged("PositionsQuery"); }
+            get { return _msSqlPluginSettings.DeliveryPositionsQuery; }
+            set { _msSqlPluginSettings.DeliveryPositionsQuery = value; OnPropertyChanged("DeliveryPositionsQuery"); }
         }
 
+        public bool CheckOrders
+        {
+            get { return _msSqlPluginSettings.CheckOrders; }
+            set { _msSqlPluginSettings.CheckOrders = value;  OnPropertyChanged("CheckOrders"); }
+        }
+
+        public string OrdersQuery
+        {
+            get { return _msSqlPluginSettings.OrdersQuery; }
+            set { _msSqlPluginSettings.OrdersQuery = value; OnPropertyChanged("OrdersQuery"); }
+        }
+
+        public string OrderRecipientQuery
+        {
+            get { return _msSqlPluginSettings.OrderRecipientQuery; }
+            set { _msSqlPluginSettings.OrderRecipientQuery = value; OnPropertyChanged("OrderRecipientQuery"); }
+        }
+
+        public string OrderPositionsQuery
+        {
+            get { return _msSqlPluginSettings.OrderPositionsQuery; }
+            set { _msSqlPluginSettings.OrderPositionsQuery = value; OnPropertyChanged("OrderPositionsQuery"); }
+        }
 
     }
 }
