@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using Ix4Models;
 using System.Data;
 using System.Reflection;
+using SimplestLogger;
 
 namespace SqlDataExtractor
 {
@@ -19,7 +20,7 @@ namespace SqlDataExtractor
 
         public SqlTableOrdersExplorer(IPluginSettings pluginSettings)
         {
-            this._pluginSettings = pluginSettings as MsSqlPluginSettings; 
+            this._pluginSettings = pluginSettings as MsSqlPluginSettings;
         }
         private string DbConnection
         {
@@ -46,7 +47,7 @@ namespace SqlDataExtractor
                 using (var connection = new SqlConnection(DbConnection))
                 {
                     connection.Open();
-                    var cmdText = _pluginSettings.ArticlesQuery;
+                    var cmdText = _pluginSettings.OrdersQuery;
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     orders = LoadOrders(reader, connection);
@@ -140,6 +141,96 @@ namespace SqlDataExtractor
                 }
             }
             return orders.ToArray();
+        }
+
+        private LICSRequestOrderPosition[] GetRequestOrderPositions(SqlConnection connection, string orderId)
+        {
+            List<LICSRequestOrderPosition> orderPositions = new List<LICSRequestOrderPosition>();
+
+            string getOrderPositionsQuery = string.Format(_pluginSettings.OrderPositionsQuery, orderId);
+            SqlCommand cmd = new SqlCommand(getOrderPositionsQuery, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
+            DataTable table = new DataTable();
+            table.Load(reader);
+            foreach (DataRow row in table.AsEnumerable())
+            {
+
+                try
+                {
+                    LICSRequestOrderPosition orderPosition = new LICSRequestOrderPosition();
+
+                    foreach (DataColumn column in row.Table.Columns)
+                    {
+                        var res = row[column.ColumnName];
+                        PropertyInfo propertyInfo = orderPosition.GetType().GetProperty(column.ColumnName);
+                        if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
+                        {
+                            propertyInfo.SetValue(orderPosition, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
+                        }
+                        else
+                        {
+                            propertyInfo.SetValue(orderPosition, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                        }
+
+
+                    }
+
+                    orderPositions.Add(orderPosition);
+
+                }
+                catch (Exception ex)
+                {
+                    _loger.Log("Exception while reflect DataColumn values using Reflection in GetDeliveryPositions");
+                    _loger.Log(ex);
+                }
+
+            }
+            return orderPositions.ToArray();
+        }
+
+        private LICSRequestOrderRecipient GetOrderRecipient(SqlConnection connection, string referenceNo)
+        {
+            string getOrderRecipientQuery = string.Format(_pluginSettings.OrderRecipientQuery, referenceNo);
+            SqlCommand cmd = new SqlCommand(getOrderRecipientQuery, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
+            DataTable table = new DataTable();
+            table.Load(reader);
+
+            LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
+            foreach (DataRow row in table.AsEnumerable())
+            {
+                _loger.Log("COUNT OF TABLE ROWS = " + table.AsEnumerable().Count());
+                try
+                {
+
+
+                    foreach (DataColumn column in row.Table.Columns)
+                    {
+                        var res = row[column.ColumnName];
+                        PropertyInfo propertyInfo = orderRecipient.GetType().GetProperty(column.ColumnName);
+                        if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
+                        {
+                            propertyInfo.SetValue(orderRecipient, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
+                        }
+                        else
+                        {
+                            propertyInfo.SetValue(orderRecipient, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                        }
+
+
+                    }
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    _loger.Log("Exception while reflect DataColumn values using Reflection in GetOrderPositions");
+                    _loger.Log(ex);
+                }
+            }
+            return orderRecipient;
+
         }
     }
 }

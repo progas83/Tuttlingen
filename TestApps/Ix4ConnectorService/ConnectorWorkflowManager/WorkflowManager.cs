@@ -23,7 +23,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 6000;
+        private static readonly long RElapsedEvery = 60000;
         private static readonly int _articlesPerRequest = 20;
 
 
@@ -258,7 +258,8 @@ namespace ConnectorWorkflowManager
                     foreach (var item in requests)
                     {
                         item.ClientId = _customerInfo.ClientID;
-                        var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                        bool res = true;
+                      //  var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
                         _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
                     }
                 }
