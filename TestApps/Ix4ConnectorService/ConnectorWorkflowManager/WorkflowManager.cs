@@ -11,6 +11,9 @@ using System.Timers;
 using System.Xml.Serialization;
 using System.Linq;
 using Ix4Models.Converters;
+using System.Xml;
+using System.Xml.Linq;
+using System.Data.SqlClient;
 
 namespace ConnectorWorkflowManager
 {
@@ -95,15 +98,25 @@ namespace ConnectorWorkflowManager
             _timer.Enabled = false;
             try
             {
-
-                // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
-                //CheckArticles();
                 WrightLog("Timer has elapsed");
+                // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
+                if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
+                {
+                    WrightLog("Check Artikles started");
+                    CheckArticles();
+                }
+
+
                 //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
 
-           //     CheckArticles();
+                //     CheckArticles();
                 //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-                CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
+                if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
+                {
+                    WrightLog("Check Orders started");
+                    CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
+                }
+                
                 //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                 //CheckDeliveries();
             }
@@ -159,6 +172,19 @@ namespace ConnectorWorkflowManager
                 try
                 {
 
+                    //if (_ix4ServiceConnector != null)
+                    //{
+                    //    XmlSerializer serializator = new XmlSerializer(typeof(LICSRequestOrderPosition));
+                    //    using (Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate))
+                    //    {
+                    //        serializator.Serialize(st, request.OrderImport[0].Positions[0]);
+                    //     //   byte[] bytesRequest = ReadToEnd(st);
+                    //      //  string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
+                    //      //  _loger.Log(resp);
+                    //    }
+                    //    //File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
+                    //    result = true;
+                    //}
                     if (_ix4ServiceConnector != null)
                     {
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
@@ -167,9 +193,11 @@ namespace ConnectorWorkflowManager
                             serializator.Serialize(st, request);
                             byte[] bytesRequest = ReadToEnd(st);
                             string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
+                            SimplestParcerLicsRequest(resp);
+                        //    SimplestParcerLicsRequest(resp);
                             _loger.Log(resp);
                         }
-                        File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
+                      //  File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
                         result = true;
                     }
                 }
@@ -185,6 +213,71 @@ namespace ConnectorWorkflowManager
             return result;
         }
 
+        private void SimplestParcerLicsRequest(string response)
+        {
+            try
+            {
+                TextReader tr = new StringReader(response);
+                //  XElement elem = XElement.Load(tr);
+
+                //   string xml = "<StatusDocumentItem xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><DataUrl/><LastUpdated>2013-02-01T12:35:29.9517061Z</LastUpdated><Message>Job put in queue</Message><State>0</State><StateName>Waiting to be processed</StateName></StatusDocumentItem>";
+                XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
+
+                LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
+                if(resp.OrderImport!=null)
+                foreach (var ord in resp.OrderImport.Order)
+                {
+                    if (ord.State == 1)
+                    {
+                        SendToDB(ord.ReferenceNo);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                _loger.Log(ex);
+            }
+            
+        }
+        private string DbConnection
+        {
+            get
+            {
+                return _customerInfo.PluginSettings.MsSqlSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _customerInfo.PluginSettings.MsSqlSettings.DbSettings.ServerAdress,
+                                                                                                         _customerInfo.PluginSettings.MsSqlSettings.DbSettings.DataBaseName,
+                                                                                                         _customerInfo.PluginSettings.MsSqlSettings.DbSettings.DbUserName,
+                                                                                                         _customerInfo.PluginSettings.MsSqlSettings.DbSettings.Password) :
+                                                                    string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _customerInfo.PluginSettings.MsSqlSettings.DbSettings.ServerAdress,
+                                                                                                         _customerInfo.PluginSettings.MsSqlSettings.DbSettings.DataBaseName);
+
+                //return   string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+                //                                                                                    _pluginSettings.DbSettings.DataBaseName);
+
+            }
+        }
+
+        private void SendToDB(string no)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(DbConnection))
+                {
+                    connection.Open();
+                    var cmdText = string.Format(@"UPDATE WAKopf SET Status = 5 WHERE ID = {0} ", no);
+                    SqlCommand cmd = new SqlCommand(cmdText, connection);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    _loger.Log(string.Format("Wasnot errors while updating customer DB"));
+                }
+            }
+            catch(Exception ex)
+            {
+                _loger.Log("Exception in the Sent info to DB");
+                _loger.Log(ex);
+            }
+
+            
+        }
         private byte[] ReadToEnd(System.IO.Stream stream)
         {
             long originalPosition = 0;
@@ -252,14 +345,19 @@ namespace ConnectorWorkflowManager
                 // if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
                 // {
                 LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-                _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, requests.Length));
+                if (requests != null)
+                {
+
+                }
+
                 if (requests.Length > 0)
                 {
                     foreach (var item in requests)
                     {
+                        _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
                         item.ClientId = _customerInfo.ClientID;
-                        bool res = true;
-                      //  var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                        var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
+                       
                         _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
                     }
                 }
@@ -272,6 +370,8 @@ namespace ConnectorWorkflowManager
                 _loger.Log(ex);
             }
         }
+
+
 
         private void CheckDeliveries()
         {
@@ -367,7 +467,7 @@ namespace ConnectorWorkflowManager
             int countA = 0;
             try
             {
-               var timegap = (GetTimeStamp() - _articlesLastUpdate);
+                var timegap = (GetTimeStamp() - _articlesLastUpdate);
                 if (_articlesLastUpdate == 0 || timegap > 43200)
                 {
 
@@ -386,11 +486,11 @@ namespace ConnectorWorkflowManager
 
                     List<LICSRequestArticle> tempAtricles = new List<LICSRequestArticle>();
 
-                    for(int i=0;i< articles.Length;i++)
+                    for (int i = 0; i < articles.Length; i++)
                     {
                         articles[i].ClientNo = currentClientID;
                         tempAtricles.Add(articles[i]);
-                        if (tempAtricles.Count >= _articlesPerRequest || i==articles.Length-1)
+                        if (tempAtricles.Count >= _articlesPerRequest || i == articles.Length - 1)
                         {
                             request.ArticleImport = tempAtricles.ToArray();
                             var resSent = SendLicsRequestToIx4(request, "articleFile.xml");
@@ -425,7 +525,7 @@ namespace ConnectorWorkflowManager
                     //if (res)
                     //{
                     //    _cachedArticles = articles;
-                        
+
                     //}
                     //   _loger.Log("Articles result: " + res);
                 }

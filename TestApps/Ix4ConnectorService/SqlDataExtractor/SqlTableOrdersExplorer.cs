@@ -51,7 +51,7 @@ namespace SqlDataExtractor
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     orders = LoadOrders(reader, connection);
-                    _loger.Log(string.Format("Article no in SQL Extractor = {0}", orders.Length));
+                    _loger.Log(string.Format("Orders no in SQL Extractor = {0}", orders.Length));
                 }
             }
             catch (Exception ex)
@@ -136,7 +136,7 @@ namespace SqlDataExtractor
                 }
                 catch (Exception ex)
                 {
-                    _loger.Log("Exception while reflect DataColumn values using Reflection in ORders");
+                    _loger.Log("Exception while reflect DataColumn values using Reflection in LoadOrders");
                     _loger.Log(ex);
                 }
             }
@@ -162,14 +162,26 @@ namespace SqlDataExtractor
                     foreach (DataColumn column in row.Table.Columns)
                     {
                         var res = row[column.ColumnName];
+                      //  string ind = column.ColumnName;
+                        _loger.Log(string.Format("column.ColumnName ={0} value = {1}",(string)column.ColumnName,res.ToString()));
                         PropertyInfo propertyInfo = orderPosition.GetType().GetProperty(column.ColumnName);
+                        _loger.Log("AFTER GETTING PROPERTY INFO");
+                        if (propertyInfo==null)
+                        {
+                            _loger.Log(propertyInfo, "propertyInfo");
+                            continue;
+                        }
+
                         if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
                         {
+                            _loger.Log("VALUE IS NULL");
                             propertyInfo.SetValue(orderPosition, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
                         }
                         else
                         {
+                            _loger.Log("OKOKOKOKOKOKOKOKOK");
                             propertyInfo.SetValue(orderPosition, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                            //   propertyInfo.SetValue(orderPosition, Convert.ChangeType(row[column.ColumnName], propertyInfo.PropertyType), null);
                         }
 
 
@@ -190,16 +202,19 @@ namespace SqlDataExtractor
 
         private LICSRequestOrderRecipient GetOrderRecipient(SqlConnection connection, string referenceNo)
         {
+        //    _loger.Log(_pluginSettings, "_pluginSettings");
+       //     _loger.Log("_pluginSettings.OrderRecipientQuery" + _pluginSettings.OrderRecipientQuery);
             string getOrderRecipientQuery = string.Format(_pluginSettings.OrderRecipientQuery, referenceNo);
             SqlCommand cmd = new SqlCommand(getOrderRecipientQuery, connection);
             SqlDataReader reader = cmd.ExecuteReader();
             DataTable table = new DataTable();
+      //      _loger.Log("Before reader");
             table.Load(reader);
 
             LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
-            foreach (DataRow row in table.AsEnumerable())
+            foreach (DataRow row in table.Rows)
             {
-                _loger.Log("COUNT OF TABLE ROWS = " + table.AsEnumerable().Count());
+        //        _loger.Log("COUNT OF TABLE ROWS = " + table.AsEnumerable().Count());
                 try
                 {
 
@@ -207,7 +222,19 @@ namespace SqlDataExtractor
                     foreach (DataColumn column in row.Table.Columns)
                     {
                         var res = row[column.ColumnName];
+             //           _loger.Log("RES = " + res);
                         PropertyInfo propertyInfo = orderRecipient.GetType().GetProperty(column.ColumnName);
+             //           _loger.Log("column.ColumnName =" + column.ColumnName);
+                        if(propertyInfo!=null)
+                        {
+            //                _loger.Log("propertyInfo VALIDITY" );
+                        }
+                        else
+                        {
+            //                _loger.Log(propertyInfo, "propertyInfo");
+                           continue;
+                        }
+                        
                         if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
                         {
                             propertyInfo.SetValue(orderRecipient, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);

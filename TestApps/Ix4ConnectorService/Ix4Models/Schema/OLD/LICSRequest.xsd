@@ -20,15 +20,8 @@
                     <xs:element name="EAN" type="xs:string"  minOccurs="0" maxOccurs="1" /> <!--The EAN (maxlength: 20)-->
                     <xs:element name="ProductCode" type="xs:string"   minOccurs="0" maxOccurs="1"/> <!--The product code (maxlength: 50)-->
                     <xs:element name="ArticleGroup" type="xs:string"   minOccurs="0" maxOccurs="1"/> <!--The articlegroup of this article (maxlength: 50)-->
-                    <xs:element name="ArticleGroupDescription2" type="xs:string"   minOccurs="0" maxOccurs="1"/> <!--The articlegroup of this article (maxlength: 255)-->
                     <xs:element name="ArticleGroupFactor" type="xs:double" minOccurs="0" maxOccurs="1"/>    <!--The reference article factor to base-->
                     <xs:element name="Weight" type="xs:double" minOccurs="0" maxOccurs="1"/> <!--Weight per QuantityUnit)-->
-                    <xs:element name="NotStocked" type="xs:int" minOccurs="0" maxOccurs="1"/><!--Article is not in stock.-->
-                    <xs:element name="StockMin" type="xs:double" minOccurs="0" maxOccurs="1"/><!--Minimum stock.-->
-                    <xs:element name="PUQuantity" type="xs:double" minOccurs="0" maxOccurs="1"/><!-- Quantity per package unit.-->
-                    <xs:element name="ShortDescription" type="xs:string" minOccurs="0" maxOccurs="1"/><!-- Short description. -->
-                    <xs:element name="ArticleVariant" type="xs:string" minOccurs="0" maxOccurs="1"/><!-- Article variant. -->
-                    <xs:element name="Inactive" type="xs:int" minOccurs="0" maxOccurs="1"/><!-- Inactive flag. -->
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -69,7 +62,7 @@
                     <xs:element name="PaymentCondition"  type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Details for payment (maxlength: 255)-->
                     <xs:element name="Comment"  type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Comments (maxlength: 255)-->
                     <xs:element name="Currency"  type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--The currency (maxlength: 50)-->                   
-                    <xs:element name="Recipient"  minOccurs="0" maxOccurs="1"> <!--Complex element for the recipient-->
+                    <xs:element name="Recipient"> <!--Complex element for the recipient-->
                       <xs:complexType>
                         <xs:sequence>
                           <xs:element name="FirstName" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Firstname (maxlength: 50)-->
@@ -104,7 +97,7 @@
                                 <xs:element name="SerialNo" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Serial number (maxlength: 50)-->
                                 <xs:element name="ExpiryDate" type="xs:dateTime"  minOccurs="0" maxOccurs="1"/> <!--Expirey date-->
                                 <xs:element name="ProjectNo" type="xs:string" minOccurs="0" maxOccurs="1" /> <!--Project number (maxlength: 50)-->
-                                <xs:element name="CustomerText" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Customer instructions (maxlength: 500)-->
+                                <xs:element name="CustomerText" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Customer instructions (maxlength: 255)-->
                                 <xs:element name="CommissionText" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Commission instructions (maxlength: 255)-->
                                 <xs:element name="PackageText" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Packaging instructions (maxlength: 255)-->
                                 <xs:element name="ShipmentText" type="xs:string"  minOccurs="0" maxOccurs="1"/> <!--Shipment instructions (maxlength: 255)-->

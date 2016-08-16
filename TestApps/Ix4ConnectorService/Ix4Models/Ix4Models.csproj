@@ -53,6 +53,10 @@
     <Compile Include="Ix4ComplexModel.cs" />
     <Compile Include="Ix4RequestProps.cs" />
     <Compile Include="MappedItem.cs" />
+    <Compile Include="Schema\LICSRequest.cs">
+      <DependentUpon>LICSRequest.xsd</DependentUpon>
+      <SubType>code</SubType>
+    </Compile>
     <Compile Include="SettingsDataModel\CsvPluginSettings.cs" />
     <Compile Include="SettingsDataModel\CustomerInfo.cs" />
     <Compile Include="SettingsDataModel\MsSqlPluginSettings.cs" />
@@ -63,9 +67,6 @@
     <Compile Include="SettingsDataModel\TimeSign.cs" />
     <Compile Include="SettingsDataModel\XmlPluginSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schema\LICSRequest.cs">
-      <DependentUpon>LICSRequest.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Schema\LICSResponse.cs">
       <DependentUpon>LICSResponse.xsd</DependentUpon>
     </Compile>

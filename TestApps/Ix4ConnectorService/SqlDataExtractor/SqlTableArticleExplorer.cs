@@ -83,8 +83,8 @@ namespace SqlDataExtractor
                     LICSRequestArticle articleItem = new LICSRequestArticle();
                  //   articleItem.GetType().GetProperty(propertyName).SetValue.GetValue((car, null);
 
-                  //  var r = table.AsEnumerable();
-                    foreach(DataColumn column in  row.Table.Columns)
+                    //  var r = table.AsEnumerable();
+                    foreach (DataColumn column in  row.Table.Columns)
                     {
                         var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = articleItem.GetType().GetProperty(column.ColumnName);
