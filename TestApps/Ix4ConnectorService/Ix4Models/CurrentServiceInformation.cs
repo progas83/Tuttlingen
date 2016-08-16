@@ -29,5 +29,10 @@
         private static readonly string _temporaryXmlFileName = string.Format("{0}{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\tmp.xml");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
         public static string TemporaryXmlFileName { get { return _temporaryXmlFileName; } }
 
+        private static readonly string _floatTemporaryXmlFileName = string.Format("{0}{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "\\tmp{0}.xml");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
+        public static string FloatTemporaryXmlFileName { get { return _floatTemporaryXmlFileName; } }
+
+
+
     }
 }

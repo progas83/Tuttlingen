@@ -116,7 +116,7 @@ namespace ConnectorWorkflowManager
                     WrightLog("Check Orders started");
                     CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
                 }
-                
+
                 //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                 //CheckDeliveries();
             }
@@ -164,6 +164,7 @@ namespace ConnectorWorkflowManager
 
 
         private static object _o = new object();
+        private static int _errorCount = 0;
         private bool SendLicsRequestToIx4(LICSRequest request, string fileName)
         {
             bool result = false;
@@ -187,17 +188,25 @@ namespace ConnectorWorkflowManager
                     //}
                     if (_ix4ServiceConnector != null)
                     {
+                        bool requestSuccess = true;
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
                         using (Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate))
                         {
                             serializator.Serialize(st, request);
                             byte[] bytesRequest = ReadToEnd(st);
                             string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
+                            requestSuccess = CheckStateRequest(resp);
                             SimplestParcerLicsRequest(resp);
-                        //    SimplestParcerLicsRequest(resp);
+                            //    SimplestParcerLicsRequest(resp);
                             _loger.Log(resp);
                         }
-                      //  File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
+                        if (!requestSuccess)
+                        {
+                            _errorCount++;
+                            File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
+
+                        }
+
                         result = true;
                     }
                 }
@@ -207,8 +216,32 @@ namespace ConnectorWorkflowManager
                 }
                 finally
                 {
-                    //File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
+                    File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
                 }
+            }
+            return result;
+        }
+
+        private bool CheckStateRequest(string response)
+        {
+            bool result = true;
+            try
+            {
+                TextReader tr = new StringReader(response);
+                //  XElement elem = XElement.Load(tr);
+
+                //   string xml = "<StatusDocumentItem xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><DataUrl/><LastUpdated>2013-02-01T12:35:29.9517061Z</LastUpdated><Message>Job put in queue</Message><State>0</State><StateName>Waiting to be processed</StateName></StatusDocumentItem>";
+                XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
+
+                LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
+                if (resp.State != 0)
+                {
+                    result = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _loger.Log(ex);
             }
             return result;
         }
@@ -224,20 +257,20 @@ namespace ConnectorWorkflowManager
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
-                if(resp.OrderImport!=null)
-                foreach (var ord in resp.OrderImport.Order)
-                {
-                    if (ord.State == 1)
+                if (resp.OrderImport != null)
+                    foreach (var ord in resp.OrderImport.Order)
                     {
-                        SendToDB(ord.ReferenceNo);
+                        if (ord.State == 1)
+                        {
+                            SendToDB(ord.ReferenceNo);
+                        }
                     }
-                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _loger.Log(ex);
             }
-            
+
         }
         private string DbConnection
         {
@@ -270,13 +303,13 @@ namespace ConnectorWorkflowManager
                     _loger.Log(string.Format("Wasnot errors while updating customer DB"));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _loger.Log("Exception in the Sent info to DB");
                 _loger.Log(ex);
             }
 
-            
+
         }
         private byte[] ReadToEnd(System.IO.Stream stream)
         {
@@ -357,7 +390,7 @@ namespace ConnectorWorkflowManager
                         _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
                         item.ClientId = _customerInfo.ClientID;
                         var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
-                       
+
                         _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
                     }
                 }
