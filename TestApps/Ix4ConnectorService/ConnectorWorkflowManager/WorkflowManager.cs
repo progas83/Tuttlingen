@@ -99,7 +99,7 @@ namespace ConnectorWorkflowManager
             _timer.Enabled = false;
             try
             {
-              //  ExportData();
+                ExportData();
                 WrightLog("Timer has elapsed");
                 // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
@@ -136,50 +136,50 @@ namespace ConnectorWorkflowManager
 
 
         }
-        //private void ExportData()
-        //{
-        //    if (_ix4ServiceConnector != null)
-        //    {
-        //        XmlNode nodeResult = _ix4ServiceConnector.ExportData("GP", null);
+        private void ExportData()
+        {
+            if (_ix4ServiceConnector != null)
+            {
+                XmlNode nodeResult = _ix4ServiceConnector.ExportData("GP", null);
 
-        //        XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
-        //        if(msgNodes.Count>0)
-        //        {
-        //            XmlSerializer sr = new XmlSerializer(typeof(MSG));
+                XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                if (msgNodes.Count > 0)
+                {
+                    XmlSerializer sr = new XmlSerializer(typeof(MSG));
 
-        //            foreach (XmlNode node in msgNodes)
-        //            {
-                        
-        //                TextReader tr = new StringReader(node.OuterXml);
-        //                var red = sr.Deserialize(tr);
-        //            }
+                    foreach (XmlNode node in msgNodes)
+                    {
 
-        //        }
+                        TextReader tr = new StringReader(node.OuterXml);
+                        MSG red =(MSG)sr.Deserialize(tr);
+                    }
 
-
-        //        //string result = nodeResult.OuterXml.ToString();
-        //        //string xmlContent = nodeResult.OuterXml;
-        //        //XmlDocument doc = new XmlDocument();
-        //        //doc.LoadXml(xmlContent);
-        //        //XmlNode newNode = doc.DocumentElement;
+                }
 
 
-
-        //        _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
-        //        //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
-
-        //        //using (TextReader fs = new StringReader(result))
-        //        //{
-        //        //    LICSResponse res = (LICSResponse)serializer.Deserialize(fs);
-        //        //}
+                //string result = nodeResult.OuterXml.ToString();
+                //string xmlContent = nodeResult.OuterXml;
+                //XmlDocument doc = new XmlDocument();
+                //doc.LoadXml(xmlContent);
+                //XmlNode newNode = doc.DocumentElement;
 
 
-        //    }
 
-        //    //    LICSResponse response
-            
-        //    // nodeResult.OuterXml;
-        //}
+                _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
+                //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
+
+                //using (TextReader fs = new StringReader(result))
+                //{
+                //    LICSResponse res = (LICSResponse)serializer.Deserialize(fs);
+                //}
+
+
+            }
+
+            //    LICSResponse response
+
+            // nodeResult.OuterXml;
+        }
         public void Pause()
         {
             if (_timer != null && _timer.Enabled)
