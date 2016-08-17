@@ -17,7 +17,7 @@ namespace SimplestLogger
         private static object _padlock = new object();
         private static StreamWriter _streamWriterFile;
         //   private static readonly _logFilename = CurrentServiceInformation.LoggerFileName;
-        private const string _newLine = "-------------Date: {0} | Time: {1}--------------------------------------------------------------------------";
+        private const string _newLine = "      -Date: {0} | Time: {1}----";
         private Logger()
         {
            
@@ -48,8 +48,7 @@ namespace SimplestLogger
                 try
                 {
                     _streamWriterFile = new StreamWriter(new FileStream(CurrentServiceInformation.LoggerFileName, System.IO.FileMode.Append));
-                    _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
-                    _streamWriterFile.WriteLine(message);
+                    _streamWriterFile.WriteLine(string.Format("{0}      {1}",message, string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString())));
                     _streamWriterFile.Flush();
                     
                 }

@@ -199,7 +199,7 @@ namespace ConnectorWorkflowManager
 
                         }
 
-                        result = true;
+                        result = requestSuccess;
                     }
                 }
                 catch (Exception ex)
@@ -255,6 +255,7 @@ namespace ConnectorWorkflowManager
                         if (ord.State == 1)
                         {
                             SendToDB(ord.ReferenceNo);
+                            _loger.Log("Hase updated order with NO = " + ord.ReferenceNo);
                         }
                     }
             }
