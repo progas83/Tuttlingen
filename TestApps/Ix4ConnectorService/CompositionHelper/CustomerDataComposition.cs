@@ -226,44 +226,25 @@ namespace CompositionHelper
                     break;
                 }
             }
-
-         
-            //if(plugingSettings!=null)
-            //{
-            //    bool currentRequestDataPairActive = false;
-            //    if (ix4Property == Ix4RequestProps.Deliveries)
-            //    {
-            //        currentRequestDataPairActive = plugingSettings.CheckDeliveries;
-            //    }
-            //    if (ix4Property == Ix4RequestProps.Orders)
-            //    {
-            //        currentRequestDataPairActive = plugingSettings.CheckOrders;
-            //    }
-
-            //    if(currentRequestDataPairActive)
-            //    {
-
-            //    }
-            //}
-           
-
-          
-           
-            //switch (dataSourceType)
-            //{
-            //    case CustomDataSourceTypes.MsSql:
-
-            //        break;
-            //    case CustomDataSourceTypes.Xml:
-
-            //        break;
-            //    case CustomDataSourceTypes.Csv:
-            //        break;
-            //    default:
-            //        break;
-            //}
-
             return requests;
+        }
+
+        public void ExportData(CustomDataSourceTypes dataSourceType, string exportDataType, string exportData, string[] exportDataParameters = null)
+        {
+            var plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.PluginType == dataSourceType);
+            if (plugingSettings == null)
+            {
+                return ;
+            }
+
+            foreach (var plugin in CustomerDataPlugins)
+            {
+                if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
+                {
+                    plugin.Value.ExportDataToCustomerSource(plugingSettings,exportDataType,exportData,exportDataParameters);
+                    break;
+                }
+            }
         }
     }
 }

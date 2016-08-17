@@ -225,6 +225,10 @@ namespace XmlDataExtractor
 
             return licsRequest;
         }
-      
+
+        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

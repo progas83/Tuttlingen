@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CONTENT" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="CONTENT" msdata:IsDataSet="false" msdata:Locale="en-US">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="MSG">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="MSGHeader_Type" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGHeader_Created" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGHeader_Status" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGHeader_User" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_Amount" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_PurchaseOrder" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_DilosProcessNo" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_DilosPos" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_WAPosID" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_OrderType" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_TrackingNo" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_ShippingType" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_BinType" type="xs:string" minOccurs="0" />
+              <xs:element name="MSGPos_ResAmount" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

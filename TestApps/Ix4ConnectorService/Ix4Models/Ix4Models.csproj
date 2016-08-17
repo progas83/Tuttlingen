@@ -57,6 +57,15 @@
       <DependentUpon>LICSRequest.xsd</DependentUpon>
       <SubType>code</SubType>
     </Compile>
+    <Compile Include="Schema\WV\GSMSG.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="Schema\WV\Wv_ExportData.cs" />
+    <Compile Include="Schema\WV\Wv_ExportData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Wv_ExportData.xsd</DependentUpon>
+    </Compile>
     <Compile Include="SettingsDataModel\CsvPluginSettings.cs" />
     <Compile Include="SettingsDataModel\CustomerInfo.cs" />
     <Compile Include="SettingsDataModel\MsSqlPluginSettings.cs" />
@@ -85,6 +94,27 @@
     </None>
     <None Include="Schema\NavisionXmlOut.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\WV\GSMSG.xsc">
+      <DependentUpon>GSMSG.xsd</DependentUpon>
+    </None>
+    <None Include="Schema\WV\GSMSG.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="Schema\WV\GSMSG.xss">
+      <DependentUpon>GSMSG.xsd</DependentUpon>
+    </None>
+    <None Include="Schema\WV\Wv_ExportData.xsc">
+      <DependentUpon>Wv_ExportData.xsd</DependentUpon>
+    </None>
+    <None Include="Schema\WV\Wv_ExportData.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Wv_ExportData.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\WV\Wv_ExportData.xss">
+      <DependentUpon>Wv_ExportData.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

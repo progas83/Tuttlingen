@@ -51,6 +51,7 @@
     <Compile Include="DatabaseSettings\View\MainDBSettindsView.xaml.cs">
       <DependentUpon>MainDBSettindsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExportDataToSQL.cs" />
     <Compile Include="ManualMaping\ViewModel\ManualMapperViewModel.cs" />
     <Compile Include="ManualMaping\View\ManualMappingView.xaml.cs">
       <DependentUpon>ManualMappingView.xaml</DependentUpon>

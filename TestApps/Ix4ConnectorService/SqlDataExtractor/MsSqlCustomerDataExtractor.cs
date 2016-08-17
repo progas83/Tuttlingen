@@ -7,6 +7,7 @@ using SqlDataExtractor.DatabaseSettings.ViewModel;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using System;
 
 namespace SqlDataExtractor
 {
@@ -89,6 +90,13 @@ namespace SqlDataExtractor
             }
             requests.Add(request);
             return requests.ToArray();
+        }
+
+        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null)
+        {
+            ExportDataToSQL sqlExporter = new ExportDataToSQL(pluginSettings);
+        //    var dataInstance = Activator.CreateInstance(Type.GetType(exportDataType));
+            sqlExporter.SaveDataToTable(exportDataType, exportData);
         }
     }
 }

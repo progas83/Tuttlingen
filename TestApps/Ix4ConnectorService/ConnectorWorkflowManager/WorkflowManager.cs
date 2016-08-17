@@ -14,6 +14,8 @@ using Ix4Models.Converters;
 using System.Xml;
 using System.Xml.Linq;
 using System.Data.SqlClient;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace ConnectorWorkflowManager
 {
@@ -26,12 +28,12 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 60000;
+        private static readonly long RElapsedEvery = 6000;
         private static readonly int _articlesPerRequest = 20;
         private long _articlesLastUpdate = 0;
         private long _ordersLastUpdate = 0;
         private long _deliveriesLastUpdate = 0;
-
+        bool _isArticlesBusy = false;
 
         private static Logger _loger = Logger.GetLogger();
 
@@ -86,22 +88,25 @@ namespace ConnectorWorkflowManager
             }
         }
 
-
+        //  Task _checkArticlesTask = new Task(()=>CheckArticles());
         private long GetTimeStamp()
         {
             return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
+
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
             try
             {
+                ExportData();
                 WrightLog("Timer has elapsed");
                 // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
                 {
                     WrightLog("Check Artikles started");
-                    CheckArticles();
+                    if (!_isArticlesBusy)
+                        Task.Run(() => CheckArticles());
                 }
 
 
@@ -117,6 +122,8 @@ namespace ConnectorWorkflowManager
 
                 //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                 //CheckDeliveries();
+
+                //    ExportData();
             }
             catch (Exception ex)
             {
@@ -129,7 +136,50 @@ namespace ConnectorWorkflowManager
 
 
         }
+        private void ExportData()
+        {
+            if (_ix4ServiceConnector != null)
+            {
+                XmlNode nodeResult = _ix4ServiceConnector.ExportData("GP", null);
 
+                XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                if(msgNodes.Count>0)
+                {
+                    XmlSerializer sr = new XmlSerializer(typeof(MSG));
+
+                    foreach (XmlNode node in msgNodes)
+                    {
+                        
+                        TextReader tr = new StringReader(node.OuterXml);
+                        var red = sr.Deserialize(tr);
+                    }
+
+                }
+
+
+                //string result = nodeResult.OuterXml.ToString();
+                //string xmlContent = nodeResult.OuterXml;
+                //XmlDocument doc = new XmlDocument();
+                //doc.LoadXml(xmlContent);
+                //XmlNode newNode = doc.DocumentElement;
+
+
+
+             //   _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
+                //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
+
+                //using (TextReader fs = new StringReader(result))
+                //{
+                //    LICSResponse res = (LICSResponse)serializer.Deserialize(fs);
+                //}
+
+
+            }
+
+            //    LICSResponse response
+            
+            // nodeResult.OuterXml;
+        }
         public void Pause()
         {
             if (_timer != null && _timer.Enabled)
@@ -190,12 +240,12 @@ namespace ConnectorWorkflowManager
                             {
                                 File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
                                 _errorCount = _errorCount * 1000;
                                 File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
                             }
-                            
+
 
                         }
 
@@ -242,15 +292,41 @@ namespace ConnectorWorkflowManager
         {
             try
             {
-                TextReader tr = new StringReader(response);
-                //  XElement elem = XElement.Load(tr);
+                //TextReader tr = new StringReader(response);
 
-                //   string xml = "<StatusDocumentItem xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><DataUrl/><LastUpdated>2013-02-01T12:35:29.9517061Z</LastUpdated><Message>Job put in queue</Message><State>0</State><StateName>Waiting to be processed</StateName></StatusDocumentItem>";
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
-                LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
-                if (resp.OrderImport != null)
-                    foreach (var ord in resp.OrderImport.Order)
+                XmlSerializer ResponseSerializer = new XmlSerializer(typeof(LICSResponse));
+                LICSResponse objResponse;
+                using (TextReader tr = new StringReader(response))
+                {
+                    objResponse = (LICSResponse)ResponseSerializer.Deserialize(tr);
+                }
+
+                //Validate the results
+                if (objResponse.ArticleImport != null && objResponse.ArticleImport.CountOfFailed > 0)
+                {
+                    //Handle ArticleImportErrors
+                }
+
+                if (objResponse.DeliveryImport != null && objResponse.DeliveryImport.CountOfFailed > 0)
+                {
+                    //Handle DeliveryImportErrors
+                }
+
+                if (objResponse.OrderImport != null && objResponse.OrderImport.CountOfFailed > 0)
+                {
+                    //Handle OrderImportErrors
+                }
+
+
+
+
+
+
+                // LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
+                if (objResponse.OrderImport != null)
+                    foreach (var ord in objResponse.OrderImport.Order)
                     {
                         if (ord.State == 1)
                         {
@@ -369,7 +445,7 @@ namespace ConnectorWorkflowManager
                     _ordersLastUpdate = GetTimeStamp();
                     break;
                 case Ix4RequestProps.Deliveries:
-                    _deliveriesLastUpdate =GetTimeStamp();
+                    _deliveriesLastUpdate = GetTimeStamp();
                     break;
                 case Ix4RequestProps.Orders:
                     _ordersLastUpdate = GetTimeStamp();
@@ -392,13 +468,13 @@ namespace ConnectorWorkflowManager
                     }
                     break;
                 case Ix4RequestProps.Deliveries:
-                    if(_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate)>7200)
+                    if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
                     {
                         result = true;
                     }
                     break;
                 case Ix4RequestProps.Orders:
-                    if(_ordersLastUpdate == 0 || (GetTimeStamp()- _ordersLastUpdate)>60)
+                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
                     {
                         result = true;
                     }
@@ -412,10 +488,10 @@ namespace ConnectorWorkflowManager
 
         private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
-           
+
             try
             {
-                if(TimeToCheck(ix4Property))
+                if (TimeToCheck(ix4Property))
                 {
                     _loger.Log(string.Format("Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
@@ -424,18 +500,18 @@ namespace ConnectorWorkflowManager
                     {
                         foreach (var item in requests)
                         {
-                        //    _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
+                            //    _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
                             item.ClientId = _customerInfo.ClientID;
-                            bool res = SendLicsRequestToIx4(item, string.Format("{0}File.xml",ix4Property.ToString()));
+                            bool res = SendLicsRequestToIx4(item, string.Format("{0}File.xml", ix4Property.ToString()));
                             _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
-                            if(res)
+                            if (res)
                             {
                                 UpdateLastUpdateValues(ix4Property);
                             }
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -533,15 +609,22 @@ namespace ConnectorWorkflowManager
             }
 
         }
-        
+
+
+
         private void CheckArticles()
         {
             int countA = 0;
+            if (_isArticlesBusy)
+            {
+                _loger.Log("Check articles is busy");
+                return;
+            }
             try
             {
                 if (TimeToCheck(Ix4RequestProps.Articles))
                 {
-
+                    _isArticlesBusy = true;
 
                     int currentClientID = _customerInfo.ClientID;
                     LICSRequest request = new LICSRequest();
@@ -582,6 +665,10 @@ namespace ConnectorWorkflowManager
                 _loger.Log(ex);
                 _loger.Log("Inner excep " + ex.InnerException);
                 _loger.Log("Inner excep MESSAGE" + ex.InnerException.Message);
+            }
+            finally
+            {
+                _isArticlesBusy = true;
             }
         }
 

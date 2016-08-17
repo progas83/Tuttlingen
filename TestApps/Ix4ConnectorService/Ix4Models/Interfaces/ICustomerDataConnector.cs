@@ -14,5 +14,7 @@ namespace Ix4Models.Interfaces
         LICSRequestDelivery[] GetRequestDeliveries(IPluginSettings pluginSettings);
 
         LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property);
+
+        void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null);
     }
 }
