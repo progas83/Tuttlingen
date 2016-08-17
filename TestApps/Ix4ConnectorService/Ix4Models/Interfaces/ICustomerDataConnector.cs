@@ -1,5 +1,6 @@
 ﻿using Ix4Models.SettingsDataModel;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace Ix4Models.Interfaces
 {
@@ -15,6 +16,6 @@ namespace Ix4Models.Interfaces
 
         LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property);
 
-        void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null);
+        void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData );
     }
 }

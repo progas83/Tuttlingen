@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
 using System;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace SqlDataExtractor
 {
@@ -92,11 +95,21 @@ namespace SqlDataExtractor
             return requests.ToArray();
         }
 
-        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null)
+        //public void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null)
+        //{
+        //    
+        ////    var dataInstance = Activator.CreateInstance(Type.GetType(exportDataType));
+        //    sqlExporter.SaveDataToTable(exportDataType, exportData);
+        //}
+
+        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData)
         {
             ExportDataToSQL sqlExporter = new ExportDataToSQL(pluginSettings);
-        //    var dataInstance = Activator.CreateInstance(Type.GetType(exportDataType));
-            sqlExporter.SaveDataToTable(exportDataType, exportData);
+            sqlExporter.SaveDataToTable(exportData);
+
+        
         }
+
+
     }
 }

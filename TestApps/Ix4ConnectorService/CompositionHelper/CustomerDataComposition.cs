@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using Ix4Models;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.Interfaces;
+using System.Xml;
 
 namespace CompositionHelper
 {
@@ -229,7 +230,7 @@ namespace CompositionHelper
             return requests;
         }
 
-        public void ExportData(CustomDataSourceTypes dataSourceType, string exportDataType, string exportData, string[] exportDataParameters = null)
+        public void ExportData(CustomDataSourceTypes dataSourceType, XmlNode exportData)
         {
             var plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.PluginType == dataSourceType);
             if (plugingSettings == null)
@@ -241,7 +242,7 @@ namespace CompositionHelper
             {
                 if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
                 {
-                    plugin.Value.ExportDataToCustomerSource(plugingSettings,exportDataType,exportData,exportDataParameters);
+                    plugin.Value.ExportDataToCustomerSource(plugingSettings,exportData);
                     break;
                 }
             }

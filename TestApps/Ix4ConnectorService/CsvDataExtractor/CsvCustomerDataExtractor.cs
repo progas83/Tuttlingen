@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Controls;
+using System.Xml;
 
 namespace CsvDataExtractor
 {
@@ -45,6 +46,11 @@ namespace CsvDataExtractor
         }
 
         public void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData)
         {
             throw new NotImplementedException();
         }

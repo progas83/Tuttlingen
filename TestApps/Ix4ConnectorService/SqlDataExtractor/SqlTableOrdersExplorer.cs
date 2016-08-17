@@ -13,31 +13,31 @@ using SimplestLogger;
 
 namespace SqlDataExtractor
 {
-    class SqlTableOrdersExplorer
+    class SqlTableOrdersExplorer : SqlTableWorker
     {
-        private MsSqlPluginSettings _pluginSettings;
-        private static Logger _loger = Logger.GetLogger();
+       // private MsSqlPluginSettings _pluginSettings;
+      //  private static Logger _loger = Logger.GetLogger();
 
-        public SqlTableOrdersExplorer(IPluginSettings pluginSettings)
+        public SqlTableOrdersExplorer(IPluginSettings pluginSettings) : base(pluginSettings)
         {
-            this._pluginSettings = pluginSettings as MsSqlPluginSettings;
+        
         }
-        private string DbConnection
-        {
-            get
-            {
-                return _pluginSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _pluginSettings.DbSettings.ServerAdress,
-                                                                                                         _pluginSettings.DbSettings.DataBaseName,
-                                                                                                         _pluginSettings.DbSettings.DbUserName,
-                                                                                                         _pluginSettings.DbSettings.Password) :
-                                                                    string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
-                                                                                                         _pluginSettings.DbSettings.DataBaseName);
+        //private string DbConnection
+        //{
+        //    get
+        //    {
+        //        return _pluginSettings.DbSettings.UseSqlServerAuth ? string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWithServerAuth, _pluginSettings.DbSettings.ServerAdress,
+        //                                                                                                 _pluginSettings.DbSettings.DataBaseName,
+        //                                                                                                 _pluginSettings.DbSettings.DbUserName,
+        //                                                                                                 _pluginSettings.DbSettings.Password) :
+        //                                                            string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+        //                                                                                                 _pluginSettings.DbSettings.DataBaseName);
 
-                //return   string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
-                //                                                                                    _pluginSettings.DbSettings.DataBaseName);
+        //        //return   string.Format(CurrentServiceInformation.MsSqlDatabaseConnectionStringWindowsAuth, _pluginSettings.DbSettings.ServerAdress,
+        //        //                                                                                    _pluginSettings.DbSettings.DataBaseName);
 
-            }
-        }
+        //    }
+        //}
 
         internal LICSRequestOrder[] GetRequestOrders()
         {

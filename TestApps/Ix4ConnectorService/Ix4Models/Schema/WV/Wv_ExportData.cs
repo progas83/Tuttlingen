@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Ix4Models.Schema.WV;
 using System.Xml.Serialization;
 
 // 
@@ -26,7 +27,7 @@ public partial class MSG {
     
     private string mSGHeader_TypeField;
     
-    private string mSGHeader_CreatedField;
+    private System.DateTime mSGHeader_CreatedField;
     
     private string mSGHeader_StatusField;
     
@@ -34,25 +35,25 @@ public partial class MSG {
     
     private string mSGPos_ItemNoField;
     
-    private string mSGPos_AmountField;
+    private int mSGPos_AmountField;
     
-    private string mSGPos_PurchaseOrderField;
+    private int mSGPos_PurchaseOrderField;
     
-    private string mSGPos_DilosProcessNoField;
+    private int mSGPos_DilosProcessNoField;
     
-    private string mSGPos_DilosPosField;
+    private int mSGPos_DilosPosField;
     
-    private string mSGPos_WAPosIDField;
+    private int mSGPos_WAPosIDField;
     
-    private string mSGPos_WAKopfIDField;
+    private int mSGPos_WAKopfIDField;
     
-    private string mSGPos_OrderTypeField;
+    private int mSGPos_OrderTypeField;
     
-    private string mSGPos_ShippingTypeField;
+    private int mSGPos_ShippingTypeField;
     
     private string mSGPos_BinTypeField;
     
-    private string mSGPos_ResAmountField;
+    private int mSGPos_ResAmountField;
     
     private string mSGPos_StorageplaceField;
     
@@ -76,7 +77,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_Created")]
-    public string Created {
+    public System.DateTime Created {
         get {
             return this.mSGHeader_CreatedField;
         }
@@ -110,6 +111,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_ItemNo")]
+    [MSGPos]
     public string ItemNo {
         get {
             return this.mSGPos_ItemNoField;
@@ -121,7 +123,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_Amount")]
-    public string Amount {
+    [MSGPos]
+    public int Amount {
         get {
             return this.mSGPos_AmountField;
         }
@@ -132,7 +135,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_PurchaseOrder")]
-    public string PurchaseOrder {
+    [MSGPos]
+    public int PurchaseOrder {
         get {
             return this.mSGPos_PurchaseOrderField;
         }
@@ -143,7 +147,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_DilosProcessNo")]
-    public string DilosProcessNo {
+    [MSGPos]
+    public int DilosProcessNo {
         get {
             return this.mSGPos_DilosProcessNoField;
         }
@@ -154,7 +159,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_DilosPos")]
-    public string DilosPos {
+    [MSGPos]
+    public int DilosPos {
         get {
             return this.mSGPos_DilosPosField;
         }
@@ -165,7 +171,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_WAPosID")]
-    public string WAPosID {
+    [MSGPos]
+    public int WAPosID {
         get {
             return this.mSGPos_WAPosIDField;
         }
@@ -176,7 +183,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_WAKopfID")]
-    public string WAKopfID {
+    [MSGPos]
+    public int WAKopfID {
         get {
             return this.mSGPos_WAKopfIDField;
         }
@@ -187,7 +195,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_OrderType")]
-    public string OrderType {
+    [MSGPos]
+    public int OrderType {
         get {
             return this.mSGPos_OrderTypeField;
         }
@@ -198,7 +207,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_ShippingType")]
-    public string ShippingType {
+    [MSGPos]
+    public int ShippingType {
         get {
             return this.mSGPos_ShippingTypeField;
         }
@@ -209,6 +219,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_BinType")]
+    [MSGPos]
     public string BinType {
         get {
             return this.mSGPos_BinTypeField;
@@ -220,7 +231,8 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_ResAmount")]
-    public string ResAmount {
+    [MSGPos]
+    public int ResAmount {
         get {
             return this.mSGPos_ResAmountField;
         }
@@ -231,6 +243,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_Storageplace")]
+    [MSGPos]
     public string Storageplace {
         get {
             return this.mSGPos_StorageplaceField;
@@ -242,6 +255,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_DeliveryNo")]
+    [MSGPos]
     public string DeliveryNo {
         get {
             return this.mSGPos_DeliveryNoField;
@@ -253,6 +267,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_Supplier")]
+    [MSGPos]
     public string Supplier {
         get {
             return this.mSGPos_SupplierField;
@@ -264,6 +279,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_TrackingNo")]
+    [MSGPos]
     public string TrackingNo {
         get {
             return this.mSGPos_TrackingNoField;

@@ -28,7 +28,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 60000;
+        private static readonly long RElapsedEvery = 6000;
         private static readonly int _articlesPerRequest = 20;
         private long _articlesLastUpdate = 0;
         private long _ordersLastUpdate = 0;
@@ -140,21 +140,31 @@ namespace ConnectorWorkflowManager
         {
             if (_ix4ServiceConnector != null)
             {
-                XmlNode nodeResult = _ix4ServiceConnector.ExportData("GP", null);
+                XmlNode nodeResult = _ix4ServiceConnector.ExportData("GS", null);
 
                 XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
                 if (msgNodes.Count > 0)
                 {
-                    XmlSerializer sr = new XmlSerializer(typeof(MSG));
-
-                    foreach (XmlNode node in msgNodes)
-                    {
-
-                        TextReader tr = new StringReader(node.OuterXml);
-                        MSG red =(MSG)sr.Deserialize(tr);
-                    }
-
+                    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
                 }
+
+                XmlNode nodeResult1 = _ix4ServiceConnector.ExportData("GR", null);
+
+                XmlNodeList msgNodes1 = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                if (msgNodes1.Count > 0)
+                {
+                    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult1);
+                }
+
+                XmlNode nodeResult2 = _ix4ServiceConnector.ExportData("GP", null);
+
+                XmlNodeList msgNodes2 = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                if (msgNodes2.Count > 0)
+                {
+                     _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
+                }
+
+
 
 
                 //string result = nodeResult.OuterXml.ToString();
@@ -165,7 +175,7 @@ namespace ConnectorWorkflowManager
 
 
 
-                _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
+
                 //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 //using (TextReader fs = new StringReader(result))

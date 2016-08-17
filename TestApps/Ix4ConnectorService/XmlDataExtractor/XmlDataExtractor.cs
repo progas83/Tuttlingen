@@ -13,6 +13,7 @@ using XmlDataExtractor.Settings.ViewModel;
 using Ix4Models.Converters;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.Interfaces;
+using System.Xml;
 
 namespace XmlDataExtractor
 {
@@ -227,6 +228,11 @@ namespace XmlDataExtractor
         }
 
         public void ExportDataToCustomerSource(IPluginSettings pluginSettings, string exportDataType, string exportData, string[] exportDataParameters = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData)
         {
             throw new NotImplementedException();
         }

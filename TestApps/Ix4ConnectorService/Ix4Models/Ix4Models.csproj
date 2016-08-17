@@ -60,6 +60,7 @@
     <Compile Include="Schema\WV\GSMSG.cs">
       <SubType>code</SubType>
     </Compile>
+    <Compile Include="Schema\WV\MSGPosAttribute.cs" />
     <Compile Include="Schema\WV\Wv_ExportData.cs" />
     <Compile Include="Schema\WV\Wv_ExportData.Designer.cs">
       <AutoGen>True</AutoGen>
