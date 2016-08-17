@@ -165,7 +165,7 @@ namespace ConnectorWorkflowManager
 
 
 
-             //   _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
+                _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
                 //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 //using (TextReader fs = new StringReader(result))
