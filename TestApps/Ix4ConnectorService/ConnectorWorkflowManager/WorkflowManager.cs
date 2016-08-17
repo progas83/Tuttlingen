@@ -28,6 +28,9 @@ namespace ConnectorWorkflowManager
         private static object _padlock = new object();
         private static readonly long RElapsedEvery = 60000;
         private static readonly int _articlesPerRequest = 20;
+        private long _articlesLastUpdate = 0;
+        private long _ordersLastUpdate = 0;
+        private long _deliveriesLastUpdate = 0;
 
 
         private static Logger _loger = Logger.GetLogger();
@@ -73,9 +76,6 @@ namespace ConnectorWorkflowManager
                 _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
                 _dataCompositor = new CustomerDataComposition(_customerInfo.PluginSettings);
                 _ix4ServiceConnector = Ix4ConnectorManager.Instance.GetRegisteredIx4WebServiceInterface(_customerInfo.ClientID, _customerInfo.UserName, _customerInfo.Password, _customerInfo.ServiceEndpoint);
-                //   _loger.Log("CUSTOMER INFO = "+ _customerInfo.ToString());
-
-
                 _timer.Enabled = true;
             }
             catch (Exception ex)
@@ -85,9 +85,7 @@ namespace ConnectorWorkflowManager
                 _loger.Log(_ix4ServiceConnector, "_ix4ServiceConnector");
             }
         }
-        private long _articlesLastUpdate = 0;
-        private long _ordersLastUpdate = 0;
-        private long _deliveriesLastUpdate = 0;
+
 
         private long GetTimeStamp()
         {
@@ -172,20 +170,6 @@ namespace ConnectorWorkflowManager
             {
                 try
                 {
-
-                    //if (_ix4ServiceConnector != null)
-                    //{
-                    //    XmlSerializer serializator = new XmlSerializer(typeof(LICSRequestOrderPosition));
-                    //    using (Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate))
-                    //    {
-                    //        serializator.Serialize(st, request.OrderImport[0].Positions[0]);
-                    //     //   byte[] bytesRequest = ReadToEnd(st);
-                    //      //  string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
-                    //      //  _loger.Log(resp);
-                    //    }
-                    //    //File.Delete(CurrentServiceInformation.TemporaryXmlFileName);
-                    //    result = true;
-                    //}
                     if (_ix4ServiceConnector != null)
                     {
                         bool requestSuccess = true;
@@ -197,13 +181,21 @@ namespace ConnectorWorkflowManager
                             string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
                             requestSuccess = CheckStateRequest(resp);
                             SimplestParcerLicsRequest(resp);
-                            //    SimplestParcerLicsRequest(resp);
                             _loger.Log(resp);
                         }
                         if (!requestSuccess)
                         {
                             _errorCount++;
-                            File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
+                            try
+                            {
+                                File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
+                            }
+                            catch(Exception ex)
+                            {
+                                _errorCount = _errorCount * 1000;
+                                File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
+                            }
+                            
 
                         }
 
@@ -368,35 +360,81 @@ namespace ConnectorWorkflowManager
             _loger.Log(message);
         }
 
+        private void UpdateLastUpdateValues(Ix4RequestProps ix4Property)
+        {
+            switch (ix4Property)
+            {
+                case Ix4RequestProps.Articles:
+                    _ordersLastUpdate = GetTimeStamp();
+                    break;
+                case Ix4RequestProps.Deliveries:
+                    _deliveriesLastUpdate =GetTimeStamp();
+                    break;
+                case Ix4RequestProps.Orders:
+                    _ordersLastUpdate = GetTimeStamp();
+                    break;
+                default:
+                    break;
+            }
+        }
 
+
+        private bool TimeToCheck(Ix4RequestProps ix4Property)
+        {
+            bool result = false;
+            switch (ix4Property)
+            {
+                case Ix4RequestProps.Articles:
+                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
+                    {
+                        result = true;
+                    }
+                    break;
+                case Ix4RequestProps.Deliveries:
+                    if(_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate)>7200)
+                    {
+                        result = true;
+                    }
+                    break;
+                case Ix4RequestProps.Orders:
+                    if(_ordersLastUpdate == 0 || (GetTimeStamp()- _ordersLastUpdate)>60)
+                    {
+                        result = true;
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+            return result;
+        }
 
         private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
-            _loger.Log("============================ CheckPreparedRequest============================================");
+           
             try
             {
-                // if(_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) >60)
-                // {
-                LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-                if (requests != null)
+                if(TimeToCheck(ix4Property))
                 {
+                    _loger.Log(string.Format("Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
+                    LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
 
-                }
-
-                if (requests.Length > 0)
-                {
-                    foreach (var item in requests)
+                    if (requests != null)
                     {
-                        _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
-                        item.ClientId = _customerInfo.ClientID;
-                        var res = SendLicsRequestToIx4(item, "deliveryFile.xml");
-
-                        _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
+                        foreach (var item in requests)
+                        {
+                        //    _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
+                            item.ClientId = _customerInfo.ClientID;
+                            bool res = SendLicsRequestToIx4(item, string.Format("{0}File.xml",ix4Property.ToString()));
+                            _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
+                            if(res)
+                            {
+                                UpdateLastUpdateValues(ix4Property);
+                            }
+                        }
                     }
                 }
-                //     _ordersLastUpdate = GetTimeStamp();
-                //}
-
+                
             }
             catch (Exception ex)
             {
@@ -482,7 +520,7 @@ namespace ConnectorWorkflowManager
             }
 
         }
-
+        LICSRequestArticle[] _cachedArticles;
         private LICSRequestArticle GetArticleByNumber(string articleNo)
         {
             if (_cachedArticles != null)
@@ -494,14 +532,13 @@ namespace ConnectorWorkflowManager
             }
 
         }
-        LICSRequestArticle[] _cachedArticles;
+        
         private void CheckArticles()
         {
             int countA = 0;
             try
             {
-                var timegap = (GetTimeStamp() - _articlesLastUpdate);
-                if (_articlesLastUpdate == 0 || timegap > 43200)
+                if (TimeToCheck(Ix4RequestProps.Articles))
                 {
 
 
@@ -535,32 +572,8 @@ namespace ConnectorWorkflowManager
                             }
                         }
                     }
-                    _articlesLastUpdate = GetTimeStamp();
-                    //foreach (LICSRequestArticle article in articles)
-                    //{
-                    // //   article.ClientNo = currentClientID;
-                    // //   tempAtricles.Add(article);
-                    //    //if (tempAtricles.Count > 20)
-                    //    //{
-                    //    //    request.ArticleImport = tempAtricles.ToArray();
-                    //    //    var resSent = SendLicsRequestToIx4(request, "articleFile.xml");
-                    //    //    if (resSent)
-                    //    //    {
-                    //    //        countA++;
-                    //    //        _loger.Log(string.Format("Was sent {0}", countA));
-                    //    //        tempAtricles = new List<LICSRequestArticle>();
-                    //    //    }
-                    //    //}
-                    //}
-                    //  request.ArticleImport = articles;
+                    UpdateLastUpdateValues(Ix4RequestProps.Articles);
 
-                    //     var res = SendLicsRequestToIx4(request, "articleFile.xml");
-                    //if (res)
-                    //{
-                    //    _cachedArticles = articles;
-
-                    //}
-                    //   _loger.Log("Articles result: " + res);
                 }
             }
             catch (Exception ex)
