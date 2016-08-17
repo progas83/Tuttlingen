@@ -264,6 +264,8 @@ namespace ConnectorWorkflowManager
             return result;
         }
 
+
+
         private bool CheckStateRequest(string response)
         {
             bool result = true;
@@ -276,7 +278,7 @@ namespace ConnectorWorkflowManager
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
-                if (resp.State != 0)
+                if (resp.State != 0 )
                 {
                     result = false;
                 }
@@ -492,6 +494,52 @@ namespace ConnectorWorkflowManager
             return result;
         }
 
+        private bool HasItemsForSending(LICSRequest[] requests, Ix4RequestProps ix4Property)
+        {
+            bool result = false;
+            if(requests!=null)
+            {
+                switch (ix4Property)
+                {
+                    case Ix4RequestProps.Articles:
+                        foreach (LICSRequest request in requests)
+                        {
+                            if (request.ArticleImport.Length > 0)
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
+                        break;
+                    case Ix4RequestProps.Orders:
+                        foreach (LICSRequest request in requests)
+                        {
+                            if (request.OrderImport.Length > 0)
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
+                        break;
+                    case Ix4RequestProps.Deliveries:
+                        foreach (LICSRequest request in requests)
+                        {
+                            if (request.DeliveryImport.Length > 0)
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+           
+            return result;
+        }
+
         private void CheckPreparedRequest(CustomDataSourceTypes dataSourceType, Ix4RequestProps ix4Property)
         {
 
@@ -501,8 +549,8 @@ namespace ConnectorWorkflowManager
                 {
                     _loger.Log(string.Format("Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-
-                    if (requests != null)
+                    
+                    if (HasItemsForSending(requests,ix4Property))
                     {
                         foreach (var item in requests)
                         {
