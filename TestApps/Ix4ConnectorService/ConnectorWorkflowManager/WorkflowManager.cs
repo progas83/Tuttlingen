@@ -28,7 +28,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 6000;
+        private static readonly long RElapsedEvery = 60000;
         private static readonly int _articlesPerRequest = 20;
         private long _articlesLastUpdate = 0;
         private long _ordersLastUpdate = 0;
@@ -99,7 +99,7 @@ namespace ConnectorWorkflowManager
             _timer.Enabled = false;
             try
             {
-                ExportData();
+              //  ExportData();
                 WrightLog("Timer has elapsed");
                 // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
@@ -136,50 +136,50 @@ namespace ConnectorWorkflowManager
 
 
         }
-        private void ExportData()
-        {
-            if (_ix4ServiceConnector != null)
-            {
-                XmlNode nodeResult = _ix4ServiceConnector.ExportData("GP", null);
+        //private void ExportData()
+        //{
+        //    if (_ix4ServiceConnector != null)
+        //    {
+        //        XmlNode nodeResult = _ix4ServiceConnector.ExportData("GP", null);
 
-                XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
-                if(msgNodes.Count>0)
-                {
-                    XmlSerializer sr = new XmlSerializer(typeof(MSG));
+        //        XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+        //        if(msgNodes.Count>0)
+        //        {
+        //            XmlSerializer sr = new XmlSerializer(typeof(MSG));
 
-                    foreach (XmlNode node in msgNodes)
-                    {
+        //            foreach (XmlNode node in msgNodes)
+        //            {
                         
-                        TextReader tr = new StringReader(node.OuterXml);
-                        var red = sr.Deserialize(tr);
-                    }
+        //                TextReader tr = new StringReader(node.OuterXml);
+        //                var red = sr.Deserialize(tr);
+        //            }
 
-                }
-
-
-                //string result = nodeResult.OuterXml.ToString();
-                //string xmlContent = nodeResult.OuterXml;
-                //XmlDocument doc = new XmlDocument();
-                //doc.LoadXml(xmlContent);
-                //XmlNode newNode = doc.DocumentElement;
+        //        }
 
 
-
-                _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
-                //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
-
-                //using (TextReader fs = new StringReader(result))
-                //{
-                //    LICSResponse res = (LICSResponse)serializer.Deserialize(fs);
-                //}
+        //        //string result = nodeResult.OuterXml.ToString();
+        //        //string xmlContent = nodeResult.OuterXml;
+        //        //XmlDocument doc = new XmlDocument();
+        //        //doc.LoadXml(xmlContent);
+        //        //XmlNode newNode = doc.DocumentElement;
 
 
-            }
 
-            //    LICSResponse response
+        //        _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, "GP", nodeResult.OuterXml);
+        //        //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
+
+        //        //using (TextReader fs = new StringReader(result))
+        //        //{
+        //        //    LICSResponse res = (LICSResponse)serializer.Deserialize(fs);
+        //        //}
+
+
+        //    }
+
+        //    //    LICSResponse response
             
-            // nodeResult.OuterXml;
-        }
+        //    // nodeResult.OuterXml;
+        //}
         public void Pause()
         {
             if (_timer != null && _timer.Enabled)
@@ -328,11 +328,17 @@ namespace ConnectorWorkflowManager
                 if (objResponse.OrderImport != null)
                     foreach (var ord in objResponse.OrderImport.Order)
                     {
+                        int status = 2;
                         if (ord.State == 1)
                         {
-                            SendToDB(ord.ReferenceNo);
-                            _loger.Log("Hase updated order with NO = " + ord.ReferenceNo);
+                            status = 5;
                         }
+                        else
+                        {
+                            status = 3;
+                        }
+                        SendToDB(ord.ReferenceNo,status);
+                        _loger.Log(string.Format("Hase updated order with NO = {0}  new status = {1}", ord.ReferenceNo,status));
                     }
             }
             catch (Exception ex)
@@ -358,14 +364,14 @@ namespace ConnectorWorkflowManager
             }
         }
 
-        private void SendToDB(string no)
+        private void SendToDB(string no, int status)
         {
             try
             {
                 using (var connection = new SqlConnection(DbConnection))
                 {
                     connection.Open();
-                    var cmdText = string.Format(@"UPDATE WAKopf SET Status = 5 WHERE ID = {0} ", no);
+                    var cmdText = string.Format(@"UPDATE WAKopf SET Status = {0} WHERE ID = {1} ",status, no);
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -442,7 +448,7 @@ namespace ConnectorWorkflowManager
             switch (ix4Property)
             {
                 case Ix4RequestProps.Articles:
-                    _ordersLastUpdate = GetTimeStamp();
+                    _articlesLastUpdate = GetTimeStamp();
                     break;
                 case Ix4RequestProps.Deliveries:
                     _deliveriesLastUpdate = GetTimeStamp();
@@ -462,7 +468,7 @@ namespace ConnectorWorkflowManager
             switch (ix4Property)
             {
                 case Ix4RequestProps.Articles:
-                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
+                    if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
                     {
                         result = true;
                     }
