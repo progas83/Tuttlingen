@@ -136,9 +136,10 @@ namespace ConnectorWorkflowManager
 
 
         }
+        bool _dataHasExported = false;
         private void ExportData()
         {
-            if (_ix4ServiceConnector != null)
+            if (_ix4ServiceConnector != null && !_dataHasExported)
             {
                 XmlNode nodeResult = _ix4ServiceConnector.ExportData("GS", null);
 
@@ -146,24 +147,36 @@ namespace ConnectorWorkflowManager
                 if (msgNodes.Count > 0)
                 {
                     _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
+                    _dataHasExported = true;
                 }
 
-                XmlNode nodeResult1 = _ix4ServiceConnector.ExportData("GR", null);
+                System.Threading.Thread.Sleep(10000);
+                //   XmlNode nodeResult1 = _ix4ServiceConnector.ExportData("GR", null);
 
-                XmlNodeList msgNodes1 = nodeResult.LastChild.LastChild.SelectNodes("MSG");
-                if (msgNodes1.Count > 0)
-                {
-                    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult1);
-                }
+                //   XmlNodeList msgNodes1 = nodeResult1.LastChild.LastChild.SelectNodes("MSG");
+                //   if (msgNodes1.Count > 0)
+                //   {
+                //       _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult1);
+                //   }
 
                 XmlNode nodeResult2 = _ix4ServiceConnector.ExportData("GP", null);
-
-                XmlNodeList msgNodes2 = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
+                var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
                 if (msgNodes2.Count > 0)
                 {
-                     _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
+                    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
+                    _dataHasExported = true;
                 }
 
+
+
+                //   XmlNode nodeResult22 = _ix4ServiceConnector.ExportData("GP", null);
+                //   //  var rer = nodeResult.LastChild.LastChild.ChildNodes;
+                //   var msgNodes22 = nodeResult22.LastChild.LastChild.SelectNodes("MSG");
+                //   if (msgNodes22.Count > 0)
+                //   {
+                //      // node1 = nodeResult2;  // _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
+                //   }
 
 
 

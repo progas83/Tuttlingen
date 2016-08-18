@@ -35,7 +35,7 @@ public partial class MSG {
     
     private string mSGPos_ItemNoField;
     
-    private int mSGPos_AmountField;
+    private double mSGPos_AmountField;
     
     private int mSGPos_PurchaseOrderField;
     
@@ -124,7 +124,7 @@ public partial class MSG {
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_Amount")]
     [MSGPos]
-    public int Amount {
+    public double Amount {
         get {
             return this.mSGPos_AmountField;
         }

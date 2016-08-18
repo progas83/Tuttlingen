@@ -53,14 +53,24 @@ namespace SqlDataExtractor
 
                 foreach (XmlNode node in msgNodes)
                 {
-
-                    TextReader tr = new StringReader(node.OuterXml);
-                    MSG red = (MSG)sr.Deserialize(tr);
+                    try
+                    {
+                        TextReader tr = new StringReader(node.OuterXml);
+                        MSG red = (MSG)sr.Deserialize(tr);
+                        InsertIntoTable(red);
+                    }
+                    catch(Exception ex)
+                    {
+                        _loger.Log(ex);
+                    }
+                  
                 }
 
             }
         }
-        private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
+      //  private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
+        
+        private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
         private void InsertIntoTable(MSG message)
         {
           using (var connection = new SqlConnection(_dbConnection))
@@ -122,19 +132,32 @@ namespace SqlDataExtractor
         }
 
         private int InsertHeader(MSG message, SqlConnection con)
-        {
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Created,Status,User) output INSERTED.ID VALUES(@hType,@hCreated,@hStatus,@hUser)", con))
+        {                                                                                           // output INSERTED.ID
+            int modified = -1;
+            //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated);", con))
             {
                 cmd.Parameters.AddWithValue("@hType", message.Type);
-                cmd.Parameters.AddWithValue("@hCreated", message.Created);
+            
                 cmd.Parameters.AddWithValue("@hStatus", message.Status);
                 cmd.Parameters.AddWithValue("@hUser", message.User);
+                cmd.Parameters.AddWithValue("@hCreated",message.Created);
+              //  cmd.Parameters.AddWithValue("@hLastUpdate", DateTime.Now);
+              //  cmd.Parameters.AddWithValue("@hErrorText", "Error");
 
 
 
                 con.Open();
                 _loger.Log("Connection opened to InterfaceDilosLMS for InsertHeader");
-                int modified = (int)cmd.ExecuteScalar();
+                try
+                {
+                    modified = (int)cmd.ExecuteScalar();
+                }
+                catch(Exception ex)
+                {
+
+                }
+                
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
 
