@@ -17,32 +17,15 @@ namespace SqlDataExtractor
 {
     class ExportDataToSQL : SqlTableWorker
     {
+        private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
+
+      //    private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
+
         public ExportDataToSQL(IPluginSettings pluginSettings) : base(pluginSettings)
         {
 
         }
 
-        //  internal void SaveDataToTable(string dataInstance, string exportData)
-        //  {
-        //      // Stream sr = new FileStream(, FileMode.Open);
-
-        //    //  XmlNode node = new XmlNode();
-
-        //      XmlDocument doc = new XmlDocument();
-        //      doc.LoadXml(exportData);
-
-        //     // MSG content = 
-        //      XmlSerializer serializer = new XmlSerializer(typeof(MSG));
-        //      using (FileStream fs = new FileStream(@"E:\Ilya\WV_Info\WW_LMS\WW_LMS\GSMSG.xml", FileMode.Open))
-        //      {
-        //          MSG res = (MSG)serializer.Deserialize(fs);
-        //      }
-
-        //      //TextReader reader = new StringReader(exportData);
-        //      //var res = (NewDataSet)serializer.Deserialize(reader);
-        ////      NewDataSet wvExportData = new NewDataSet();
-
-        //  }
 
         internal void SaveDataToTable(XmlNode exportData)
         {
@@ -58,11 +41,10 @@ namespace SqlDataExtractor
                     {
                         TextReader tr = new StringReader(node.OuterXml);
                         MSG red = (MSG)sr.Deserialize(tr);
-                        if(red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
+                        if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
                         {
                             InsertIntoTable(red);
                         }
-                        
                     }
                     catch(Exception ex)
                     {
@@ -73,9 +55,7 @@ namespace SqlDataExtractor
 
             }
         }
-      //  private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
-        
-        private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
+
         private void InsertIntoTable(MSG message)
         {
           using (var connection = new SqlConnection(_dbConnection))
@@ -83,18 +63,25 @@ namespace SqlDataExtractor
               //  connection.Open();
                 
                 int headerID = InsertHeader(message,connection);
-                SqlCommand cmd = InsertPosition("MsgPos", message, headerID);
-                cmd.Connection = connection;
-                connection.Open();
-                _loger.Log("Connection opened to InterfaceDilosLMS for InsertPosition");
-                var result = cmd.ExecuteNonQuery();
-                //var cmdText = _pluginSettings.OrdersQuery;
-               // SqlCommand cmd = new SqlCommand(cmdText, connection);
-                //SqlDataReader reader = cmd.ExecuteReader();
-                //orders = LoadOrders(reader, connection);
-                _loger.Log(string.Format("SQL commang affected {0} rows", result));
-                if (connection.State == System.Data.ConnectionState.Open)
-                    connection.Close();
+                if(headerID!=-1)
+                {
+                    SqlCommand cmd = InsertPosition("MsgPos", message, headerID);
+                    cmd.Connection = connection;
+                    connection.Open();
+                    _loger.Log("Connection opened to InterfaceDilosLMS for InsertPosition");
+                    var result = cmd.ExecuteNonQuery();
+                    //var cmdText = _pluginSettings.OrdersQuery;
+                    // SqlCommand cmd = new SqlCommand(cmdText, connection);
+                    //SqlDataReader reader = cmd.ExecuteReader();
+                    //orders = LoadOrders(reader, connection);
+                    _loger.Log(string.Format("SQL commang affected {0} rows", result));
+                    if (connection.State == System.Data.ConnectionState.Open)
+                        connection.Close();
+                }
+                else
+                {
+                    _loger.Log("There was no correct header number for MSG.WAKopfID = " + message.WAKopfID);
+                }
             }
         }
 
@@ -140,32 +127,57 @@ namespace SqlDataExtractor
         {                                                                                           // output INSERTED.ID
             int modified = -1;
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
+            //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY();", con))
+
+
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY();", con))
             {
+                con.Open();
+                var serverVersion = con.ServerVersion;
+                _loger.Log("Current Server version = " + serverVersion);
                 cmd.Parameters.AddWithValue("@hType", message.Type);
-            
                 cmd.Parameters.AddWithValue("@hStatus", message.Status);
                 cmd.Parameters.AddWithValue("@hUser", message.User);
                 cmd.Parameters.AddWithValue("@hCreated",message.Created);
                 cmd.Parameters.AddWithValue("@hLastUpdate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@hErrorText", string.IsNullOrEmpty(message.ErrorText) ? string.Empty : message.ErrorText);
+                
+                //int res = -10;
+                //SqlParameter outputID = new SqlParameter();
+                //outputID.Direction = System.Data.ParameterDirection.Output;
+                //outputID.ParameterName = "@hID";
+                //outputID.Size = sizeof(int);
+                //outputID.DbType = System.Data.DbType.Int32;
 
-
-
-                con.Open();
+                //cmd.Parameters.Add(outputID);
+              //  cmd.Parameters.AddWithValue("@hID", res).Direction = System.Data.ParameterDirection.ReturnValue;
                 _loger.Log("Connection opened to InterfaceDilosLMS for InsertHeader");
                 try
                 {
-                    modified = (int)cmd.ExecuteScalar();
+                    //cmd.ExecuteScalar();
+                    //var rerere = outputID.Value;
+                    //modified = Convert.ToInt32(cmd.ExecuteScalar());
+                   var ress = Convert.ToInt32(cmd.ExecuteScalar());//.ExecuteNonQuery();
+                    _loger.Log("CAN GET ID ============================================= " + ress);
+                    if (con.State == System.Data.ConnectionState.Open)
+                        con.Close();
+                    con.Open();
+                    SqlCommand cmdGetID = new SqlCommand("SELECT MAX(ID) FROM MsgHeader", con);
+                    modified = Convert.ToInt32(cmdGetID.ExecuteScalar());
+                    _loger.Log("USE EXTRA METHOD FOR GETTING record ID = " + modified);
                 }
                 catch(Exception ex)
                 {
-
+                    _loger.Log("Return record ID from Header DB ERROR");
+                    _loger.Log(ex);
+                  
                 }
-                
-                if (con.State == System.Data.ConnectionState.Open)
-                    con.Close();
-
+                finally
+                {
+                    if (con.State == System.Data.ConnectionState.Open)
+                        con.Close();
+                }
+               
                 return modified;
             }
         }
@@ -200,18 +212,6 @@ namespace SqlDataExtractor
         //-          “CA” Cancel Order
         //-          “BO” Stock corrections/adjustmets
         //-          “SA” Stock
-        //    using(SqlCommand cmd = new SqlCommand("INSERT INTO Mem_Basic(Mem_Na,Mem_Occ) output INSERTED.ID VALUES(@na,@occ)", con))
-        //{
-        //    cmd.Parameters.AddWithValue("@na", Mem_NA);
-        //    cmd.Parameters.AddWithValue("@occ", Mem_Occ);
-        //    con.Open();
 
-        //    int modified = (int)cmd.ExecuteScalar();
-
-        //    if (con.State == System.Data.ConnectionState.Open) 
-        //        con.Close();
-
-        //    return modified;
-        //}
     }
 }

@@ -40,7 +40,7 @@ namespace SqlDataExtractor.Commands
                     connection.Open();
                     if (connection.State == ConnectionState.Open)
                     {
-                        _viewModel.DbConnectionStatus = "Connection Success";
+                        _viewModel.DbConnectionStatus =string.Format( "Connection Success. Server version is {0}",connection.ServerVersion);
                     }
                     connection.Close();
                 }
