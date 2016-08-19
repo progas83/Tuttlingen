@@ -49,6 +49,7 @@ namespace SqlDataExtractor
             XmlNodeList msgNodes = exportData.LastChild.LastChild.SelectNodes("MSG");
             if (msgNodes.Count > 0)
             {
+                _loger.Log(string.Format("Export data count = {0}", msgNodes.Count));
                 XmlSerializer sr = new XmlSerializer(typeof(MSG));
 
                 foreach (XmlNode node in msgNodes)
@@ -57,7 +58,11 @@ namespace SqlDataExtractor
                     {
                         TextReader tr = new StringReader(node.OuterXml);
                         MSG red = (MSG)sr.Deserialize(tr);
-                        InsertIntoTable(red);
+                        if(red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
+                        {
+                            InsertIntoTable(red);
+                        }
+                        
                     }
                     catch(Exception ex)
                     {
@@ -135,15 +140,15 @@ namespace SqlDataExtractor
         {                                                                                           // output INSERTED.ID
             int modified = -1;
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated);", con))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
             {
                 cmd.Parameters.AddWithValue("@hType", message.Type);
             
                 cmd.Parameters.AddWithValue("@hStatus", message.Status);
                 cmd.Parameters.AddWithValue("@hUser", message.User);
                 cmd.Parameters.AddWithValue("@hCreated",message.Created);
-              //  cmd.Parameters.AddWithValue("@hLastUpdate", DateTime.Now);
-              //  cmd.Parameters.AddWithValue("@hErrorText", "Error");
+                cmd.Parameters.AddWithValue("@hLastUpdate", DateTime.Now);
+                cmd.Parameters.AddWithValue("@hErrorText", string.IsNullOrEmpty(message.ErrorText) ? string.Empty : message.ErrorText);
 
 
 

@@ -137,20 +137,21 @@ namespace ConnectorWorkflowManager
 
         }
         bool _dataHasExported = false;
+        private static int _exportAttempts = 0;
         private void ExportData()
         {
             if (_ix4ServiceConnector != null && !_dataHasExported)
             {
-                XmlNode nodeResult = _ix4ServiceConnector.ExportData("GS", null);
+                //XmlNode nodeResult = _ix4ServiceConnector.ExportData("GS", null);
 
-                XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
-                if (msgNodes.Count > 0)
-                {
-                    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
-                    _dataHasExported = true;
-                }
+                //XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                //if (msgNodes.Count > 0)
+                //{
+                //    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
+                //    _dataHasExported = true;
+                //}
 
-                System.Threading.Thread.Sleep(10000);
+              
                 //   XmlNode nodeResult1 = _ix4ServiceConnector.ExportData("GR", null);
 
                 //   XmlNodeList msgNodes1 = nodeResult1.LastChild.LastChild.SelectNodes("MSG");
@@ -164,9 +165,30 @@ namespace ConnectorWorkflowManager
                 var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
                 if (msgNodes2.Count > 0)
                 {
+                    _loger.Log("Starting export data GP");
                     _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
                     _dataHasExported = true;
+                    _exportAttempts = 0;
                 }
+                else
+                {
+                    _exportAttempts++;
+                    _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts) );
+                    System.Threading.Thread.Sleep(30000);
+                }
+
+                //XmlNode nodeResult25 = _ix4ServiceConnector.ExportData("GS", null);
+                ////   var rer = nodeResult.LastChild.LastChild.ChildNodes;
+                //var msgNodes25 = nodeResult25.LastChild.LastChild.SelectNodes("MSG");
+                //if (msgNodes25.Count > 0)
+                //{
+                //    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult25);
+                //    _dataHasExported = true;
+                //}
+                //else
+                //{
+                //    System.Threading.Thread.Sleep(30000);
+                //}
 
 
 

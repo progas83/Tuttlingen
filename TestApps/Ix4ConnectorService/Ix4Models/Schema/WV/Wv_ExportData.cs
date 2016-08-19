@@ -28,7 +28,11 @@ public partial class MSG {
     private string mSGHeader_TypeField;
     
     private System.DateTime mSGHeader_CreatedField;
-    
+
+    private System.DateTime mSGHeader_LastUpdateField;
+
+    private string mSGHeader_ErrorTextField;
+
     private string mSGHeader_StatusField;
     
     private string mSGHeader_UserField;
@@ -85,7 +89,21 @@ public partial class MSG {
             this.mSGHeader_CreatedField = value;
         }
     }
-    
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_LastUpdate")]
+    public System.DateTime LastUpdate
+    {
+        get
+        {
+            return this.mSGHeader_LastUpdateField;
+        }
+        set
+        {
+            this.mSGHeader_LastUpdateField = value;
+        }
+    }
+
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName ="MSGHeader_Status")]
     public string Status
@@ -97,7 +115,21 @@ public partial class MSG {
             this.mSGHeader_StatusField = value;
         }
     }
-    
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_ErrorText")]
+    public string ErrorText
+    {
+        get
+        {
+            return this.mSGHeader_ErrorTextField;
+        }
+        set
+        {
+            this.mSGHeader_ErrorTextField = value;
+        }
+    }
+
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_User")]
     public string User {

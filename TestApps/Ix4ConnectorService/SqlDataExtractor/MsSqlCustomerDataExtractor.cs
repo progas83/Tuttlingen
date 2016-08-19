@@ -104,8 +104,16 @@ namespace SqlDataExtractor
 
         public void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData)
         {
-            ExportDataToSQL sqlExporter = new ExportDataToSQL(pluginSettings);
-            sqlExporter.SaveDataToTable(exportData);
+            try
+            {
+                ExportDataToSQL sqlExporter = new ExportDataToSQL(pluginSettings);
+                sqlExporter.SaveDataToTable(exportData);
+            }
+            catch(Exception ex)
+            {
+                _loger.Log(ex);
+            }
+            
 
         
         }
