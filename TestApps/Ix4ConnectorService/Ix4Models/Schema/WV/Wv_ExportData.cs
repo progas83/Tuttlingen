@@ -242,11 +242,44 @@ public partial class MSG {
     [MSGPos]
     public int ShippingType {
         get {
-            return this.mSGPos_ShippingTypeField;
+            return this.GetModifiedShippingType();
         }
         set {
             this.mSGPos_ShippingTypeField = value;
         }
+    }
+
+    private int GetModifiedShippingType()
+    {
+        int resultShippingType = 9;
+        switch(this.mSGPos_ShippingTypeField)
+        {
+            case 100:
+                resultShippingType = 9;
+                break;
+            case 900:
+                resultShippingType = 1;
+                break;
+            case 200:
+                resultShippingType = 5;
+                break;
+            case 800:
+                resultShippingType = 6;
+                break;
+            case 130:
+                resultShippingType = 13;
+                break;
+            case 0:
+                resultShippingType = 19;
+                break;
+            default:
+                break;
+
+        }
+
+
+        return resultShippingType;
+
     }
     
     /// <remarks/>
