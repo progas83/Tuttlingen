@@ -159,22 +159,25 @@ namespace ConnectorWorkflowManager
                 //   {
                 //       _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult1);
                 //   }
+                foreach(string mark in new string[] {"GP","GS" })
+                {
+                    XmlNode nodeResult2 = _ix4ServiceConnector.ExportData(mark,null);// ("GS", null);
+                    //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
+                    var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
+                    if (msgNodes2.Count > 0)
+                    {
+                        _loger.Log("Starting export data " + mark);
+                        _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
+                        _dataHasExported = true;
+                        _exportAttempts = 0;
+                    }
+                    else
+                    {
+                        _exportAttempts++;
+                        _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
+                        System.Threading.Thread.Sleep(30000);
+                    }
 
-                XmlNode nodeResult2 = _ix4ServiceConnector.ExportData("GS", null);
-                //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
-                var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
-                if (msgNodes2.Count > 0)
-                {
-                    _loger.Log("Starting export data GP");
-                    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
-                    _dataHasExported = true;
-                    _exportAttempts = 0;
-                }
-                else
-                {
-                    _exportAttempts++;
-                    _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts) );
-                    System.Threading.Thread.Sleep(30000);
                 }
 
                 //XmlNode nodeResult25 = _ix4ServiceConnector.ExportData("GS", null);

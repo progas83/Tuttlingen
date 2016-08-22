@@ -17,9 +17,9 @@ namespace SqlDataExtractor
 {
     class ExportDataToSQL : SqlTableWorker
     {
-        private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
+      //  private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
 
-      //    private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
+       private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
 
         public ExportDataToSQL(IPluginSettings pluginSettings) : base(pluginSettings)
         {
@@ -128,20 +128,78 @@ namespace SqlDataExtractor
             int modified = -1;
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY();", con))
-
-
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
+            if(message.Type.Equals("GS"))
             {
-                con.Open();
-                var serverVersion = con.ServerVersion;
-                _loger.Log("Current Server version = " + serverVersion);
+                int existedHeaderID = FindExistedGSHeader(message,con);
+                if(existedHeaderID!=-1)
+                {
+                    modified = existedHeaderID;
+                }
+                else
+                {
+                    modified = InsertNewHeaderRecord(message, con);
+                }
+                
+            }
+            else
+            {
+                modified = InsertNewHeaderRecord(message, con);
+            }
+
+
+           
+                return modified;
+            
+        }
+
+        private int FindExistedGSHeader(MSG message, SqlConnection con)
+        {
+            int existedHeaderID = -1;
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE WAKopfID = @pCurrentWAKopfID ",con))
+                {
+
+                    cmd.Parameters.AddWithValue("@pCurrentWAKopfID", message.WAKopfID);
+                    con.Open();
+                   var existedItem = cmd.ExecuteScalar();
+                    if(existedItem!=null)
+                    {
+                        existedHeaderID = Convert.ToInt32(existedItem);
+                    }
+
+                }
+
+            }
+            catch(Exception ex)
+            {
+                _loger.Log(ex);
+            }
+            finally
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+           
+                return existedHeaderID;
+        }
+
+        private int InsertNewHeaderRecord(MSG message, SqlConnection con)
+        {
+            int modified = -1;
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY() AS LastItemID;", con))
+            {
+                
+
+                //  var serverVersion = con.ServerVersion;
+                //  _loger.Log("Current Server version = " + serverVersion);
                 cmd.Parameters.AddWithValue("@hType", message.Type);
                 cmd.Parameters.AddWithValue("@hStatus", message.Status);
                 cmd.Parameters.AddWithValue("@hUser", message.User);
-                cmd.Parameters.AddWithValue("@hCreated",message.Created);
+                cmd.Parameters.AddWithValue("@hCreated", message.Created);
                 cmd.Parameters.AddWithValue("@hLastUpdate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@hErrorText", string.IsNullOrEmpty(message.ErrorText) ? string.Empty : message.ErrorText);
-                
+
                 //int res = -10;
                 //SqlParameter outputID = new SqlParameter();
                 //outputID.Direction = System.Data.ParameterDirection.Output;
@@ -150,36 +208,50 @@ namespace SqlDataExtractor
                 //outputID.DbType = System.Data.DbType.Int32;
 
                 //cmd.Parameters.Add(outputID);
-              //  cmd.Parameters.AddWithValue("@hID", res).Direction = System.Data.ParameterDirection.ReturnValue;
+                //  cmd.Parameters.AddWithValue("@hID", res).Direction = System.Data.ParameterDirection.ReturnValue;
+
+                con.Open();
                 _loger.Log("Connection opened to InterfaceDilosLMS for InsertHeader");
                 try
                 {
+
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        dr.Read();
+                        modified = Convert.ToInt32(dr["LastItemID"]);
+                        _loger.Log("USE SqlDataReader FOR GETTING record ID = " + modified);
+                    }
+                    else
+                    {
+                        _loger.Log("Cant get last inserted headerID");
+                    }
                     //cmd.ExecuteScalar();
                     //var rerere = outputID.Value;
                     //modified = Convert.ToInt32(cmd.ExecuteScalar());
-                   var ress = Convert.ToInt32(cmd.ExecuteScalar());//.ExecuteNonQuery();
-                    _loger.Log("CAN GET ID ============================================= " + ress);
-                    if (con.State == System.Data.ConnectionState.Open)
-                        con.Close();
-                    con.Open();
-                    SqlCommand cmdGetID = new SqlCommand("SELECT MAX(ID) FROM MsgHeader", con);
-                    modified = Convert.ToInt32(cmdGetID.ExecuteScalar());
-                    _loger.Log("USE EXTRA METHOD FOR GETTING record ID = " + modified);
+                    //var ress = Convert.ToInt32(cmd.ExecuteScalar());//.ExecuteNonQuery();
+                    // _loger.Log("CAN GET ID ============================================= " + ress);
+                    // if (con.State == System.Data.ConnectionState.Open)
+                    //     con.Close();
+                    // con.Open();
+                    // SqlCommand cmdGetID = new SqlCommand("SELECT MAX(ID) FROM MsgHeader", con);
+                    // modified = Convert.ToInt32(cmdGetID.ExecuteScalar());
+                    // _loger.Log("USE EXTRA METHOD FOR GETTING record ID = " + modified);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _loger.Log("Return record ID from Header DB ERROR");
                     _loger.Log(ex);
-                  
+
                 }
                 finally
                 {
                     if (con.State == System.Data.ConnectionState.Open)
                         con.Close();
                 }
-               
-                return modified;
+
             }
+            return modified;
         }
 
         private string GetTableName(string msgType)
