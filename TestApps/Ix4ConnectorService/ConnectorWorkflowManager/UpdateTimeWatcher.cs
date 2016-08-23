@@ -12,7 +12,7 @@ namespace ConnectorWorkflowManager
         static UpdateTimeWatcher()
         {
             DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day,17, 30, 00)).AddDays(-1);
-            _articlesLastUpdate =(long)DateTime.UtcNow.Subtract(yesturdayHalfPastSeventeen).TotalSeconds;
+            _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
         private static long _articlesLastUpdate = 1;
         private static long _ordersLastUpdate = 0;

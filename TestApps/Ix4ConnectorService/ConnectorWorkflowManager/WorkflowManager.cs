@@ -28,7 +28,7 @@ namespace ConnectorWorkflowManager
 
         protected Timer _timer;// = new Timer(RElapsedEvery);
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 6000;
+        private static readonly long RElapsedEvery = 6000;//60*10*1000;
         private static readonly int _articlesPerRequest = 20;
       
       
