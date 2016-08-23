@@ -9,11 +9,12 @@ namespace ConnectorWorkflowManager
 {
    static class UpdateTimeWatcher
     {
-        //public static UpdateTimeWatcher()
-        //{
-        //    _articlesLastUpdate = 
-        //}
-        private static long _articlesLastUpdate = 0;
+        static UpdateTimeWatcher()
+        {
+            DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day,17, 30, 00)).AddDays(-1);
+            _articlesLastUpdate =(long)DateTime.UtcNow.Subtract(yesturdayHalfPastSeventeen).TotalSeconds;
+        }
+        private static long _articlesLastUpdate = 1;
         private static long _ordersLastUpdate = 0;
         private static long _deliveriesLastUpdate = 0;
 
@@ -55,8 +56,8 @@ namespace ConnectorWorkflowManager
             switch (ix4Property)
             {
                 case Ix4RequestProps.Articles:
-                    //if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200)
-                    if(DateTime.UtcNow > new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 17, 30, 00))
+                    if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 86400)
+                  
                     {
                         result = true;
                     }
@@ -68,7 +69,7 @@ namespace ConnectorWorkflowManager
                     }
                     break;
                 case Ix4RequestProps.Orders:
-                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
+                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 1800)
                     {
                         result = true;
                     }

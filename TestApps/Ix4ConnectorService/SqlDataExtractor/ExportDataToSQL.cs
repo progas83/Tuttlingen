@@ -18,7 +18,7 @@ namespace SqlDataExtractor
     class ExportDataToSQL : SqlTableWorker
     {
         private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
-        private string _dbConnectionlms10dat = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=lms10dat; User ID=sa;Password=sa";
+    //    private string _dbConnectionlms10dat = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=lms10dat; User ID=sa;Password=sa";
       //    private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
 
         public ExportDataToSQL(IPluginSettings pluginSettings) : base(pluginSettings)
@@ -29,38 +29,36 @@ namespace SqlDataExtractor
         int itemsCount = 0;
         internal void SaveDataToTable(XmlNode exportData)
         {
-            //   CreateGPFromGs(null);
-
-
             XmlNodeList msgNodes = exportData.LastChild.LastChild.SelectNodes("MSG");
 
-            CreateGPFromGs(msgNodes);
-            //if (msgNodes.Count > 0)
-            //{
-            //    _loger.Log(string.Format("Export data count = {0}", msgNodes.Count));
-            //    XmlSerializer sr = new XmlSerializer(typeof(MSG));
+            //            CreateGPFromGs(msgNodes);
+            if (msgNodes.Count > 0)
+            {
+                _loger.Log(string.Format("Export data count = {0}", msgNodes.Count));
+                XmlSerializer sr = new XmlSerializer(typeof(MSG));
+                foreach (XmlNode node in msgNodes)
+                {
+                    try
+                    {
+                        TextReader tr = new StringReader(node.OuterXml);
+                        MSG red = (MSG)sr.Deserialize(tr);
+                        // if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
+                       // if (itemsCount <= 100)
+                       // {
+                            InsertIntoTable(red);
+                            itemsCount++;
+                        _loger.Log("Succefully exported MSG");
+                        _loger.Log(node.OuterXml);
+                        //}
+                    }
+                    catch (Exception ex)
+                    {
+                        _loger.Log(ex);
+                    }
 
-            //    foreach (XmlNode node in msgNodes)
-            //    {
-            //        try
-            //        {
-            //            TextReader tr = new StringReader(node.OuterXml);
-            //            MSG red = (MSG)sr.Deserialize(tr);
-            //            // if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
-            //            if (itemsCount <= 100)
-            //            {
-            //                InsertIntoTable(red);
-            //                itemsCount++;
-            //            }
-            //        }
-            //        catch(Exception ex)
-            //        {
-            //            _loger.Log(ex);
-            //        }
+                }
 
-            //    }
-
-            // }
+            }
         }
         //string GPFile = @"E:\Test\All_GPMessages_201608221730.xml";
         string GPFile = @"C:\Users\admin\Desktop\All_GPMessages_201608221730.xml"; 
@@ -212,11 +210,7 @@ namespace SqlDataExtractor
             {
                 modified = InsertNewHeaderRecord(message, con);
             }
-
-
-
             return modified;
-
         }
 
         private int FindExistedGSHeader(MSG message, SqlConnection con)

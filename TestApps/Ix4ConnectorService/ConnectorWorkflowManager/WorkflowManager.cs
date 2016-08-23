@@ -157,7 +157,6 @@ namespace ConnectorWorkflowManager
                             _exportAttempts++;
                             _loger.Log(string.Format("Can't export {0} data", mark));
                             _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
-                            // System.Threading.Thread.Sleep(3000);
                         }
                     }
                     UpdateTimeWatcher.SetLastUpdateTimeProperty("GP");
