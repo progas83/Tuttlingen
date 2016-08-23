@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CurrentProcessExist" xml:space="preserve">
+    <value>Current app already running.Please close the Ix4-Agent Configurator window and try again.</value>
+  </data>
   <data name="OrderPositionsSettingsPanel" xml:space="preserve">
     <value>SQL query for getting positions of particular Order</value>
   </data>

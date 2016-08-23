@@ -33,6 +33,8 @@ namespace ConnectorWorkflowManager
         private long _articlesLastUpdate = 0;
         private long _ordersLastUpdate = 0;
         private long _deliveriesLastUpdate = 0;
+        private long _exportGPLastUpdate = 0;
+        private long _exportGSLastUpdate = 0;
         bool _isArticlesBusy = false;
 
         private static Logger _loger = Logger.GetLogger();
@@ -89,10 +91,7 @@ namespace ConnectorWorkflowManager
         }
 
         //  Task _checkArticlesTask = new Task(()=>CheckArticles());
-        private long GetTimeStamp()
-        {
-            return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-        }
+   
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
@@ -140,7 +139,7 @@ namespace ConnectorWorkflowManager
         private static int _exportAttempts = 0;
         private void ExportData()
         {
-            if (_ix4ServiceConnector != null && !_dataHasExported)
+            if (_ix4ServiceConnector != null)// && !_dataHasExported)
             {
                 //XmlNode nodeResult = _ix4ServiceConnector.ExportData("GS", null);
 
@@ -151,7 +150,7 @@ namespace ConnectorWorkflowManager
                 //    _dataHasExported = true;
                 //}
 
-              
+
                 //   XmlNode nodeResult1 = _ix4ServiceConnector.ExportData("GR", null);
 
                 //   XmlNodeList msgNodes1 = nodeResult1.LastChild.LastChild.SelectNodes("MSG");
@@ -159,75 +158,133 @@ namespace ConnectorWorkflowManager
                 //   {
                 //       _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult1);
                 //   }
-                foreach(string mark in new string[] {"GP","GS" })
-                {
-                    XmlNode nodeResult2 = _ix4ServiceConnector.ExportData(mark,null);// ("GS", null);
-                    //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
-                    var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
-                    if (msgNodes2.Count > 0)
-                    {
-                        _loger.Log("Starting export data " + mark);
-                        _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
-                        _dataHasExported = true;
-                        _exportAttempts = 0;
-                    }
-                    else
-                    {
-                        _exportAttempts++;
-                        _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
-                        System.Threading.Thread.Sleep(30000);
-                    }
 
+           //     _dataCompositor.ExportData(CustomDataSourceTypes.MsSql,null);
+                if (TimeToCheckExportData("GP"))
+                {
+                    //     foreach (string mark in new string[] { "GP", "GS" })
+                    foreach (string mark in new string[] { "GS" })
+                    {
+                        if (TimeToCheckExportData(mark))
+                        {
+                            XmlNode nodeResult2 = _ix4ServiceConnector.ExportData(mark, null);// ("GS", null);
+                                                                                              //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
+                            var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
+                            if (msgNodes2.Count > 0)
+                            {
+                                _loger.Log("Starting export data " + mark);
+                                _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
+                                _dataHasExported = true;
+                                _exportAttempts = 0;
+                            }
+                            else
+                            {
+                                _exportAttempts++;
+                                _loger.Log(string.Format("Can't export {0} data", mark));
+                                _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
+                                System.Threading.Thread.Sleep(3000);
+                            }
+                        }
+                    }
+                    UpdateExportDataLastUpdate("GP");
                 }
 
-                //XmlNode nodeResult25 = _ix4ServiceConnector.ExportData("GS", null);
-                ////   var rer = nodeResult.LastChild.LastChild.ChildNodes;
-                //var msgNodes25 = nodeResult25.LastChild.LastChild.SelectNodes("MSG");
-                //if (msgNodes25.Count > 0)
-                //{
-                //    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult25);
-                //    _dataHasExported = true;
-                //}
-                //else
-                //{
-                //    System.Threading.Thread.Sleep(30000);
-                //}
+            }
+        }
+
+        private bool TimeToCheckExportData(string exportDataType)
+        {
+            bool isItTimeToCheck = false;
+            switch(exportDataType)
+            {
+                case "GP":
+                    if(_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1800)
+                    {
+                        isItTimeToCheck = true;
+                    }
+                    break;
+                case "GS":
+                    if(_exportGSLastUpdate == 0 || (GetTimeStamp() - _exportGSLastUpdate)>1800)
+                    {
+                        isItTimeToCheck = true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return isItTimeToCheck;
+        }
+
+        private void UpdateExportDataLastUpdate(string exportDataType)
+        {
+            switch(exportDataType)
+            {
+                case "GP":
+                    _exportGPLastUpdate = GetTimeStamp();
+                    break;
+                case "GS":
+                    _exportGSLastUpdate = GetTimeStamp();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private long GetTimeStamp()
+        {
+            return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
 
 
+        private void UpdateLastUpdateValues(Ix4RequestProps ix4Property)
+        {
+            switch (ix4Property)
+            {
+                case Ix4RequestProps.Articles:
+                    _articlesLastUpdate = GetTimeStamp();
+                    break;
+                case Ix4RequestProps.Deliveries:
+                    _deliveriesLastUpdate = GetTimeStamp();
+                    break;
+                case Ix4RequestProps.Orders:
+                    _ordersLastUpdate = GetTimeStamp();
+                    break;
+                default:
+                    break;
+            }
+        }
 
-                //   XmlNode nodeResult22 = _ix4ServiceConnector.ExportData("GP", null);
-                //   //  var rer = nodeResult.LastChild.LastChild.ChildNodes;
-                //   var msgNodes22 = nodeResult22.LastChild.LastChild.SelectNodes("MSG");
-                //   if (msgNodes22.Count > 0)
-                //   {
-                //      // node1 = nodeResult2;  // _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
-                //   }
 
-
-
-                //string result = nodeResult.OuterXml.ToString();
-                //string xmlContent = nodeResult.OuterXml;
-                //XmlDocument doc = new XmlDocument();
-                //doc.LoadXml(xmlContent);
-                //XmlNode newNode = doc.DocumentElement;
-
-
-
-
-                //XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
-
-                //using (TextReader fs = new StringReader(result))
-                //{
-                //    LICSResponse res = (LICSResponse)serializer.Deserialize(fs);
-                //}
-
+        private bool TimeToCheck(Ix4RequestProps ix4Property)
+        {
+            bool result = false;
+            switch (ix4Property)
+            {
+                case Ix4RequestProps.Articles:
+                    if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
+                    {
+                        result = true;
+                    }
+                    break;
+                case Ix4RequestProps.Deliveries:
+                    if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
+                    {
+                        result = true;
+                    }
+                    break;
+                case Ix4RequestProps.Orders:
+                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
+                    {
+                        result = true;
+                    }
+                    break;
+                default:
+                    break;
 
             }
-
-            //    LICSResponse response
-
-            // nodeResult.OuterXml;
+            return result;
         }
+
         public void Pause()
         {
             if (_timer != null && _timer.Enabled)
@@ -326,7 +383,7 @@ namespace ConnectorWorkflowManager
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
-                if (resp.State != 0 )
+                if (resp.State != 0)
                 {
                     result = false;
                 }
@@ -387,8 +444,8 @@ namespace ConnectorWorkflowManager
                         {
                             status = 3;
                         }
-                        SendToDB(ord.ReferenceNo,status);
-                        _loger.Log(string.Format("Hase updated order with NO = {0}  new status = {1}", ord.ReferenceNo,status));
+                        SendToDB(ord.ReferenceNo, status);
+                        _loger.Log(string.Format("Hase updated order with NO = {0}  new status = {1}", ord.ReferenceNo, status));
                     }
             }
             catch (Exception ex)
@@ -421,7 +478,7 @@ namespace ConnectorWorkflowManager
                 using (var connection = new SqlConnection(DbConnection))
                 {
                     connection.Open();
-                    var cmdText = string.Format(@"UPDATE WAKopf SET Status = {0} WHERE ID = {1} ",status, no);
+                    var cmdText = string.Format(@"UPDATE WAKopf SET Status = {0} WHERE ID = {1} ", status, no);
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -493,59 +550,12 @@ namespace ConnectorWorkflowManager
             _loger.Log(message);
         }
 
-        private void UpdateLastUpdateValues(Ix4RequestProps ix4Property)
-        {
-            switch (ix4Property)
-            {
-                case Ix4RequestProps.Articles:
-                    _articlesLastUpdate = GetTimeStamp();
-                    break;
-                case Ix4RequestProps.Deliveries:
-                    _deliveriesLastUpdate = GetTimeStamp();
-                    break;
-                case Ix4RequestProps.Orders:
-                    _ordersLastUpdate = GetTimeStamp();
-                    break;
-                default:
-                    break;
-            }
-        }
 
-
-        private bool TimeToCheck(Ix4RequestProps ix4Property)
-        {
-            bool result = false;
-            switch (ix4Property)
-            {
-                case Ix4RequestProps.Articles:
-                    if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
-                    {
-                        result = true;
-                    }
-                    break;
-                case Ix4RequestProps.Deliveries:
-                    if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
-                    {
-                        result = true;
-                    }
-                    break;
-                case Ix4RequestProps.Orders:
-                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
-                    {
-                        result = true;
-                    }
-                    break;
-                default:
-                    break;
-
-            }
-            return result;
-        }
 
         private bool HasItemsForSending(LICSRequest[] requests, Ix4RequestProps ix4Property)
         {
             bool result = false;
-            if(requests!=null)
+            if (requests != null)
             {
                 switch (ix4Property)
                 {
@@ -584,7 +594,7 @@ namespace ConnectorWorkflowManager
 
                 }
             }
-           
+
             return result;
         }
 
@@ -597,8 +607,8 @@ namespace ConnectorWorkflowManager
                 {
                     _loger.Log(string.Format("Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
-                    
-                    if (HasItemsForSending(requests,ix4Property))
+
+                    if (HasItemsForSending(requests, ix4Property))
                     {
                         foreach (var item in requests)
                         {

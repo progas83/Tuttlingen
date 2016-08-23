@@ -61,6 +61,15 @@ namespace Locale.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current app already running.Please close the Ix4-Agent Configurator window and try again..
+        /// </summary>
+        public static string CurrentProcessExist {
+            get {
+                return ResourceManager.GetString("CurrentProcessExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SQL query for getting positions of particular Order.
         /// </summary>
         public static string OrderPositionsSettingsPanel {

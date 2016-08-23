@@ -18,52 +18,118 @@ namespace SqlDataExtractor
     class ExportDataToSQL : SqlTableWorker
     {
       //  private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
-
-       private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
+        private string _dbConnectionlms10dat = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=lms10dat; User ID=sa;Password=sa";
+          private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
 
         public ExportDataToSQL(IPluginSettings pluginSettings) : base(pluginSettings)
         {
 
         }
 
-
+        int itemsCount = 0;
         internal void SaveDataToTable(XmlNode exportData)
         {
+            //   CreateGPFromGs(null);
+
+
             XmlNodeList msgNodes = exportData.LastChild.LastChild.SelectNodes("MSG");
-            if (msgNodes.Count > 0)
+
+            CreateGPFromGs(msgNodes);
+            //if (msgNodes.Count > 0)
+            //{
+            //    _loger.Log(string.Format("Export data count = {0}", msgNodes.Count));
+            //    XmlSerializer sr = new XmlSerializer(typeof(MSG));
+
+            //    foreach (XmlNode node in msgNodes)
+            //    {
+            //        try
+            //        {
+            //            TextReader tr = new StringReader(node.OuterXml);
+            //            MSG red = (MSG)sr.Deserialize(tr);
+            //            // if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
+            //            if (itemsCount <= 100)
+            //            {
+            //                InsertIntoTable(red);
+            //                itemsCount++;
+            //            }
+            //        }
+            //        catch(Exception ex)
+            //        {
+            //            _loger.Log(ex);
+            //        }
+
+            //    }
+
+            // }
+        }
+        string GPFile = @"E:\Test\All_GPMessages_201608221730.xml";
+        private void CreateGPFromGs(XmlNodeList msgGSnodes)
+        {
+            XmlSerializer sr = new XmlSerializer(typeof(MSG));
+            XmlDocument doc = new XmlDocument();
+            doc.Load(GPFile);
+            XmlNodeList msgGPNodesFromFile = doc.DocumentElement.SelectNodes("MSG");
+
+            List<MSG> msgGPitems = new List<MSG>();
+            foreach (XmlNode nodeGP in msgGPNodesFromFile)
             {
-                _loger.Log(string.Format("Export data count = {0}", msgNodes.Count));
-                XmlSerializer sr = new XmlSerializer(typeof(MSG));
-
-                foreach (XmlNode node in msgNodes)
-                {
-                    try
-                    {
-                        TextReader tr = new StringReader(node.OuterXml);
-                        MSG red = (MSG)sr.Deserialize(tr);
-                        if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
-                        {
-                            InsertIntoTable(red);
-                        }
-                    }
-                    catch(Exception ex)
-                    {
-                        _loger.Log(ex);
-                    }
-                  
-                }
-
+                TextReader tr = new StringReader(nodeGP.OuterXml);
+                MSG msgGP = (MSG)sr.Deserialize(tr);
+                msgGPitems.Add(msgGP);
             }
+
+            bool complete = msgGPNodesFromFile.Count == msgGPitems.Count;
+
+            List<MSG> msgGSitems = new List<MSG>();
+            foreach (XmlNode nodeGS in msgGSnodes)
+            {
+                TextReader tr = new StringReader(nodeGS.OuterXml);
+                MSG msgGS = (MSG)sr.Deserialize(tr);
+                msgGSitems.Add(msgGS);
+            }
+
+            List<int> ordersNumbers = msgGSitems.Select(n => n.WAKopfID).Distinct().ToList();
+            List<int> absentGPNumbers = new List<int>();
+            foreach (int unicNumber in ordersNumbers)
+            {
+                List<MSG> gps = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
+
+                if (gps != null)
+                {
+                    foreach (MSG gpToInsert in gps)
+                    {
+                        InsertIntoTable(gpToInsert);
+                    }
+                }
+                else
+                {
+                    absentGPNumbers.Add(unicNumber);
+                    _loger.Log("Error for order WAKopfID = " + unicNumber);
+                }
+                // foreach (MSG gpItem in msgGPitems.Select(t=>t.WAKopfID==unicNumber))
+            }
+            foreach (int unicNumber in ordersNumbers)
+            {
+                List<MSG> gss = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
+                foreach (MSG gsToInsert in gss)
+                {
+                    if(!absentGPNumbers.Contains(unicNumber))
+                    {
+                        InsertIntoTable(gsToInsert);
+                    }
+                }
+            }
+
         }
 
         private void InsertIntoTable(MSG message)
         {
-          using (var connection = new SqlConnection(_dbConnection))
+            using (var connection = new SqlConnection(_dbConnection))
             {
-              //  connection.Open();
-                
-                int headerID = InsertHeader(message,connection);
-                if(headerID!=-1)
+                //  connection.Open();
+
+                int headerID = InsertHeader(message, connection);
+                if (headerID != -1)
                 {
                     SqlCommand cmd = InsertPosition("MsgPos", message, headerID);
                     cmd.Connection = connection;
@@ -85,7 +151,7 @@ namespace SqlDataExtractor
             }
         }
 
-        private  SqlCommand InsertPosition(string tabelName, MSG message, int headerID)
+        private SqlCommand InsertPosition(string tabelName, MSG message, int headerID)
         {
             SqlCommand sqlCommand = new SqlCommand();
             StringBuilder tableColumnsNames = new StringBuilder();
@@ -116,7 +182,7 @@ namespace SqlDataExtractor
                 _loger.Log(string.Format("Insert position command = {0}", commandText));
                 sqlCommand.CommandText = commandText;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _loger.Log(ex);
             }
@@ -128,10 +194,10 @@ namespace SqlDataExtractor
             int modified = -1;
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY();", con))
-            if(message.Type.Equals("GS"))
+            if (message.Type.Equals("GS"))
             {
-                int existedHeaderID = FindExistedGSHeader(message,con);
-                if(existedHeaderID!=-1)
+                int existedHeaderID = FindExistedGSHeader(message, con);
+                if (existedHeaderID != -1)
                 {
                     modified = existedHeaderID;
                 }
@@ -139,7 +205,7 @@ namespace SqlDataExtractor
                 {
                     modified = InsertNewHeaderRecord(message, con);
                 }
-                
+
             }
             else
             {
@@ -147,9 +213,9 @@ namespace SqlDataExtractor
             }
 
 
-           
-                return modified;
-            
+
+            return modified;
+
         }
 
         private int FindExistedGSHeader(MSG message, SqlConnection con)
@@ -157,13 +223,13 @@ namespace SqlDataExtractor
             int existedHeaderID = -1;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE WAKopfID = @pCurrentWAKopfID ",con))
+                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE WAKopfID = @pCurrentWAKopfID ", con))
                 {
 
                     cmd.Parameters.AddWithValue("@pCurrentWAKopfID", message.WAKopfID);
                     con.Open();
-                   var existedItem = cmd.ExecuteScalar();
-                    if(existedItem!=null)
+                    var existedItem = cmd.ExecuteScalar();
+                    if (existedItem != null)
                     {
                         existedHeaderID = Convert.ToInt32(existedItem);
                     }
@@ -171,7 +237,7 @@ namespace SqlDataExtractor
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _loger.Log(ex);
             }
@@ -180,8 +246,8 @@ namespace SqlDataExtractor
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
             }
-           
-                return existedHeaderID;
+
+            return existedHeaderID;
         }
 
         private int InsertNewHeaderRecord(MSG message, SqlConnection con)
@@ -189,7 +255,7 @@ namespace SqlDataExtractor
             int modified = -1;
             using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY() AS LastItemID;", con))
             {
-                
+
 
                 //  var serverVersion = con.ServerVersion;
                 //  _loger.Log("Current Server version = " + serverVersion);
