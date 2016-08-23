@@ -30,11 +30,8 @@ namespace ConnectorWorkflowManager
         private static object _padlock = new object();
         private static readonly long RElapsedEvery = 6000;
         private static readonly int _articlesPerRequest = 20;
-        private long _articlesLastUpdate = 0;
-        private long _ordersLastUpdate = 0;
-        private long _deliveriesLastUpdate = 0;
-        private long _exportGPLastUpdate = 0;
-        private long _exportGSLastUpdate = 0;
+      
+      
         bool _isArticlesBusy = false;
 
         private static Logger _loger = Logger.GetLogger();
@@ -91,7 +88,7 @@ namespace ConnectorWorkflowManager
         }
 
         //  Task _checkArticlesTask = new Task(()=>CheckArticles());
-   
+
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
@@ -139,151 +136,127 @@ namespace ConnectorWorkflowManager
         private static int _exportAttempts = 0;
         private void ExportData()
         {
-            if (_ix4ServiceConnector != null)// && !_dataHasExported)
+            if (_ix4ServiceConnector != null)
             {
-                //XmlNode nodeResult = _ix4ServiceConnector.ExportData("GS", null);
-
-                //XmlNodeList msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
-                //if (msgNodes.Count > 0)
-                //{
-                //    _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
-                //    _dataHasExported = true;
-                //}
-
-
-                //   XmlNode nodeResult1 = _ix4ServiceConnector.ExportData("GR", null);
-
-                //   XmlNodeList msgNodes1 = nodeResult1.LastChild.LastChild.SelectNodes("MSG");
-                //   if (msgNodes1.Count > 0)
-                //   {
-                //       _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult1);
-                //   }
-
-           //     _dataCompositor.ExportData(CustomDataSourceTypes.MsSql,null);
-                if (TimeToCheckExportData("GP"))
+                if (UpdateTimeWatcher.TimeToCheck("GP"))
                 {
-                    //     foreach (string mark in new string[] { "GP", "GS" })
-                    foreach (string mark in new string[] { "GS" })
+                    foreach (string mark in new string[] { "GP", "GS" })
                     {
-                       // if (TimeToCheckExportData(mark))
+                        _loger.Log("Starting export data " + mark);
+                        XmlNode nodeResult = _ix4ServiceConnector.ExportData(mark, null);
+
+                        var msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                        if (msgNodes.Count > 0)
                         {
-                            XmlNode nodeResult2 = _ix4ServiceConnector.ExportData(mark, null);// ("GS", null);
-                                                                                              //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
-                            var msgNodes2 = nodeResult2.LastChild.LastChild.SelectNodes("MSG");
-                            if (msgNodes2.Count > 0)
-                            {
-                                _loger.Log("Starting export data " + mark);
-                                _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult2);
-                                _dataHasExported = true;
-                                _exportAttempts = 0;
-                            }
-                            else
-                            {
-                                _exportAttempts++;
-                                _loger.Log(string.Format("Can't export {0} data", mark));
-                                _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
-                                System.Threading.Thread.Sleep(3000);
-                            }
+                            _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
+                            _dataHasExported = true;
+                            _exportAttempts = 0;
+                        }
+                        else
+                        {
+                            _exportAttempts++;
+                            _loger.Log(string.Format("Can't export {0} data", mark));
+                            _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
+                            // System.Threading.Thread.Sleep(3000);
                         }
                     }
-                    UpdateExportDataLastUpdate("GP");
+                    UpdateTimeWatcher.SetLastUpdateTimeProperty("GP");
                 }
-
             }
         }
 
-        private bool TimeToCheckExportData(string exportDataType)
-        {
-            bool isItTimeToCheck = false;
-            switch(exportDataType)
-            {
-                case "GP":
-                    if(_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1800)
-                    {
-                        isItTimeToCheck = true;
-                    }
-                    break;
-                case "GS":
-                    if(_exportGSLastUpdate == 0 || (GetTimeStamp() - _exportGSLastUpdate)>1800)
-                    {
-                        isItTimeToCheck = true;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return isItTimeToCheck;
-        }
+        //private bool TimeToCheckExportData(string exportDataType)
+        //{
+        //    bool isItTimeToCheck = false;
+        //    switch (exportDataType)
+        //    {
+        //        case "GP":
+        //            if (_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1800)
+        //            {
+        //                isItTimeToCheck = true;
+        //            }
+        //            break;
+        //        case "GS":
+        //            if (_exportGSLastUpdate == 0 || (GetTimeStamp() - _exportGSLastUpdate) > 1800)
+        //            {
+        //                isItTimeToCheck = true;
+        //            }
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //    return isItTimeToCheck;
+        //}
 
-        private void UpdateExportDataLastUpdate(string exportDataType)
-        {
-            switch(exportDataType)
-            {
-                case "GP":
-                    _exportGPLastUpdate = GetTimeStamp();
-                    break;
-                case "GS":
-                    _exportGSLastUpdate = GetTimeStamp();
-                    break;
-                default:
-                    break;
-            }
-        }
+        //private void UpdateExportDataLastUpdate(string exportDataType)
+        //{
+        //    switch (exportDataType)
+        //    {
+        //        case "GP":
+        //            _exportGPLastUpdate = GetTimeStamp();
+        //            break;
+        //        case "GS":
+        //            _exportGSLastUpdate = GetTimeStamp();
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
-        private long GetTimeStamp()
-        {
-            return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-        }
-
-
-        private void UpdateLastUpdateValues(Ix4RequestProps ix4Property)
-        {
-            switch (ix4Property)
-            {
-                case Ix4RequestProps.Articles:
-                    _articlesLastUpdate = GetTimeStamp();
-                    break;
-                case Ix4RequestProps.Deliveries:
-                    _deliveriesLastUpdate = GetTimeStamp();
-                    break;
-                case Ix4RequestProps.Orders:
-                    _ordersLastUpdate = GetTimeStamp();
-                    break;
-                default:
-                    break;
-            }
-        }
+        //private long GetTimeStamp()
+        //{
+        //    return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        //}
 
 
-        private bool TimeToCheck(Ix4RequestProps ix4Property)
-        {
-            bool result = false;
-            switch (ix4Property)
-            {
-                case Ix4RequestProps.Articles:
-                    if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
-                    {
-                        result = true;
-                    }
-                    break;
-                case Ix4RequestProps.Deliveries:
-                    if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
-                    {
-                        result = true;
-                    }
-                    break;
-                case Ix4RequestProps.Orders:
-                    if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
-                    {
-                        result = true;
-                    }
-                    break;
-                default:
-                    break;
+        //private void UpdateLastUpdateValues(Ix4RequestProps ix4Property)
+        //{
+        //    switch (ix4Property)
+        //    {
+        //        case Ix4RequestProps.Articles:
+        //            _articlesLastUpdate = GetTimeStamp();
+        //            break;
+        //        case Ix4RequestProps.Deliveries:
+        //            _deliveriesLastUpdate = GetTimeStamp();
+        //            break;
+        //        case Ix4RequestProps.Orders:
+        //            _ordersLastUpdate = GetTimeStamp();
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
-            }
-            return result;
-        }
+
+        //private bool TimeToCheck(Ix4RequestProps ix4Property)
+        //{
+        //    bool result = false;
+        //    switch (ix4Property)
+        //    {
+        //        case Ix4RequestProps.Articles:
+        //            if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
+        //            {
+        //                result = true;
+        //            }
+        //            break;
+        //        case Ix4RequestProps.Deliveries:
+        //            if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
+        //            {
+        //                result = true;
+        //            }
+        //            break;
+        //        case Ix4RequestProps.Orders:
+        //            if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
+        //            {
+        //                result = true;
+        //            }
+        //            break;
+        //        default:
+        //            break;
+
+        //    }
+        //    return result;
+        //}
 
         public void Pause()
         {
@@ -603,7 +576,7 @@ namespace ConnectorWorkflowManager
 
             try
             {
-                if (TimeToCheck(ix4Property))
+                if (UpdateTimeWatcher.TimeToCheck(ix4Property))
                 {
                     _loger.Log(string.Format("Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
@@ -618,7 +591,7 @@ namespace ConnectorWorkflowManager
                             _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
                             if (res)
                             {
-                                UpdateLastUpdateValues(ix4Property);
+                                UpdateTimeWatcher.SetLastUpdateTimeProperty(ix4Property);
                             }
                         }
                     }
@@ -637,7 +610,7 @@ namespace ConnectorWorkflowManager
         {
             try
             {
-                if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
+                if(UpdateTimeWatcher.TimeToCheck(Ix4RequestProps.Deliveries))
                 {
                     if (_cachedArticles == null)
                     {
@@ -699,15 +672,13 @@ namespace ConnectorWorkflowManager
                         }
 
                     }
-                    _deliveriesLastUpdate = GetTimeStamp();
+                    UpdateTimeWatcher.SetLastUpdateTimeProperty(Ix4RequestProps.Deliveries);
                 }
-
             }
             catch (Exception ex)
             {
                 _loger.Log(ex);
             }
-
         }
         LICSRequestArticle[] _cachedArticles;
         private LICSRequestArticle GetArticleByNumber(string articleNo)
@@ -734,7 +705,7 @@ namespace ConnectorWorkflowManager
             }
             try
             {
-                if (TimeToCheck(Ix4RequestProps.Articles))
+                if (UpdateTimeWatcher.TimeToCheck(Ix4RequestProps.Articles))
                 {
                     _isArticlesBusy = true;
 
@@ -768,8 +739,7 @@ namespace ConnectorWorkflowManager
                             }
                         }
                     }
-                    UpdateLastUpdateValues(Ix4RequestProps.Articles);
-
+                   UpdateTimeWatcher.SetLastUpdateTimeProperty(Ix4RequestProps.Articles);
                 }
             }
             catch (Exception ex)
@@ -784,39 +754,39 @@ namespace ConnectorWorkflowManager
             }
         }
 
-        private void CheckOrders()
-        {
-            try
-            {
-                if (_customerInfo == null)
-                {
-                    return;
-                }
+        //private void CheckOrders()
+        //{
+        //    try
+        //    {
+        //        if (_customerInfo == null)
+        //        {
+        //            return;
+        //        }
 
-                string[] xmlSourceFiles = Directory.GetFiles(_customerInfo.PluginSettings.XmlSettings.XmlOrdersSourceFolder);
-                if (xmlSourceFiles.Length > 0)
-                {
-                    foreach (string file in xmlSourceFiles)
-                    {
-                        LICSRequest request = new LICSRequest();
+        //        string[] xmlSourceFiles = Directory.GetFiles(_customerInfo.PluginSettings.XmlSettings.XmlOrdersSourceFolder);
+        //        if (xmlSourceFiles.Length > 0)
+        //        {
+        //            foreach (string file in xmlSourceFiles)
+        //            {
+        //                LICSRequest request = new LICSRequest();
 
-                        LICSRequestOrder[] requestOrders = _dataCompositor.GetRequestOrders();
-                        request.OrderImport = requestOrders;
-                        request.ClientId = _customerInfo.ClientID;
-                        var res = SendLicsRequestToIx4(request, Path.GetFileName(file));
-                    }
-                }
+        //                LICSRequestOrder[] requestOrders = _dataCompositor.GetRequestOrders();
+        //                request.OrderImport = requestOrders;
+        //                request.ClientId = _customerInfo.ClientID;
+        //                var res = SendLicsRequestToIx4(request, Path.GetFileName(file));
+        //            }
+        //        }
 
 
-                string mes1 = string.Format("Service Timer has been elapsed at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString());
-                string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.XmlArticleSourceFolder, xmlSourceFiles.Length);
-                WrightLog(mes1);
-                WrightLog(mes2);
-            }
-            catch (Exception ex)
-            {
-                WrightLog(ex.Message);
-            }
-        }
+        //        string mes1 = string.Format("Service Timer has been elapsed at {0} | {1}", DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString());
+        //        string mes2 = string.Format("Count of files in the folder {0} = {1}", _customerInfo.PluginSettings.XmlSettings.XmlArticleSourceFolder, xmlSourceFiles.Length);
+        //        WrightLog(mes1);
+        //        WrightLog(mes2);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WrightLog(ex.Message);
+        //    }
+        //}
     }
 }
