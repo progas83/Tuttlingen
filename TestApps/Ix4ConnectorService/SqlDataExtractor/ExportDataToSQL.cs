@@ -17,9 +17,9 @@ namespace SqlDataExtractor
 {
     class ExportDataToSQL : SqlTableWorker
     {
-      //  private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
+        private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
         private string _dbConnectionlms10dat = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=lms10dat; User ID=sa;Password=sa";
-          private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
+      //    private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
 
         public ExportDataToSQL(IPluginSettings pluginSettings) : base(pluginSettings)
         {
@@ -62,64 +62,65 @@ namespace SqlDataExtractor
 
             // }
         }
-        string GPFile = @"E:\Test\All_GPMessages_201608221730.xml";
+        //string GPFile = @"E:\Test\All_GPMessages_201608221730.xml";
+        string GPFile = @"C:\Users\admin\Desktop\All_GPMessages_201608221730.xml"; 
         private void CreateGPFromGs(XmlNodeList msgGSnodes)
         {
             XmlSerializer sr = new XmlSerializer(typeof(MSG));
             XmlDocument doc = new XmlDocument();
             doc.Load(GPFile);
             XmlNodeList msgGPNodesFromFile = doc.DocumentElement.SelectNodes("MSG");
-
-            List<MSG> msgGPitems = new List<MSG>();
-            foreach (XmlNode nodeGP in msgGPNodesFromFile)
+            if(msgGPNodesFromFile.Count>0)
             {
-                TextReader tr = new StringReader(nodeGP.OuterXml);
-                MSG msgGP = (MSG)sr.Deserialize(tr);
-                msgGPitems.Add(msgGP);
-            }
-
-            bool complete = msgGPNodesFromFile.Count == msgGPitems.Count;
-
-            List<MSG> msgGSitems = new List<MSG>();
-            foreach (XmlNode nodeGS in msgGSnodes)
-            {
-                TextReader tr = new StringReader(nodeGS.OuterXml);
-                MSG msgGS = (MSG)sr.Deserialize(tr);
-                msgGSitems.Add(msgGS);
-            }
-
-            List<int> ordersNumbers = msgGSitems.Select(n => n.WAKopfID).Distinct().ToList();
-            List<int> absentGPNumbers = new List<int>();
-            foreach (int unicNumber in ordersNumbers)
-            {
-                List<MSG> gps = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
-
-                if (gps != null)
+                List<MSG> msgGPitems = new List<MSG>();
+                foreach (XmlNode nodeGP in msgGPNodesFromFile)
                 {
-                    foreach (MSG gpToInsert in gps)
+                    TextReader tr = new StringReader(nodeGP.OuterXml);
+                    MSG msgGP = (MSG)sr.Deserialize(tr);
+                    msgGPitems.Add(msgGP);
+                }
+
+                bool complete = msgGPNodesFromFile.Count == msgGPitems.Count;
+
+                List<MSG> msgGSitems = new List<MSG>();
+                foreach (XmlNode nodeGS in msgGSnodes)
+                {
+                    TextReader tr = new StringReader(nodeGS.OuterXml);
+                    MSG msgGS = (MSG)sr.Deserialize(tr);
+                    msgGSitems.Add(msgGS);
+                }
+
+                List<int> ordersNumbers = msgGSitems.Select(n => n.WAKopfID).Distinct().ToList();
+                List<int> absentGPNumbers = new List<int>();
+                foreach (int unicNumber in ordersNumbers)
+                {
+                    List<MSG> gps = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
+
+                    if (gps != null)
                     {
-                        InsertIntoTable(gpToInsert);
+                        foreach (MSG gpToInsert in gps)
+                        {
+                            InsertIntoTable(gpToInsert);
+                        }
+                    }
+                    else
+                    {
+                        absentGPNumbers.Add(unicNumber);
+                        _loger.Log("Error for order WAKopfID = " + unicNumber);
                     }
                 }
-                else
+                foreach (int unicNumber in ordersNumbers)
                 {
-                    absentGPNumbers.Add(unicNumber);
-                    _loger.Log("Error for order WAKopfID = " + unicNumber);
-                }
-                // foreach (MSG gpItem in msgGPitems.Select(t=>t.WAKopfID==unicNumber))
-            }
-            foreach (int unicNumber in ordersNumbers)
-            {
-                List<MSG> gss = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
-                foreach (MSG gsToInsert in gss)
-                {
-                    if(!absentGPNumbers.Contains(unicNumber))
+                    List<MSG> gss = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
+                    foreach (MSG gsToInsert in gss)
                     {
-                        InsertIntoTable(gsToInsert);
+                        if (!absentGPNumbers.Contains(unicNumber))
+                        {
+                            InsertIntoTable(gsToInsert);
+                        }
                     }
                 }
             }
-
         }
 
         private void InsertIntoTable(MSG message)

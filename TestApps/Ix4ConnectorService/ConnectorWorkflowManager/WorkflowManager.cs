@@ -165,7 +165,7 @@ namespace ConnectorWorkflowManager
                     //     foreach (string mark in new string[] { "GP", "GS" })
                     foreach (string mark in new string[] { "GS" })
                     {
-                        if (TimeToCheckExportData(mark))
+                       // if (TimeToCheckExportData(mark))
                         {
                             XmlNode nodeResult2 = _ix4ServiceConnector.ExportData(mark, null);// ("GS", null);
                                                                                               //   var rer = nodeResult.LastChild.LastChild.ChildNodes;
