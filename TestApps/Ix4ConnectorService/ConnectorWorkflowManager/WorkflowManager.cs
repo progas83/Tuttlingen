@@ -26,9 +26,9 @@ namespace ConnectorWorkflowManager
         private CustomerDataComposition _dataCompositor;
         private IProxyIx4WebService _ix4ServiceConnector;
 
-        protected Timer _timer;// = new Timer(RElapsedEvery);
+        protected Timer _timer;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 6000;//60*10*1000;
+        private static readonly long RElapsedEvery = 60*10*1000;
         private static readonly int _articlesPerRequest = 20;
       
       
@@ -87,16 +87,14 @@ namespace ConnectorWorkflowManager
             }
         }
 
-        //  Task _checkArticlesTask = new Task(()=>CheckArticles());
-
-
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             _timer.Enabled = false;
             try
             {
-                ExportData();
                 WrightLog("Timer has elapsed");
+                ExportData();
+               
                 // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
                 {
@@ -164,99 +162,6 @@ namespace ConnectorWorkflowManager
             }
         }
 
-        //private bool TimeToCheckExportData(string exportDataType)
-        //{
-        //    bool isItTimeToCheck = false;
-        //    switch (exportDataType)
-        //    {
-        //        case "GP":
-        //            if (_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1800)
-        //            {
-        //                isItTimeToCheck = true;
-        //            }
-        //            break;
-        //        case "GS":
-        //            if (_exportGSLastUpdate == 0 || (GetTimeStamp() - _exportGSLastUpdate) > 1800)
-        //            {
-        //                isItTimeToCheck = true;
-        //            }
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    return isItTimeToCheck;
-        //}
-
-        //private void UpdateExportDataLastUpdate(string exportDataType)
-        //{
-        //    switch (exportDataType)
-        //    {
-        //        case "GP":
-        //            _exportGPLastUpdate = GetTimeStamp();
-        //            break;
-        //        case "GS":
-        //            _exportGSLastUpdate = GetTimeStamp();
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-
-        //private long GetTimeStamp()
-        //{
-        //    return (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-        //}
-
-
-        //private void UpdateLastUpdateValues(Ix4RequestProps ix4Property)
-        //{
-        //    switch (ix4Property)
-        //    {
-        //        case Ix4RequestProps.Articles:
-        //            _articlesLastUpdate = GetTimeStamp();
-        //            break;
-        //        case Ix4RequestProps.Deliveries:
-        //            _deliveriesLastUpdate = GetTimeStamp();
-        //            break;
-        //        case Ix4RequestProps.Orders:
-        //            _ordersLastUpdate = GetTimeStamp();
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-
-
-        //private bool TimeToCheck(Ix4RequestProps ix4Property)
-        //{
-        //    bool result = false;
-        //    switch (ix4Property)
-        //    {
-        //        case Ix4RequestProps.Articles:
-        //            if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 43200) // _customerInfo.ScheduleSettings.ScheduledIssues[0].secValue
-        //            {
-        //                result = true;
-        //            }
-        //            break;
-        //        case Ix4RequestProps.Deliveries:
-        //            if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
-        //            {
-        //                result = true;
-        //            }
-        //            break;
-        //        case Ix4RequestProps.Orders:
-        //            if (_ordersLastUpdate == 0 || (GetTimeStamp() - _ordersLastUpdate) > 60)
-        //            {
-        //                result = true;
-        //            }
-        //            break;
-        //        default:
-        //            break;
-
-        //    }
-        //    return result;
-        //}
-
         public void Pause()
         {
             if (_timer != null && _timer.Enabled)
@@ -322,10 +227,7 @@ namespace ConnectorWorkflowManager
                                 _errorCount = _errorCount * 1000;
                                 File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
                             }
-
-
                         }
-
                         result = requestSuccess;
                     }
                 }

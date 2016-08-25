@@ -1,4 +1,5 @@
 ﻿using Ix4Models;
+using SimplestLogger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace ConnectorWorkflowManager
 {
    static class UpdateTimeWatcher
     {
+        private static Logger _loger = Logger.GetLogger();
         static UpdateTimeWatcher()
         {
             DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day,17, 30, 00)).AddDays(-1);
             _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            _loger.Log("Articles last update total seconds = " + _articlesLastUpdate);
         }
         private static long _articlesLastUpdate = 1;
         private static long _ordersLastUpdate = 0;
@@ -20,6 +23,8 @@ namespace ConnectorWorkflowManager
 
         private static long _exportGPLastUpdate = 0;
         private static long _exportGSLastUpdate = 0;
+
+        
 
 
         private static long GetTimeStamp()
@@ -36,6 +41,10 @@ namespace ConnectorWorkflowManager
                     if (_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1800)
                     {
                         isItTimeToCheck = true;
+                    }
+                    else
+                    {
+
                     }
                     break;
                 case "GS":
@@ -57,7 +66,6 @@ namespace ConnectorWorkflowManager
             {
                 case Ix4RequestProps.Articles:
                     if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 86400)
-                  
                     {
                         result = true;
                     }

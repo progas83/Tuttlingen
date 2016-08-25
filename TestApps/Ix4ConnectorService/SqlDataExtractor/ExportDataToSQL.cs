@@ -30,92 +30,25 @@ namespace SqlDataExtractor
         internal void SaveDataToTable(XmlNode exportData)
         {
             XmlNodeList msgNodes = exportData.LastChild.LastChild.SelectNodes("MSG");
-
-            //            CreateGPFromGs(msgNodes);
             if (msgNodes.Count > 0)
             {
-                _loger.Log(string.Format("Export data count = {0}", msgNodes.Count));
+                _loger.Log(string.Format("Got xmlNodes count = {0}", msgNodes.Count));
                 XmlSerializer sr = new XmlSerializer(typeof(MSG));
                 foreach (XmlNode node in msgNodes)
                 {
                     try
                     {
-                        TextReader tr = new StringReader(node.OuterXml);
+                       TextReader tr = new StringReader(node.OuterXml);
                         MSG red = (MSG)sr.Deserialize(tr);
-                        // if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
-                        // if (itemsCount <= 100)
-                        // {
+
                         InsertIntoTable(red);
                         itemsCount++;
                         _loger.Log("Succefully exported MSG");
                         _loger.Log(node.OuterXml);
-                        //}
                     }
                     catch (Exception ex)
                     {
                         _loger.Log(ex);
-                    }
-
-                }
-
-            }
-        }
-        //string GPFile = @"E:\Test\All_GPMessages_201608221730.xml";
-        string GPFile = @"C:\Users\admin\Desktop\All_GPMessages_201608221730.xml";
-        private void CreateGPFromGs(XmlNodeList msgGSnodes)
-        {
-            XmlSerializer sr = new XmlSerializer(typeof(MSG));
-            XmlDocument doc = new XmlDocument();
-            doc.Load(GPFile);
-            XmlNodeList msgGPNodesFromFile = doc.DocumentElement.SelectNodes("MSG");
-            if (msgGPNodesFromFile.Count > 0)
-            {
-                List<MSG> msgGPitems = new List<MSG>();
-                foreach (XmlNode nodeGP in msgGPNodesFromFile)
-                {
-                    TextReader tr = new StringReader(nodeGP.OuterXml);
-                    MSG msgGP = (MSG)sr.Deserialize(tr);
-                    msgGPitems.Add(msgGP);
-                }
-
-                bool complete = msgGPNodesFromFile.Count == msgGPitems.Count;
-
-                List<MSG> msgGSitems = new List<MSG>();
-                foreach (XmlNode nodeGS in msgGSnodes)
-                {
-                    TextReader tr = new StringReader(nodeGS.OuterXml);
-                    MSG msgGS = (MSG)sr.Deserialize(tr);
-                    msgGSitems.Add(msgGS);
-                }
-
-                List<int> ordersNumbers = msgGSitems.Select(n => n.WAKopfID).Distinct().ToList();
-                List<int> absentGPNumbers = new List<int>();
-                foreach (int unicNumber in ordersNumbers)
-                {
-                    List<MSG> gps = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
-
-                    if (gps != null)
-                    {
-                        foreach (MSG gpToInsert in gps)
-                        {
-                            InsertIntoTable(gpToInsert);
-                        }
-                    }
-                    else
-                    {
-                        absentGPNumbers.Add(unicNumber);
-                        _loger.Log("Error for order WAKopfID = " + unicNumber);
-                    }
-                }
-                foreach (int unicNumber in ordersNumbers)
-                {
-                    List<MSG> gss = msgGPitems.Where(t => t.WAKopfID == unicNumber).ToList();
-                    foreach (MSG gsToInsert in gss)
-                    {
-                        if (!absentGPNumbers.Contains(unicNumber))
-                        {
-                            InsertIntoTable(gsToInsert);
-                        }
                     }
                 }
             }
@@ -125,8 +58,6 @@ namespace SqlDataExtractor
         {
             using (var connection = new SqlConnection(_dbConnection))
             {
-                //  connection.Open();
-
                 int headerID = InsertHeader(message, connection);
                 if (headerID != -1)
                 {
@@ -135,10 +66,6 @@ namespace SqlDataExtractor
                     connection.Open();
                     _loger.Log("Connection opened to InterfaceDilosLMS for InsertPosition");
                     var result = cmd.ExecuteNonQuery();
-                    //var cmdText = _pluginSettings.OrdersQuery;
-                    // SqlCommand cmd = new SqlCommand(cmdText, connection);
-                    //SqlDataReader reader = cmd.ExecuteReader();
-                    //orders = LoadOrders(reader, connection);
                     _loger.Log(string.Format("SQL commang affected {0} rows", result));
                     if (connection.State == System.Data.ConnectionState.Open)
                         connection.Close();
@@ -163,7 +90,7 @@ namespace SqlDataExtractor
 
                 PropertyInfo[] posProperties = message.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(MSGPosAttribute))).ToArray();
 
-                for (int i = 0; i < posProperties.Length; i++)// PropertyInfo prop in posProperties)
+                for (int i = 0; i < posProperties.Length; i++)
                 {
                     if (posProperties[i].GetValue(message) != null)
                     {
@@ -189,10 +116,8 @@ namespace SqlDataExtractor
         }
 
         private int InsertHeader(MSG message, SqlConnection con)
-        {                                                                                           // output INSERTED.ID
+        {
             int modified = -1;
-            //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);", con))
-            //using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) output INSERTED.ID VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY();", con))
             if (message.Type.Equals("GS"))
             {
                 int existedHeaderID = FindExistedGSHeader(message, con);
@@ -218,7 +143,7 @@ namespace SqlDataExtractor
             int existedHeaderID = -1;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE HeaderID IN (SELECT ID FROM MsgHeader WHERE TYPE = 'GS')  AND WAKopfID = @pCurrentWAKopfID", con))// ("SELECT HeaderID FROM MsgPos WHERE WAKopfID = @pCurrentWAKopfID ", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE HeaderID IN (SELECT ID FROM MsgHeader WHERE TYPE = 'GS')  AND WAKopfID = @pCurrentWAKopfID", con))
                 {
                     cmd.Parameters.AddWithValue("@pCurrentWAKopfID", message.WAKopfID);
                     con.Open();
@@ -227,9 +152,7 @@ namespace SqlDataExtractor
                     {
                         existedHeaderID = Convert.ToInt32(existedItem);
                     }
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -240,7 +163,6 @@ namespace SqlDataExtractor
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
             }
-
             return existedHeaderID;
         }
 
@@ -249,10 +171,6 @@ namespace SqlDataExtractor
             int modified = -1;
             using (SqlCommand cmd = new SqlCommand("INSERT INTO MsgHeader (Type,Status,[User], Created,LastUpdate,ErrorText) VALUES (@hType,@hStatus,@hUser,@hCreated,@hLastUpdate,@hErrorText);SELECT SCOPE_IDENTITY() AS LastItemID;", con))
             {
-
-
-                //  var serverVersion = con.ServerVersion;
-                //  _loger.Log("Current Server version = " + serverVersion);
                 cmd.Parameters.AddWithValue("@hType", message.Type);
                 cmd.Parameters.AddWithValue("@hStatus", message.Status);
                 cmd.Parameters.AddWithValue("@hUser", message.User);
@@ -260,18 +178,7 @@ namespace SqlDataExtractor
                 cmd.Parameters.AddWithValue("@hLastUpdate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@hErrorText", string.IsNullOrEmpty(message.ErrorText) ? string.Empty : message.ErrorText);
 
-                //int res = -10;
-                //SqlParameter outputID = new SqlParameter();
-                //outputID.Direction = System.Data.ParameterDirection.Output;
-                //outputID.ParameterName = "@hID";
-                //outputID.Size = sizeof(int);
-                //outputID.DbType = System.Data.DbType.Int32;
-
-                //cmd.Parameters.Add(outputID);
-                //  cmd.Parameters.AddWithValue("@hID", res).Direction = System.Data.ParameterDirection.ReturnValue;
-
                 con.Open();
-                _loger.Log("Connection opened to InterfaceDilosLMS for InsertHeader");
                 try
                 {
 
@@ -280,27 +187,16 @@ namespace SqlDataExtractor
                     {
                         dr.Read();
                         modified = Convert.ToInt32(dr["LastItemID"]);
-                        _loger.Log("USE SqlDataReader FOR GETTING record ID = " + modified);
+                        _loger.Log(string.Format("New header was inserted to DB for WakopfID = {0}. As result got HeaderId = {1}",message.WAKopfID, modified)); 
                     }
                     else
                     {
                         _loger.Log("Cant get last inserted headerID");
                     }
-                    //cmd.ExecuteScalar();
-                    //var rerere = outputID.Value;
-                    //modified = Convert.ToInt32(cmd.ExecuteScalar());
-                    //var ress = Convert.ToInt32(cmd.ExecuteScalar());//.ExecuteNonQuery();
-                    // _loger.Log("CAN GET ID ============================================= " + ress);
-                    // if (con.State == System.Data.ConnectionState.Open)
-                    //     con.Close();
-                    // con.Open();
-                    // SqlCommand cmdGetID = new SqlCommand("SELECT MAX(ID) FROM MsgHeader", con);
-                    // modified = Convert.ToInt32(cmdGetID.ExecuteScalar());
-                    // _loger.Log("USE EXTRA METHOD FOR GETTING record ID = " + modified);
                 }
                 catch (Exception ex)
                 {
-                    _loger.Log("Return record ID from Header DB ERROR");
+                    _loger.Log(string.Format("Could not create new record MsgHeader for ",message.WAKopfID));
                     _loger.Log(ex);
 
                 }
