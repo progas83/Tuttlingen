@@ -18,8 +18,8 @@ namespace SqlDataExtractor
     class ExportDataToSQL : SqlTableWorker
     {
         private string _dbConnection = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=InterfaceDilosLMS; User ID=sa;Password=sa";
-    //    private string _dbConnectionlms10dat = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=lms10dat; User ID=sa;Password=sa";
-      //    private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
+        //    private string _dbConnectionlms10dat = @"Data Source=192.168.50.3\sql,1433;Network Library=DBMSSOCN;Initial Catalog=lms10dat; User ID=sa;Password=sa";
+        //    private string _dbConnection = @"Data Source =DESKTOP-PC\SQLEXPRESS2012;Initial Catalog = InterfaceDilosLMS;Integrated Security=SSPI";
 
         public ExportDataToSQL(IPluginSettings pluginSettings) : base(pluginSettings)
         {
@@ -43,10 +43,10 @@ namespace SqlDataExtractor
                         TextReader tr = new StringReader(node.OuterXml);
                         MSG red = (MSG)sr.Deserialize(tr);
                         // if (red.WAKopfID == 1680191 || red.WAKopfID ==  1680198)
-                       // if (itemsCount <= 100)
-                       // {
-                            InsertIntoTable(red);
-                            itemsCount++;
+                        // if (itemsCount <= 100)
+                        // {
+                        InsertIntoTable(red);
+                        itemsCount++;
                         _loger.Log("Succefully exported MSG");
                         _loger.Log(node.OuterXml);
                         //}
@@ -61,14 +61,14 @@ namespace SqlDataExtractor
             }
         }
         //string GPFile = @"E:\Test\All_GPMessages_201608221730.xml";
-        string GPFile = @"C:\Users\admin\Desktop\All_GPMessages_201608221730.xml"; 
+        string GPFile = @"C:\Users\admin\Desktop\All_GPMessages_201608221730.xml";
         private void CreateGPFromGs(XmlNodeList msgGSnodes)
         {
             XmlSerializer sr = new XmlSerializer(typeof(MSG));
             XmlDocument doc = new XmlDocument();
             doc.Load(GPFile);
             XmlNodeList msgGPNodesFromFile = doc.DocumentElement.SelectNodes("MSG");
-            if(msgGPNodesFromFile.Count>0)
+            if (msgGPNodesFromFile.Count > 0)
             {
                 List<MSG> msgGPitems = new List<MSG>();
                 foreach (XmlNode nodeGP in msgGPNodesFromFile)
@@ -218,9 +218,8 @@ namespace SqlDataExtractor
             int existedHeaderID = -1;
             try
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE WAKopfID = @pCurrentWAKopfID ", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT HeaderID FROM MsgPos WHERE HeaderID IN (SELECT ID FROM MsgHeader WHERE TYPE = 'GS')  AND WAKopfID = @pCurrentWAKopfID", con))// ("SELECT HeaderID FROM MsgPos WHERE WAKopfID = @pCurrentWAKopfID ", con))
                 {
-
                     cmd.Parameters.AddWithValue("@pCurrentWAKopfID", message.WAKopfID);
                     con.Open();
                     var existedItem = cmd.ExecuteScalar();
