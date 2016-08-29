@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ConnectorWorkflowManager
 {
-   static class UpdateTimeWatcher
+    static class UpdateTimeWatcher
     {
         private static Logger _loger = Logger.GetLogger();
         static UpdateTimeWatcher()
         {
-            DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day,17, 30, 00)).AddDays(-1);
+            DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 17, 30, 00)).AddDays(-1);
             _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             _loger.Log("Articles last update total seconds = " + _articlesLastUpdate);
         }
@@ -24,7 +24,7 @@ namespace ConnectorWorkflowManager
         private static long _exportGPLastUpdate = 0;
         private static long _exportGSLastUpdate = 0;
 
-        
+
 
 
         private static long GetTimeStamp()
@@ -65,7 +65,7 @@ namespace ConnectorWorkflowManager
             switch (ix4Property)
             {
                 case Ix4RequestProps.Articles:
-                    if (_articlesLastUpdate == 0 || (GetTimeStamp() - _articlesLastUpdate) > 86400)
+                    if (_articlesLastUpdate == 0 || GetTimeStamp() - _articlesLastUpdate > 86400)
                     {
                         result = true;
                     }

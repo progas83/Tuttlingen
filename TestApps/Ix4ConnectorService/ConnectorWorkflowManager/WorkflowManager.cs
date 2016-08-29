@@ -93,12 +93,15 @@ namespace ConnectorWorkflowManager
             try
             {
                 WrightLog("Timer has elapsed");
-                ExportData();
+                if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
+                {
+                    ExportData();
+                }
                
                 // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
                 {
-                    WrightLog("Check Artikles started");
+                    
                     if (!_isArticlesBusy)
                         Task.Run(() => CheckArticles());
                 }
@@ -110,8 +113,9 @@ namespace ConnectorWorkflowManager
                 //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
                 {
-                    WrightLog("Check Orders started");
+                    
                     CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
+                    WrightLog("Check Orders finished");
                 }
 
                 //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
@@ -608,6 +612,7 @@ namespace ConnectorWorkflowManager
             {
                 if (UpdateTimeWatcher.TimeToCheck(Ix4RequestProps.Articles))
                 {
+                    WrightLog("Check Artikles started");
                     _isArticlesBusy = true;
 
                     int currentClientID = _customerInfo.ClientID;
@@ -651,7 +656,7 @@ namespace ConnectorWorkflowManager
             }
             finally
             {
-                _isArticlesBusy = true;
+                _isArticlesBusy = false;
             }
         }
 
