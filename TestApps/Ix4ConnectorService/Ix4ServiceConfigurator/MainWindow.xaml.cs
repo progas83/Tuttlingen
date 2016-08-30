@@ -25,6 +25,7 @@ namespace Ix4ServiceConfigurator
             InitializeComponent();
 
             _viewModel = new MainWindowViewModel();
+
             UIMainCustomerInfo.PasswordSet(_viewModel.Customer.Password);
             this.DataContext = _viewModel;
 

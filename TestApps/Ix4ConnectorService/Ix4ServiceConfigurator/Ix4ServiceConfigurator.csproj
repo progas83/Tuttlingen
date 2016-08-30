@@ -81,6 +81,7 @@
     <Compile Include="Converters\ServiceStatusToIconConverter.cs" />
     <Compile Include="EventArguments\ServiceControllerStatusEventArg.cs" />
     <Compile Include="ServiceInfoWrapper.cs" />
+    <Compile Include="ViewModel\IPwd.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\CustomerInfoViewModel.cs" />
     <Compile Include="View\CustomerInfoView.xaml.cs">

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
-   public interface IPwd
+    public interface IPwd
     {
         System.Security.SecureString PasswordGet { get; }
-       void PasswordSet(string val);
+        void PasswordSet(string val);
     }
 }
