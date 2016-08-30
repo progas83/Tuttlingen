@@ -36,7 +36,7 @@
         <Border Grid.RowSpan="2" Grid.Column="0" Grid.Row="0"  BorderThickness="5" BorderBrush="Green" 
                 HorizontalAlignment="Left" VerticalAlignment="Top">
             <DockPanel>
-                <controls:CustomerInfoControl DataContext="{Binding Customer}" DockPanel.Dock="Top" IsEnabled="False"/>
+                <controls:CustomerInfoControl x:Name="UIMainCustomerInfo"  DataContext="{Binding Customer}" DockPanel.Dock="Top" IsEnabled="False"/>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                     <Label Content="{Binding Source={StaticResource Localization},Path=SelectLanguage}"/>
                     <ComboBox ItemsSource="{Binding Source={StaticResource Languages},Path=SupportedCultures}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedLanguage}"/>

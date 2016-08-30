@@ -12,6 +12,8 @@ using Ix4Models;
 using Ix4Models.SettingsDataModel;
 using Ix4Models.SettingsManager;
 using System.Collections.ObjectModel;
+using System.Security;
+using System.Runtime.InteropServices;
 
 namespace Ix4ServiceConfigurator.ViewModel
 {
@@ -27,9 +29,9 @@ namespace Ix4ServiceConfigurator.ViewModel
             _view.Closing += OnCustomerViewClosing;
 
             Customer = XmlConfigurationManager.Instance.GetCustomerInformation();
+            _view.UIUserInfo.UIPwdBox.Password = Customer.Password;
 
             _compositor = new CustomerDataComposition(Customer.PluginSettings);
-            //_compositor.AssembleCustomerDataComponents();
         }
 
         private CustomDataSourceTypes _selectedDataSource;
@@ -89,6 +91,14 @@ namespace Ix4ServiceConfigurator.ViewModel
 
         public void Execute(object parameter)
         {
+
+            var passwordContainer = parameter as IPwd;
+            if (passwordContainer != null)
+            {
+                var secureString = passwordContainer.PasswordGet;
+                Customer.Password = ConvertToUnsecureString(secureString);
+            }
+
             Customer.PluginSettings = _compositor.SavePluginsSettings();
             if(Customer.ScheduleSettings.ScheduledIssues==null)
             {
@@ -96,21 +106,30 @@ namespace Ix4ServiceConfigurator.ViewModel
                                                                                     new ScheduledItem(Ix4RequestProps.Orders, 0),
                                                                                     new ScheduledItem(Ix4RequestProps.Deliveries, 0)};
             }
-         //   Customer.ScheduleSettings.Schedule.Add(Ix4RequestProps.Articles, 1000);
-         //   Customer.ScheduleSettings.Schedule.Add(Ix4RequestProps.Deliveries, 2000);
-          //  Customer.ScheduleSettings.Schedule.Add(Ix4RequestProps.Orders, 3000);
             XmlConfigurationManager.Instance.UpdateCustomerInformation(Customer);
 
             _view.DialogResult = true;
             _view.Close();
-            //if(CustomInformationSaveComplete!=null)
-            //{
-            //    CustomInformationSaveComplete(this, null);
-            //}
         }
 
-        //  public event EventHandler CustomInformationSaveComplete;
+        private string ConvertToUnsecureString(SecureString securePassword)
+        {
+            if (securePassword == null)
+            {
+                return string.Empty;
+            }
 
+            IntPtr unmanagedString = IntPtr.Zero;
+            try
+            {
+                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(securePassword);
+                return Marshal.PtrToStringUni(unmanagedString);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
+        }
         public void Dispose()
         {
             _view = null;
