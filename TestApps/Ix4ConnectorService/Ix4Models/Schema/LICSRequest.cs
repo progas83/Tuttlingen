@@ -231,7 +231,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool IdentityNoSpecified {
         get {
-            return this.identityNoFieldSpecified;
+            return this.identityNoField>=0;
         }
         set {
             this.identityNoFieldSpecified = value;
@@ -302,7 +302,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ArticleGroupFactorSpecified {
         get {
-            return this.articleGroupFactorFieldSpecified;
+            return this.articleGroupFactorField>=0;
         }
         set {
             this.articleGroupFactorFieldSpecified = value;
@@ -323,7 +323,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool WeightSpecified {
         get {
-            return this.weightFieldSpecified;
+            return this.weightField>=0;
         }
         set {
             this.weightFieldSpecified = value;
@@ -386,7 +386,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool PUQuantitySpecified {
         get {
-            return this.pUQuantityFieldSpecified;
+            return this.pUQuantityField>=0;
         }
         set {
             this.pUQuantityFieldSpecified = value;
@@ -563,7 +563,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return clientNoField!=0;
+            return clientNoField>=0;
         }
         set {
             this.clientNoFieldSpecified = value;
@@ -584,7 +584,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool StateSpecified {
         get {
-            return this.stateField!=0;
+            return this.stateField>=0;
         }
         set {
             this.stateFieldSpecified = value;
@@ -635,7 +635,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool PrioSpecified {
         get {
-            return this.prioField!=0;
+            return this.prioField>=0;
         }
         set {
             this.prioFieldSpecified = value;
@@ -706,7 +706,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ShipmentModeSpecified {
         get {
-            return this.shipmentModeField!=0;
+            return this.shipmentModeField>=0;
         }
         set {
             this.shipmentModeFieldSpecified = value;
@@ -769,7 +769,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool CashOnDeliveryAmountSpecified {
         get {
-            return this.cashOnDeliveryAmountField!=0;
+            return this.cashOnDeliveryAmountField>=0;
         }
         set {
             this.cashOnDeliveryAmountFieldSpecified = value;
@@ -790,7 +790,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool OrderAmountSpecified {
         get {
-            return this.orderAmountField!=0;
+            return this.orderAmountField>=0;
         }
         set {
             this.orderAmountFieldSpecified = value;
@@ -1146,7 +1146,7 @@ public partial class LICSRequestOrderPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool PositionNoSpecified {
         get {
-            return this.positionNoField!=0;
+            return this.positionNoField>=0;
         }
         set {
             this.positionNoFieldSpecified = value;
@@ -1207,7 +1207,7 @@ public partial class LICSRequestOrderPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool TargetQuantitySpecified {
         get {
-            return this.targetQuantityField!=0;
+            return this.targetQuantityField>=0;
         }
         set {
             this.targetQuantityFieldSpecified = value;
@@ -1339,7 +1339,7 @@ public partial class LICSRequestOrderPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool NetPriceSpecified {
         get {
-            return this.netPriceField!=0;
+            return this.netPriceField>=0;
         }
         set {
             this.netPriceFieldSpecified = value;
@@ -1360,7 +1360,7 @@ public partial class LICSRequestOrderPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool GrossPriceSpecified {
         get {
-            return this.grossPriceField!=0;
+            return this.grossPriceField>=0;
         }
         set {
             this.grossPriceFieldSpecified = value;
@@ -1381,7 +1381,7 @@ public partial class LICSRequestOrderPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool TaxSpecified {
         get {
-            return this.taxField!=0;
+            return this.taxField>=0;
         }
         set {
             this.taxFieldSpecified = value;
@@ -1443,7 +1443,7 @@ public partial class LICSRequestDelivery {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return this.clientNoFieldSpecified;
+            return this.clientNoField>0;
         }
         set {
             this.clientNoFieldSpecified = value;
@@ -1581,7 +1581,8 @@ public partial class LICSRequestDeliveryPosition {
     private string sSCCField;
     
     private string commentField;
-    
+    private bool targetQuantitySpecified;
+
     /// <remarks/>
     public int PositionNo {
         get {
@@ -1596,7 +1597,7 @@ public partial class LICSRequestDeliveryPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool PositionNoSpecified {
         get {
-            return this.positionNoFieldSpecified;
+            return this.positionNoField>0;
         }
         set {
             this.positionNoFieldSpecified = value;
@@ -1678,7 +1679,7 @@ public partial class LICSRequestDeliveryPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool TargetLoadsCountSpecified {
         get {
-            return this.targetLoadsCountFieldSpecified;
+            return this.targetLoadsCountField>=0;
         }
         set {
             this.targetLoadsCountFieldSpecified = value;
@@ -1699,7 +1700,7 @@ public partial class LICSRequestDeliveryPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ArticlePerLoadSpecified {
         get {
-            return this.articlePerLoadFieldSpecified;
+            return this.articlePerLoadField>=0;
         }
         set {
             this.articlePerLoadFieldSpecified = value;
@@ -1715,7 +1716,21 @@ public partial class LICSRequestDeliveryPosition {
             this.targetQuantityField = value;
         }
     }
-    
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool TargetQuantitySpecified
+    {
+        get
+        {
+            return this.targetQuantityField >= 0;
+        }
+        set
+        {
+            this.targetQuantitySpecified = value;
+        }
+    }
+
     /// <remarks/>
     public string Charge {
         get {
