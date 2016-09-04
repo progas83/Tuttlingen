@@ -50,7 +50,22 @@ namespace CsvDataExtractor
             throw new NotImplementedException();
         }
 
-        public void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData)
+        //public void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public T ExportDataToCustomerSource<T>(IPluginSettings pluginSettings, XmlNode exportData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T ExportDataToCustomerSource<T>(XmlNode exportData) where T : MSG
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICustomerDataConnector GetPrepearedDataConnector(IPluginSettings pluginSettings)
         {
             throw new NotImplementedException();
         }

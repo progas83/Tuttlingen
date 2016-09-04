@@ -19,8 +19,12 @@ namespace SqlDataExtractor
 
     public class MsSqlCustomerDataExtractor : ICustomerDataConnector
     {
+        MsSqlPluginSettings _pluginSettings;
         MainDBSettingsViewModel _msSqlPluginSettingsViewModel;
         MainDBSettindsView _msSqlPluginSettingsView;
+
+        private static Logger _loger = Logger.GetLogger();
+
         public UserControl GetControlForSettings(PluginsSettings settings)
         {
             //ManualMaping.View.ManualMappingView view = new ManualMaping.View.ManualMappingView();
@@ -49,7 +53,7 @@ namespace SqlDataExtractor
                 settings.MsSqlSettings = _msSqlPluginSettingsViewModel.CurrentPluginSettings;
             }
         }
-        private static Logger _loger = Logger.GetLogger();
+      
         public LICSRequestArticle[] GetRequestArticles(IPluginSettings pluginSettings)
         {
             MsSqlPluginSettings settings = pluginSettings as MsSqlPluginSettings;
@@ -118,6 +122,21 @@ namespace SqlDataExtractor
         
         }
 
+        public T ExportDataToCustomerSource<T>(XmlNode exportData) where T : MSG
+        {
 
+           if(_exportDataToSql==null)
+            {
+                _exportDataToSql = new ExportDataToSQL(_pluginSettings);
+            }
+            return _exportDataToSql.SaveDataToTable<T>(exportData);
+        }
+        ExportDataToSQL _exportDataToSql;
+        public ICustomerDataConnector GetPrepearedDataConnector(IPluginSettings pluginSettings)
+        {
+            _pluginSettings = pluginSettings as MsSqlPluginSettings;
+            _exportDataToSql = new ExportDataToSQL(_pluginSettings);
+            return this;
+        }
     }
 }

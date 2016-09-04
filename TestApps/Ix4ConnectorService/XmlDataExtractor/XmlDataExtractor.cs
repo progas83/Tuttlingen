@@ -236,5 +236,15 @@ namespace XmlDataExtractor
         {
             throw new NotImplementedException();
         }
+
+        public T ExportDataToCustomerSource<T>(XmlNode exportData) where T : MSG
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICustomerDataConnector GetPrepearedDataConnector(IPluginSettings pluginSettings)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

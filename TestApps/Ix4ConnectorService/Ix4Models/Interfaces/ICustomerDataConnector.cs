@@ -16,6 +16,9 @@ namespace Ix4Models.Interfaces
 
         LICSRequest[] GetRequestsWithArticles(IPluginSettings pluginSettings, Ix4RequestProps ix4Property);
 
-        void ExportDataToCustomerSource(IPluginSettings pluginSettings, XmlNode exportData );
+        T ExportDataToCustomerSource<T>(XmlNode exportData) where T : MSG;
+
+        ICustomerDataConnector GetPrepearedDataConnector(IPluginSettings pluginSettings);
+
     }
 }

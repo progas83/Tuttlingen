@@ -7,7 +7,6 @@ using SimplestLogger;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Timers;
 using System.Xml.Serialization;
 using System.Linq;
 using Ix4Models.Converters;
@@ -16,6 +15,7 @@ using System.Xml.Linq;
 using System.Data.SqlClient;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace ConnectorWorkflowManager
 {
@@ -25,13 +25,13 @@ namespace ConnectorWorkflowManager
         private CustomerInfo _customerInfo;
         private CustomerDataComposition _dataCompositor;
         private IProxyIx4WebService _ix4ServiceConnector;
-
+        private DataEnsure _ensureData;
         protected Timer _timer;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 60*10*1000;
+        private static readonly long RElapsedEvery = 10 * 1000;
         private static readonly int _articlesPerRequest = 20;
-      
-      
+
+
         bool _isArticlesBusy = false;
 
         private static Logger _loger = Logger.GetLogger();
@@ -59,7 +59,7 @@ namespace ConnectorWorkflowManager
                 return _manager;
             }
         }
-         
+
         public void Start()
         {
 
@@ -67,8 +67,9 @@ namespace ConnectorWorkflowManager
             {
                 if (_timer == null)
                 {
-                    _timer = new Timer(RElapsedEvery);
+                    _timer = new System.Timers.Timer(RElapsedEvery);
                     _timer.AutoReset = true;
+
                     _timer.Elapsed += OnTimedEvent;
                 }
 
@@ -77,6 +78,7 @@ namespace ConnectorWorkflowManager
                 _customerInfo = XmlConfigurationManager.Instance.GetCustomerInformation();
                 _dataCompositor = new CustomerDataComposition(_customerInfo.PluginSettings);
                 _ix4ServiceConnector = Ix4ConnectorManager.Instance.GetRegisteredIx4WebServiceInterface(_customerInfo.ClientID, _customerInfo.UserName, _customerInfo.Password, _customerInfo.ServiceEndpoint);
+                _ensureData = new DataEnsure(_customerInfo.UserName);
                 _timer.Enabled = true;
             }
             catch (Exception ex)
@@ -92,16 +94,18 @@ namespace ConnectorWorkflowManager
             _timer.Enabled = false;
             try
             {
+
+
                 WrightLog("Timer has elapsed");
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
                 {
                     ExportData();
                 }
-               
+
                 // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
                 {
-                    
+
                     if (!_isArticlesBusy)
                         Task.Run(() => CheckArticles());
                 }
@@ -113,7 +117,7 @@ namespace ConnectorWorkflowManager
                 //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
                 if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
                 {
-                    
+
                     CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
                     WrightLog("Check Orders finished");
                 }
@@ -148,19 +152,41 @@ namespace ConnectorWorkflowManager
                         XmlNode nodeResult = _ix4ServiceConnector.ExportData(mark, null);
 
                         var msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                        _loger.Log(string.Format("Got Exported {0} items count = {1}", mark, msgNodes.Count));
                         if (msgNodes.Count > 0)
                         {
-                            _dataCompositor.ExportData(CustomDataSourceTypes.MsSql, nodeResult);
-                            _dataHasExported = true;
-                            _exportAttempts = 0;
+                            EnsureType ensureType = EnsureType.CollectData;
+                            switch (mark)
+                            {
+                                case "SA":
+                                    ensureType = EnsureType.UpdateStoredData;
+                                    break;
+                                case "GP":
+                                    ensureType = EnsureType.CollectData;
+                                    break;
+                                case "GS":
+                                    ensureType = EnsureType.CollectData;
+                                    break;
+                                default:
+                                    ensureType = EnsureType.CollectData;
+                                    break;
+
+                            }
+
+                            if (!_ensureData.StoreExportedNodeList(msgNodes, mark, ensureType))
+                            {
+                                _ensureData.RudeStoreExportedData(nodeResult, mark);
+                            }
+                            else
+                            {
+                                _ensureData.ProcessingStoredDataToClientStorage(mark, _dataCompositor.GetCustomerDataConnector(CustomDataSourceTypes.MsSql));
+                            }
+                            _loger.Log("End export data " + mark);
+                            System.Threading.Thread.Sleep(30000);
                         }
-                        else
-                        {
-                            _exportAttempts++;
-                            _loger.Log(string.Format("Can't export {0} data", mark));
-                            _loger.Log(string.Format("Fault attempt Export Data number {0}", _exportAttempts));
-                        }
+
                     }
+
                     UpdateTimeWatcher.SetLastUpdateTimeProperty("GP");
                 }
             }
@@ -254,13 +280,13 @@ namespace ConnectorWorkflowManager
             bool result = true;
             try
             {
-                TextReader tr = new StringReader(response);
+                // TextReader tr = ;
                 //  XElement elem = XElement.Load(tr);
 
                 //   string xml = "<StatusDocumentItem xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><DataUrl/><LastUpdated>2013-02-01T12:35:29.9517061Z</LastUpdated><Message>Job put in queue</Message><State>0</State><StateName>Waiting to be processed</StateName></StatusDocumentItem>";
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
-                LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
+                LICSResponse resp = (LICSResponse)serializer.Deserialize(new StringReader(response));
                 if (resp.State != 0)
                 {
                     result = false;
@@ -515,7 +541,7 @@ namespace ConnectorWorkflowManager
         {
             try
             {
-                if(UpdateTimeWatcher.TimeToCheck(Ix4RequestProps.Deliveries))
+                if (UpdateTimeWatcher.TimeToCheck(Ix4RequestProps.Deliveries))
                 {
                     if (_cachedArticles == null)
                     {
@@ -645,7 +671,7 @@ namespace ConnectorWorkflowManager
                             }
                         }
                     }
-                   UpdateTimeWatcher.SetLastUpdateTimeProperty(Ix4RequestProps.Articles);
+                    UpdateTimeWatcher.SetLastUpdateTimeProperty(Ix4RequestProps.Articles);
                 }
             }
             catch (Exception ex)

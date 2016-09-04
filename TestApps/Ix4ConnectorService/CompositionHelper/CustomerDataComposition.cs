@@ -230,22 +230,42 @@ namespace CompositionHelper
             return requests;
         }
 
-        public void ExportData(CustomDataSourceTypes dataSourceType, XmlNode exportData)
+        public ICustomerDataConnector GetCustomerDataConnector(CustomDataSourceTypes dataSourceType)
         {
+            ICustomerDataConnector connector = null;
             var plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.PluginType == dataSourceType);
             if (plugingSettings == null)
             {
-                return ;
+                return connector;
             }
 
             foreach (var plugin in CustomerDataPlugins)
             {
                 if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
                 {
-                    plugin.Value.ExportDataToCustomerSource(plugingSettings,exportData);
+                    connector = plugin.Value.GetPrepearedDataConnector(plugingSettings);//
                     break;
                 }
             }
+            return connector;
+        }
+
+        public void ExportData(CustomDataSourceTypes dataSourceType, XmlNode exportData)
+        {
+            //var plugingSettings = _pluginSettings.AllAvailablePluginSettings().FirstOrDefault(pl => pl.PluginType == dataSourceType);
+            //if (plugingSettings == null)
+            //{
+            //    return ;
+            //}
+
+            //foreach (var plugin in CustomerDataPlugins)
+            //{
+            //    if (((string)plugin.Metadata[CurrentServiceInformation.NameForPluginMetadata]).Equals(Enum.GetName(typeof(CustomDataSourceTypes), dataSourceType)))
+            //    {
+            //        plugin.Value.ExportDataToCustomerSource(plugingSettings,exportData);
+            //        break;
+            //    }
+            //}
         }
     }
 }

@@ -24,7 +24,10 @@ using System.Xml.Serialization;
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
 [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
 public partial class MSG {
-    
+    private int headerId;
+
+    private bool saved;
+
     private string mSGHeader_TypeField;
     
     private System.DateTime mSGHeader_CreatedField;
@@ -57,7 +60,7 @@ public partial class MSG {
     
     private string mSGPos_BinTypeField;
     
-    private int mSGPos_ResAmountField;
+    private double mSGPos_ResAmountField;
     
     private string mSGPos_StorageplaceField;
     
@@ -67,9 +70,25 @@ public partial class MSG {
     
     private string mSGPos_TrackingNoField;
 
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_HeaderId")]
+    [MSGSystem]
+    public int HeaderId
+    {
+        get { return headerId; }
+        set { headerId = value; }
+    }
+
+    [MSGSystem]
+    public bool Saved
+    {
+        get { return saved; }
+        set { saved = value; }
+    }
+
     /// <remarks/>
     
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_Type")]
+    [MSGHeader]
     public string Type {
         get {
             return this.mSGHeader_TypeField;
@@ -81,6 +100,7 @@ public partial class MSG {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_Created")]
+    [MSGHeader]
     public System.DateTime Created {
         get {
             return this.mSGHeader_CreatedField;
@@ -92,6 +112,7 @@ public partial class MSG {
 
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_LastUpdate")]
+    [MSGHeader]
     public System.DateTime LastUpdate
     {
         get
@@ -106,6 +127,7 @@ public partial class MSG {
 
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName ="MSGHeader_Status")]
+    [MSGHeader]
     public string Status
     {
         get {
@@ -118,6 +140,7 @@ public partial class MSG {
 
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_ErrorText")]
+    [MSGHeader]
     public string ErrorText
     {
         get
@@ -132,6 +155,7 @@ public partial class MSG {
 
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGHeader_User")]
+    [MSGHeader]
     public string User {
         get {
             return this.mSGHeader_UserField;
@@ -297,7 +321,7 @@ public partial class MSG {
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, ElementName = "MSGPos_ResAmount")]
     [MSGPos]
-    public int ResAmount {
+    public double ResAmount {
         get {
             return this.mSGPos_ResAmountField;
         }
