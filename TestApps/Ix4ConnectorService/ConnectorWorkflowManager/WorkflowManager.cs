@@ -263,7 +263,7 @@ namespace ConnectorWorkflowManager
                 }
                 catch (Exception ex)
                 {
-                    WrightLog(ex.ToString());
+                    _loger.Log(ex);
                 }
                 finally
                 {
@@ -348,7 +348,7 @@ namespace ConnectorWorkflowManager
                         {
                             status = 3;
                         }
-                        SendToDB(ord.ReferenceNo, status);
+                        SendToDB(ord.OrderNo, status);
                         _loger.Log(string.Format("Hase updated order with NO = {0}  new status = {1}", ord.ReferenceNo, status));
                     }
             }
@@ -509,14 +509,15 @@ namespace ConnectorWorkflowManager
             {
                 if (UpdateTimeWatcher.TimeToCheck(ix4Property))
                 {
-                    _loger.Log(string.Format("Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
+                    _loger.Log(string.Format("Start Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
 
                     if (HasItemsForSending(requests, ix4Property))
                     {
                         foreach (var item in requests)
                         {
-                            //    _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
+                            _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
+                            _loger.Log("LicsReques orders = " + item.SerializeObjectToString<LICSRequest>());
                             item.ClientId = _customerInfo.ClientID;
                             bool res = SendLicsRequestToIx4(item, string.Format("{0}File.xml", ix4Property.ToString()));
                             _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
@@ -526,6 +527,8 @@ namespace ConnectorWorkflowManager
                             }
                         }
                     }
+                    _loger.Log(string.Format("Finish Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
+                    System.Threading.Thread.Sleep(30000);
                 }
 
             }

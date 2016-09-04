@@ -48,6 +48,7 @@ namespace SqlDataExtractor
                 {
                     connection.Open();
                     var cmdText = _pluginSettings.OrdersQuery;
+                    _loger.Log(string.Format("Order reques sql {0}", cmdText));
                     SqlCommand cmd = new SqlCommand(cmdText, connection);
                     SqlDataReader reader = cmd.ExecuteReader();
                     orders = LoadOrders(reader, connection);
@@ -80,26 +81,31 @@ namespace SqlDataExtractor
                 try
                 {
                     LICSRequestOrder orderItem = new LICSRequestOrder();
-                    //   articleItem.GetType().GetProperty(propertyName).SetValue.GetValue((car, null);
 
-                    //  var r = table.AsEnumerable();
                     foreach (DataColumn column in row.Table.Columns)
                     {
                         var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = orderItem.GetType().GetProperty(column.ColumnName);
+                        if (propertyInfo == null)
+                        {
+                            _loger.Log("LICSRequestOrder");
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName,(string)res));
+                            _loger.Log(propertyInfo, "propertyInfo");
+                            continue;
+                        }
                         if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
                         {
                             propertyInfo.SetValue(orderItem, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
                         }
                         else
                         {
-                            propertyInfo.SetValue(orderItem, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                            propertyInfo.SetValue(orderItem, Convert.ChangeType(Convert.ToString(row[column.ColumnName]).Trim(), propertyInfo.PropertyType), null);
                         }
 
 
                     }
-                    orderItem.Recipient = GetOrderRecipient(connection, orderItem.ReferenceNo);
-                    orderItem.Positions = GetRequestOrderPositions(connection, orderItem.ReferenceNo);
+                    orderItem.Recipient = GetOrderRecipient(connection, orderItem.OrderNo);
+                    orderItem.Positions = GetRequestOrderPositions(connection, orderItem.OrderNo);
                     orders.Add(orderItem);
                 }
                 catch (Exception ex)
@@ -116,6 +122,7 @@ namespace SqlDataExtractor
             List<LICSRequestOrderPosition> orderPositions = new List<LICSRequestOrderPosition>();
 
             string getOrderPositionsQuery = string.Format(_pluginSettings.OrderPositionsQuery, orderId);
+            _loger.Log(string.Format("getOrderPositionsQuery reques sql {0}", getOrderPositionsQuery));
             SqlCommand cmd = new SqlCommand(getOrderPositionsQuery, connection);
             SqlDataReader reader = cmd.ExecuteReader();
             DataTable table = new DataTable();
@@ -130,10 +137,12 @@ namespace SqlDataExtractor
                     foreach (DataColumn column in row.Table.Columns)
                     {
                         var res = row[column.ColumnName];
-                        _loger.Log(string.Format("column.ColumnName ={0} value = {1}", (string)column.ColumnName, res.ToString()));
+                      //  _loger.Log(string.Format("column.ColumnName ={0} value = {1}", (string)column.ColumnName, res.ToString()));
                         PropertyInfo propertyInfo = orderPosition.GetType().GetProperty(column.ColumnName);
                         if (propertyInfo == null)
                         {
+                            _loger.Log("LICSRequestOrderPosition");
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, (string)res));
                             _loger.Log(propertyInfo, "propertyInfo");
                             continue;
                         }
@@ -144,7 +153,7 @@ namespace SqlDataExtractor
                         }
                         else
                         {
-                            propertyInfo.SetValue(orderPosition, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                            propertyInfo.SetValue(orderPosition, Convert.ChangeType(Convert.ToString(row[column.ColumnName]).Trim(), propertyInfo.PropertyType), null);
                         }
                     }
                     orderPositions.Add(orderPosition);
@@ -162,6 +171,7 @@ namespace SqlDataExtractor
         private LICSRequestOrderRecipient GetOrderRecipient(SqlConnection connection, string referenceNo)
         {
             string getOrderRecipientQuery = string.Format(_pluginSettings.OrderRecipientQuery, referenceNo);
+            _loger.Log(string.Format("OrderRecipient reques sql {0}", getOrderRecipientQuery));
             SqlCommand cmd = new SqlCommand(getOrderRecipientQuery, connection);
             SqlDataReader reader = cmd.ExecuteReader();
             DataTable table = new DataTable();
@@ -177,15 +187,14 @@ namespace SqlDataExtractor
                     {
                         var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = orderRecipient.GetType().GetProperty(column.ColumnName);
-                        if (propertyInfo != null)
+                        if (propertyInfo == null)
                         {
-                            //                _loger.Log("propertyInfo VALIDITY" );
-                        }
-                        else
-                        {
-                            //               _loger.Log(propertyInfo, "propertyInfo");
+                            _loger.Log("LICSRequestOrderRecipient");
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(res)));
+                            _loger.Log(propertyInfo, "propertyInfo");
                             continue;
                         }
+
 
                         if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
                         {
@@ -193,13 +202,13 @@ namespace SqlDataExtractor
                         }
                         else
                         {
-                            propertyInfo.SetValue(orderRecipient, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                            propertyInfo.SetValue(orderRecipient, Convert.ChangeType(Convert.ToString(row[column.ColumnName]).Trim(), propertyInfo.PropertyType), null);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    _loger.Log("Exception while reflect DataColumn values using Reflection in GetOrderPositions");
+                    _loger.Log("Exception while reflect DataColumn values using Reflection in GetOrderRecipient");
                     _loger.Log(ex);
                 }
             }
