@@ -16,7 +16,10 @@ namespace ConnectorWorkflowManager
     {
         private string _customerName;
         private static Logger _loger = Logger.GetLogger();
-        private static readonly string _archiveFolder = "ArchiveData";
+
+        private static readonly string _archiveFolder = string.Format("{0}\\{1}", System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "ArchiveData");// @"C:\Ilya\ServiceProgram\configuration.xml";// "configuration.xml";
+
+       // private static readonly string _archiveFolder = "ArchiveData";
         public DataEnsure(string customerName)
         {
             _customerName = customerName;
