@@ -14,7 +14,7 @@ namespace Ix4Models
         {
             XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
 
-            using (StringWriter textWriter = new StringWriter())
+            using (Utf8StringWriter textWriter = new Utf8StringWriter())
             {
                 xmlSerializer.Serialize(textWriter, toSerialize);
                 return textWriter.ToString();

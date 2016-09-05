@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="SettingsManager\CustomerInfoSerializer.cs" />
     <Compile Include="SettingsManager\XmlConfigurationManager.cs" />
+    <Compile Include="Utf8StringWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\LICSRequest.xsd">
