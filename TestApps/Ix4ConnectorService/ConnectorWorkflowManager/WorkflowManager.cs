@@ -28,7 +28,7 @@ namespace ConnectorWorkflowManager
         private DataEnsure _ensureData;
         protected Timer _timer;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery =60* 10 * 1000;
+        private static readonly long RElapsedEvery =60* 2 * 1000;
         private static readonly int _articlesPerRequest = 20;
 
 

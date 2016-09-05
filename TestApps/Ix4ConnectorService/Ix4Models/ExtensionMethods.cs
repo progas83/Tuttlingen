@@ -23,6 +23,10 @@ namespace Ix4Models
 
         public static string Truncate(this string str, int maxLength)
         {
+            if(string.IsNullOrEmpty(str))
+            {
+                return str;
+            }
             return str.Length <= maxLength ? str : str.Substring(0, maxLength);
         }
 
