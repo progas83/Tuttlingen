@@ -19,11 +19,11 @@ namespace Ix4Models.Converters
             requestOrder.OrderNo = navisionOutputPayload.OrderHeader.OrderNumber;
             requestOrder.CustomerNo = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerNumber);
             requestOrder.DistributionCenter = navisionOutputPayload.OrderHeader.WarehouseOrder;
-           
+
 
             LICSRequestOrderRecipient orderRecipient = new LICSRequestOrderRecipient();
             orderRecipient.Name = navisionOutputPayload.OrderHeader.CustomerName;
-        //    orderRecipient.AdditionalName = (string)navisionOutputPayload.OrderHeader.CustomerName2;  RESOLVE THIS PROBLEM
+            //    orderRecipient.AdditionalName = (string)navisionOutputPayload.OrderHeader.CustomerName2;  RESOLVE THIS PROBLEM
             orderRecipient.Street = navisionOutputPayload.OrderHeader.CustomerStreet;
             orderRecipient.ZIPCode = Convert.ToString(navisionOutputPayload.OrderHeader.CustomerZIP);
             orderRecipient.City = navisionOutputPayload.OrderHeader.CustomerTown;
@@ -33,9 +33,9 @@ namespace Ix4Models.Converters
 
                 LICSRequestOrderPosition orderPosition = new LICSRequestOrderPosition();
                 orderPosition.ArticleGroup = outputPosition.VPECode;
-                orderPosition.PositionNo =(int) outputPosition.ArticleRowNumber;
+                orderPosition.PositionNo = (int)outputPosition.ArticleRowNumber;
                 orderPosition.ArticleNo = outputPosition.ArticleNumber;
-                orderPosition.TargetQuantity =Convert.ToDouble(outputPosition.VPECount);
+                orderPosition.TargetQuantity = Convert.ToDouble(outputPosition.VPECount);
 
                 LICSRequestArticle requestArticle = new LICSRequestArticle();
                 requestArticle.ArticleNo = outputPosition.ArticleNumber;
@@ -55,18 +55,6 @@ namespace Ix4Models.Converters
             licsRequest.ArticleImport = listLicsRequestArticles.ToArray();
             licsRequest.OrderImport = new LICSRequestOrder[] { requestOrder };
             return licsRequest;
-        }
-
-
-        public static string SerializeObjectToString<T>(this T toSerialize)
-        {
-            XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
-
-            using (StringWriter textWriter = new StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, toSerialize);
-                return textWriter.ToString();
-            }
         }
     }
 }

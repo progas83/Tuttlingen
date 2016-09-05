@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Ix4Models;
 using System.Xml.Serialization;
 
 // 
@@ -89,6 +88,9 @@ public partial class LICSRequest {
         get {
             return this.versionField;
         }
+        set {
+            this.versionField = value;
+        }
     }
 }
 
@@ -168,7 +170,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return this.clientNoField>=0;
+            return this.clientNoFieldSpecified;
         }
         set {
             this.clientNoFieldSpecified = value;
@@ -178,7 +180,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleNo {
         get {
-            return this.articleNoField.Truncate(50);
+            return this.articleNoField;
         }
         set {
             this.articleNoField = value;
@@ -188,7 +190,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleNo2 {
         get {
-            return this.articleNo2Field.Truncate(50);
+            return this.articleNo2Field;
         }
         set {
             this.articleNo2Field = value;
@@ -198,7 +200,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleDescription {
         get {
-            return this.articleDescriptionField.Truncate(255);
+            return this.articleDescriptionField;
         }
         set {
             this.articleDescriptionField = value;
@@ -208,7 +210,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleDescription2 {
         get {
-            return this.articleDescription2Field.Truncate(255);
+            return this.articleDescription2Field;
         }
         set {
             this.articleDescription2Field = value;
@@ -249,7 +251,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string EAN {
         get {
-            return this.eANField.Truncate(50);
+            return this.eANField;
         }
         set {
             this.eANField = value;
@@ -259,7 +261,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ProductCode {
         get {
-            return this.productCodeField.Truncate(50);
+            return this.productCodeField;
         }
         set {
             this.productCodeField = value;
@@ -269,7 +271,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleGroup {
         get {
-            return this.articleGroupField.Truncate(50);
+            return this.articleGroupField;
         }
         set {
             this.articleGroupField = value;
@@ -279,7 +281,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleGroupDescription2 {
         get {
-            return this.articleGroupDescription2Field.Truncate(255);
+            return this.articleGroupDescription2Field;
         }
         set {
             this.articleGroupDescription2Field = value;
@@ -342,7 +344,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool NotStockedSpecified {
         get {
-            return this.notStockedField>=0;
+            return this.notStockedFieldSpecified;
         }
         set {
             this.notStockedFieldSpecified = value;
@@ -363,7 +365,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool StockMinSpecified {
         get {
-            return this.stockMinField>=0;
+            return this.stockMinFieldSpecified;
         }
         set {
             this.stockMinFieldSpecified = value;
@@ -394,7 +396,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ShortDescription {
         get {
-            return this.shortDescriptionField.Truncate(50);
+            return this.shortDescriptionField;
         }
         set {
             this.shortDescriptionField = value;
@@ -404,7 +406,7 @@ public partial class LICSRequestArticle {
     /// <remarks/>
     public string ArticleVariant {
         get {
-            return this.articleVariantField.Truncate(50);
+            return this.articleVariantField;
         }
         set {
             this.articleVariantField = value;
@@ -425,7 +427,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool InactiveSpecified {
         get {
-            return this.inactiveField>=0;
+            return this.inactiveFieldSpecified;
         }
         set {
             this.inactiveFieldSpecified = value;
@@ -520,7 +522,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string ReferenceNo {
         get {
-            return this.referenceNoField.Truncate(50);
+            return this.referenceNoField;
         }
         set {
             this.referenceNoField = value;
@@ -530,7 +532,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string OrderNo {
         get {
-            return this.orderNoField.Truncate(50);
+            return this.orderNoField;
         }
         set {
             this.orderNoField = value;
@@ -540,7 +542,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string ExtOrderNo {
         get {
-            return this.extOrderNoField.Truncate(30);
+            return this.extOrderNoField;
         }
         set {
             this.extOrderNoField = value;
@@ -561,7 +563,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return this.clientNoField>=0;
+            return clientNoField>=0;
         }
         set {
             this.clientNoFieldSpecified = value;
@@ -582,7 +584,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool StateSpecified {
         get {
-            return this.stateFieldSpecified;
+            return this.stateField>=0;
         }
         set {
             this.stateFieldSpecified = value;
@@ -592,7 +594,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string CustomerOrderNo {
         get {
-            return this.customerOrderNoField.Truncate(50);
+            return this.customerOrderNoField;
         }
         set {
             this.customerOrderNoField = value;
@@ -602,7 +604,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string CustomerNo {
         get {
-            return this.customerNoField.Truncate(50);
+            return this.customerNoField;
         }
         set {
             this.customerNoField = value;
@@ -612,7 +614,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string CustomerText {
         get {
-            return this.customerTextField.Truncate(255);
+            return this.customerTextField;
         }
         set {
             this.customerTextField = value;
@@ -643,7 +645,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string DeliveryText {
         get {
-            return this.deliveryTextField.Truncate(500);
+            return this.deliveryTextField;
         }
         set {
             this.deliveryTextField = value;
@@ -653,7 +655,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string ShipmentText {
         get {
-            return this.shipmentTextField.Truncate(255);
+            return this.shipmentTextField;
         }
         set {
             this.shipmentTextField = value;
@@ -663,7 +665,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string PackageText {
         get {
-            return this.packageTextField.Truncate(255);
+            return this.packageTextField;
         }
         set {
             this.packageTextField = value;
@@ -673,7 +675,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string CommissionText {
         get {
-            return this.commissionTextField.Truncate(255);
+            return this.commissionTextField;
         }
         set {
             this.commissionTextField = value;
@@ -683,7 +685,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string ShippingText {
         get {
-            return this.shippingTextField.Truncate(255);
+            return this.shippingTextField;
         }
         set {
             this.shippingTextField = value;
@@ -725,7 +727,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ShipmentDateSpecified {
         get {
-            return this.shipmentDateFieldSpecified;
+            return this.shipmentDateField!=null;
         }
         set {
             this.shipmentDateFieldSpecified = value;
@@ -746,7 +748,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool CreatedDateSpecified {
         get {
-            return this.createdDateFieldSpecified;
+            return this.createdDateField!=null;
         }
         set {
             this.createdDateFieldSpecified = value;
@@ -838,7 +840,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string TransportType {
         get {
-            return this.transportTypeField.Truncate(50);
+            return this.transportTypeField;
         }
         set {
             this.transportTypeField = value;
@@ -848,7 +850,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string DistributionCenter {
         get {
-            return this.distributionCenterField.Truncate(50);
+            return this.distributionCenterField;
         }
         set {
             this.distributionCenterField = value;
@@ -858,7 +860,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string PaymentCondition {
         get {
-            return this.paymentConditionField.Truncate(255);
+            return this.paymentConditionField;
         }
         set {
             this.paymentConditionField = value;
@@ -868,7 +870,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string Comment {
         get {
-            return this.commentField.Truncate(255);
+            return this.commentField;
         }
         set {
             this.commentField = value;
@@ -878,7 +880,7 @@ public partial class LICSRequestOrder {
     /// <remarks/>
     public string Currency {
         get {
-            return this.currencyField.Truncate(50);
+            return this.currencyField;
         }
         set {
             this.currencyField = value;
@@ -944,7 +946,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string FirstName {
         get {
-            return this.firstNameField.Truncate(50);
+            return this.firstNameField;
         }
         set {
             this.firstNameField = value;
@@ -954,7 +956,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string Name {
         get {
-            return this.nameField.Truncate(50);
+            return this.nameField;
         }
         set {
             this.nameField = value;
@@ -964,7 +966,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string AdditionalName {
         get {
-            return this.additionalNameField.Truncate(50);
+            return this.additionalNameField;
         }
         set {
             this.additionalNameField = value;
@@ -974,7 +976,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string Street {
         get {
-            return this.streetField.Truncate(50);
+            return this.streetField;
         }
         set {
             this.streetField = value;
@@ -984,7 +986,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string City {
         get {
-            return this.cityField.Truncate(50);
+            return this.cityField;
         }
         set {
             this.cityField = value;
@@ -994,7 +996,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string ZIPCode {
         get {
-            return this.zIPCodeField.Truncate(50);
+            return this.zIPCodeField;
         }
         set {
             this.zIPCodeField = value;
@@ -1014,7 +1016,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string CompanyName {
         get {
-            return this.companyNameField.Truncate(100);
+            return this.companyNameField;
         }
         set {
             this.companyNameField = value;
@@ -1024,7 +1026,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string ContactTitle {
         get {
-            return this.contactTitleField.Truncate(50);
+            return this.contactTitleField;
         }
         set {
             this.contactTitleField = value;
@@ -1034,7 +1036,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string ContactTelephone {
         get {
-            return this.contactTelephoneField.Truncate(50);
+            return this.contactTelephoneField;
         }
         set {
             this.contactTelephoneField = value;
@@ -1044,7 +1046,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string ContactFax {
         get {
-            return this.contactFaxField.Truncate(50);
+            return this.contactFaxField;
         }
         set {
             this.contactFaxField = value;
@@ -1054,7 +1056,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string ContactEMail {
         get {
-            return this.contactEMailField.Truncate(50);
+            return this.contactEMailField;
         }
         set {
             this.contactEMailField = value;
@@ -1064,7 +1066,7 @@ public partial class LICSRequestOrderRecipient {
     /// <remarks/>
     public string AdditionalText {
         get {
-            return this.additionalTextField.Truncate(255);
+            return this.additionalTextField;
         }
         set {
             this.additionalTextField = value;
@@ -1174,7 +1176,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string SSCC {
         get {
-            return this.sSCCField.Truncate(50);
+            return this.sSCCField;
         }
         set {
             this.sSCCField = value;
@@ -1215,7 +1217,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string Charge {
         get {
-            return this.chargeField.Truncate(50);
+            return this.chargeField;
         }
         set {
             this.chargeField = value;
@@ -1225,7 +1227,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string SerialNo {
         get {
-            return this.serialNoField.Truncate(50);
+            return this.serialNoField;
         }
         set {
             this.serialNoField = value;
@@ -1246,7 +1248,7 @@ public partial class LICSRequestOrderPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ExpiryDateSpecified {
         get {
-            return this.expiryDateFieldSpecified;
+            return this.expiryDateField!=null;
         }
         set {
             this.expiryDateFieldSpecified = value;
@@ -1256,7 +1258,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string ProjectNo {
         get {
-            return this.projectNoField.Truncate(50);
+            return this.projectNoField;
         }
         set {
             this.projectNoField = value;
@@ -1266,7 +1268,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string CustomerText {
         get {
-            return this.customerTextField.Truncate(500);
+            return this.customerTextField;
         }
         set {
             this.customerTextField = value;
@@ -1276,7 +1278,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string CommissionText {
         get {
-            return this.commissionTextField.Truncate(255);
+            return this.commissionTextField;
         }
         set {
             this.commissionTextField = value;
@@ -1286,7 +1288,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string PackageText {
         get {
-            return this.packageTextField.Truncate(255);
+            return this.packageTextField;
         }
         set {
             this.packageTextField = value;
@@ -1296,7 +1298,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string ShipmentText {
         get {
-            return this.shipmentTextField.Truncate(255);
+            return this.shipmentTextField;
         }
         set {
             this.shipmentTextField = value;
@@ -1306,7 +1308,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string ShippingText {
         get {
-            return this.shippingTextField.Truncate(255);
+            return this.shippingTextField;
         }
         set {
             this.shippingTextField = value;
@@ -1316,7 +1318,7 @@ public partial class LICSRequestOrderPosition {
     /// <remarks/>
     public string Comment {
         get {
-            return this.commentField.Truncate(255);
+            return this.commentField;
         }
         set {
             this.commentField = value;
@@ -1420,7 +1422,7 @@ public partial class LICSRequestDelivery {
     /// <remarks/>
     public string DeliveryNo {
         get {
-            return this.deliveryNoField.Truncate(50);
+            return this.deliveryNoField;
         }
         set {
             this.deliveryNoField = value;
@@ -1441,7 +1443,7 @@ public partial class LICSRequestDelivery {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return this.clientNoField>=0;
+            return this.clientNoField>0;
         }
         set {
             this.clientNoFieldSpecified = value;
@@ -1492,7 +1494,7 @@ public partial class LICSRequestDelivery {
     /// <remarks/>
     public string ReferenceNo {
         get {
-            return this.referenceNoField.Truncate(50);
+            return this.referenceNoField;
         }
         set {
             this.referenceNoField = value;
@@ -1579,7 +1581,7 @@ public partial class LICSRequestDeliveryPosition {
     private string sSCCField;
     
     private string commentField;
-    private bool targetQuantityFieldSpecified;
+    private bool targetQuantitySpecified;
 
     /// <remarks/>
     public int PositionNo {
@@ -1595,7 +1597,7 @@ public partial class LICSRequestDeliveryPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool PositionNoSpecified {
         get {
-            return this.positionNoField>=0;
+            return this.positionNoField>0;
         }
         set {
             this.positionNoFieldSpecified = value;
@@ -1656,7 +1658,7 @@ public partial class LICSRequestDeliveryPosition {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool LoadTypeSpecified {
         get {
-            return this.loadTypeField>=0;
+            return this.loadTypeFieldSpecified;
         }
         set {
             this.loadTypeFieldSpecified = value;
@@ -1725,14 +1727,14 @@ public partial class LICSRequestDeliveryPosition {
         }
         set
         {
-            this.targetQuantityFieldSpecified = value;
+            this.targetQuantitySpecified = value;
         }
     }
 
     /// <remarks/>
     public string Charge {
         get {
-            return this.chargeField.Truncate(50);
+            return this.chargeField;
         }
         set {
             this.chargeField = value;
@@ -1742,7 +1744,7 @@ public partial class LICSRequestDeliveryPosition {
     /// <remarks/>
     public string SerialNo {
         get {
-            return this.serialNoField.Truncate(50);
+            return this.serialNoField;
         }
         set {
             this.serialNoField = value;
@@ -1773,7 +1775,7 @@ public partial class LICSRequestDeliveryPosition {
     /// <remarks/>
     public string ProjectNo {
         get {
-            return this.projectNoField.Truncate(50);
+            return this.projectNoField;
         }
         set {
             this.projectNoField = value;
@@ -1793,7 +1795,7 @@ public partial class LICSRequestDeliveryPosition {
     /// <remarks/>
     public string Comment {
         get {
-            return this.commentField.Truncate(255);
+            return this.commentField;
         }
         set {
             this.commentField = value;

@@ -47,6 +47,7 @@
     <Compile Include="CurrentServiceInformation.cs" />
     <Compile Include="CustomDataSourceTypes.cs" />
     <Compile Include="DataSourceInfo.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Interfaces\ICryptor.cs" />
     <Compile Include="Interfaces\ICustomerDataConnector.cs" />
     <Compile Include="Interfaces\IPluginSettings.cs" />
@@ -55,7 +56,6 @@
     <Compile Include="MappedItem.cs" />
     <Compile Include="Schema\LICSRequest.cs">
       <DependentUpon>LICSRequest.xsd</DependentUpon>
-      <SubType>code</SubType>
     </Compile>
     <Compile Include="Schema\WV\ExportDataResponse.cs" />
     <Compile Include="Schema\WV\MSGHeaderAttribute.cs" />

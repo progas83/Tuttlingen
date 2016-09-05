@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Ix4Models;
 
 namespace ConnectorWorkflowManager
 {
