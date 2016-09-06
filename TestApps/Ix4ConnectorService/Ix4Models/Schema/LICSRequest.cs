@@ -57,7 +57,7 @@ public partial class LICSRequest {
     {
         get
         {
-            return this.clientNoFieldSpecified;
+            return true; 
         }
         set
         {
@@ -186,7 +186,7 @@ public partial class LICSRequestArticle {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return this.clientNoFieldSpecified;
+            return true;
         }
         set {
             this.clientNoFieldSpecified = value;
@@ -587,7 +587,7 @@ public partial class LICSRequestOrder {
     [System.Xml.Serialization.XmlIgnoreAttribute()]
     public bool ClientNoSpecified {
         get {
-            return this.clientNoFieldSpecified;
+            return true;
         }
         set {
             this.clientNoFieldSpecified = value;

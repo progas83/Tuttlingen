@@ -208,6 +208,7 @@ namespace ConnectorWorkflowManager
             if (_timer != null && _timer.Enabled)
             {
                 _timer.Enabled = false;
+                WrightLog("Service paused");
             }
         }
 
@@ -216,6 +217,7 @@ namespace ConnectorWorkflowManager
             if (_timer != null && !_timer.Enabled)
             {
                 _timer.Enabled = true;
+                WrightLog("Service resumed");
             }
         }
 
@@ -235,7 +237,7 @@ namespace ConnectorWorkflowManager
 
 
         private static object _o = new object();
-        private static int _errorCount = 0;
+      //  private static int _errorCount = 0;
         private bool SendLicsRequestToIx4(LICSRequest request, string fileName)
         {
             bool result = false;
@@ -249,6 +251,7 @@ namespace ConnectorWorkflowManager
                         XmlSerializer serializator = new XmlSerializer(typeof(LICSRequest));
                         using (Stream st = new FileStream(CurrentServiceInformation.TemporaryXmlFileName, FileMode.OpenOrCreate))
                         {
+                            _loger.Log("Check customerID = ClientId" + request.ClientId);
                             serializator.Serialize(st, request);
                             byte[] bytesRequest = ReadToEnd(st);
                             string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
@@ -256,18 +259,18 @@ namespace ConnectorWorkflowManager
                             SimplestParcerLicsRequest(resp);
                             _loger.Log(resp);
                         }
-                        if (!requestSuccess)
+                       // if (!requestSuccess)
                         {
-                            _errorCount++;
-                            try
+                            //_errorCount++;
+                            string dataFileName = string.Empty;
+                            int attemptLookForFile = 0;
+                            do
                             {
-                                File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
+                                attemptLookForFile++;
+                                dataFileName = string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, attemptLookForFile);
                             }
-                            catch (Exception ex)
-                            {
-                                _errorCount = _errorCount * 1000;
-                                File.Copy(CurrentServiceInformation.TemporaryXmlFileName, string.Format(CurrentServiceInformation.FloatTemporaryXmlFileName, _errorCount));
-                            }
+                            while (File.Exists(dataFileName));
+                            File.Copy(CurrentServiceInformation.TemporaryXmlFileName, dataFileName);
                         }
                         result = requestSuccess;
                     }
