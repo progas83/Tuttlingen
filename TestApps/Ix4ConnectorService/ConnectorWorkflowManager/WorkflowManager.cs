@@ -28,7 +28,7 @@ namespace ConnectorWorkflowManager
         private DataEnsure _ensureData;
         protected Timer _timer;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery =60* 2 * 1000;
+        private static readonly long RElapsedEvery =60* 10 * 1000;
         private static readonly int _articlesPerRequest = 20;
 
 
@@ -91,51 +91,55 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            _timer.Enabled = false;
-            try
+           // if(DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
             {
-
-
-                WrightLog("Timer has elapsed");
-                if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
-                {
-                    ExportData();
-                }
-
-                // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
-                if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
+                _timer.Enabled = false;
+                try
                 {
 
-                    if (!_isArticlesBusy)
-                        Task.Run(() => CheckArticles());
+
+                    WrightLog("Timer has elapsed");
+                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
+                    {
+                        ExportData();
+                    }
+
+                    // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
+                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
+                    {
+
+                        if (!_isArticlesBusy)
+                            Task.Run(() => CheckArticles());
+                    }
+
+
+                    //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
+
+                    //     CheckArticles();
+                    //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
+                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
+                    {
+
+                        CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
+                        WrightLog("Check Orders finished");
+                    }
+
+                    //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
+                    //CheckDeliveries();
+
+                    //    ExportData();
                 }
-
-
-                //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
-
-                //     CheckArticles();
-                //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-                if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
+                catch (Exception ex)
                 {
-
-                    CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
-                    WrightLog("Check Orders finished");
+                    _loger.Log(ex.Message);
+                }
+                finally
+                {
+                    _timer.Enabled = true;
                 }
 
-                //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
-                //CheckDeliveries();
 
-                //    ExportData();
             }
-            catch (Exception ex)
-            {
-                _loger.Log(ex.Message);
-            }
-            finally
-            {
-                _timer.Enabled = true;
-            }
-
 
         }
         bool _dataHasExported = false;
@@ -519,6 +523,11 @@ namespace ConnectorWorkflowManager
                             _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
                             _loger.Log("LicsReques orders = " + item.SerializeObjectToString<LICSRequest>());
                             item.ClientId = _customerInfo.ClientID;
+                            _loger.Log("client id = " + _customerInfo.ClientID);
+                            foreach (var order in item.OrderImport)
+                            {
+                                order.ClientNo = _customerInfo.ClientID;
+                            }
                             bool res = SendLicsRequestToIx4(item, string.Format("{0}File.xml", ix4Property.ToString()));
                             _loger.Log(string.Format("{0} result: {1}", ix4Property, res));
                             if (res)

@@ -13,7 +13,7 @@ namespace ConnectorWorkflowManager
         private static Logger _loger = Logger.GetLogger();
         static UpdateTimeWatcher()
         {
-            DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 5, 30, 00)).AddDays(-1);
+            DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 17, 30, 00)).AddDays(-1);
             _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             _loger.Log("Articles last update total seconds = " + _articlesLastUpdate);
         }
