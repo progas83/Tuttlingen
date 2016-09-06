@@ -28,7 +28,7 @@ namespace ConnectorWorkflowManager
         private DataEnsure _ensureData;
         protected Timer _timer;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery =60* 10 * 1000;
+        private static readonly long RElapsedEvery = 60 * 1 * 1000;
         private static readonly int _articlesPerRequest = 20;
 
 
@@ -91,7 +91,7 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-           // if(DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
+            if(DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
             {
                 _timer.Enabled = false;
                 try
@@ -142,54 +142,61 @@ namespace ConnectorWorkflowManager
             }
 
         }
-        bool _dataHasExported = false;
-        private static int _exportAttempts = 0;
+
         private void ExportData()
         {
-            if (_ix4ServiceConnector != null)
+            if (_ix4ServiceConnector != null && _ensureData != null && _dataCompositor != null)
             {
                 if (UpdateTimeWatcher.TimeToCheck("GP"))
                 {
-                    foreach (string mark in new string[] { "GP", "GS" })
+                    try
                     {
-                        _loger.Log("Starting export data " + mark);
-                        XmlNode nodeResult = _ix4ServiceConnector.ExportData(mark, null);
-
-                        var msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
-                        _loger.Log(string.Format("Got Exported {0} items count = {1}", mark, msgNodes.Count));
-                        if (msgNodes.Count > 0)
+                        foreach (string mark in new string[] { "GP", "GS" })
                         {
-                            EnsureType ensureType = EnsureType.CollectData;
-                            switch (mark)
-                            {
-                                case "SA":
-                                    ensureType = EnsureType.UpdateStoredData;
-                                    break;
-                                case "GP":
-                                    ensureType = EnsureType.CollectData;
-                                    break;
-                                case "GS":
-                                    ensureType = EnsureType.CollectData;
-                                    break;
-                                default:
-                                    ensureType = EnsureType.CollectData;
-                                    break;
+                            _loger.Log("Starting export data " + mark);
+                            XmlNode nodeResult = _ix4ServiceConnector.ExportData(mark, null);
 
+                            var msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                            _loger.Log(string.Format("Got Exported {0} items count = {1}", mark, msgNodes.Count));
+                            if (msgNodes.Count > 0)
+                            {
+                                EnsureType ensureType = EnsureType.CollectData;
+                                switch (mark)
+                                {
+                                    case "SA":
+                                        ensureType = EnsureType.UpdateStoredData;
+                                        break;
+                                    case "GP":
+                                        ensureType = EnsureType.CollectData;
+                                        break;
+                                    case "GS":
+                                        ensureType = EnsureType.CollectData;
+                                        break;
+                                    default:
+                                        ensureType = EnsureType.CollectData;
+                                        break;
+                                }
+
+                                if (!_ensureData.StoreExportedNodeList(msgNodes, mark, ensureType))
+                                {
+                                    _ensureData.RudeStoreExportedData(nodeResult, mark);
+                                }
+                                else
+                                {
+                                    _ensureData.ProcessingStoredDataToClientStorage(mark, _dataCompositor.GetCustomerDataConnector(CustomDataSourceTypes.MsSql));
+                                }
+                                _loger.Log("End export data " + mark);
+                                System.Threading.Thread.Sleep(30000);
                             }
 
-                            if (!_ensureData.StoreExportedNodeList(msgNodes, mark, ensureType))
-                            {
-                                _ensureData.RudeStoreExportedData(nodeResult, mark);
-                            }
-                            else
-                            {
-                                _ensureData.ProcessingStoredDataToClientStorage(mark, _dataCompositor.GetCustomerDataConnector(CustomDataSourceTypes.MsSql));
-                            }
-                            _loger.Log("End export data " + mark);
-                            System.Threading.Thread.Sleep(30000);
                         }
-
                     }
+                    catch (Exception ex)
+                    {
+                        _loger.Log("Exception while export data");
+                        _loger.Log(ex);
+                    }
+
 
                     UpdateTimeWatcher.SetLastUpdateTimeProperty("GP");
                 }
@@ -353,7 +360,7 @@ namespace ConnectorWorkflowManager
                             status = 3;
                         }
                         SendToDB(ord.OrderNo, status);
-                        _loger.Log(string.Format("Hase updated order with NO = {0}  new status = {1}", ord.ReferenceNo, status));
+                        _loger.Log(string.Format("Has updated order with NO = {0}  new status = {1}", ord.ReferenceNo, status));
                     }
             }
             catch (Exception ex)
@@ -657,6 +664,7 @@ namespace ConnectorWorkflowManager
                     LICSRequest request = new LICSRequest();
                     request.ClientId = currentClientID;
                     LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
+                    
                     _loger.Log(string.Format("Got ARTICLES {0}", articles != null ? articles.Length : 0));
 
                     if (articles == null || articles.Length == 0)

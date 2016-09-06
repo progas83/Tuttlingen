@@ -56,7 +56,7 @@ namespace ConnectorWorkflowManager
             
             try
             {
-                if (File.Exists(fileName) && ensureType == EnsureType.UpdateStoredData)
+                if (ensureType == EnsureType.UpdateStoredData && File.Exists(fileName))
                 {
                     File.Delete(fileName);
                 }
@@ -135,7 +135,11 @@ namespace ConnectorWorkflowManager
 
        public void ProcessingStoredDataToClientStorage(string exportedDataName, ICustomerDataConnector dataConnector)
         {
-
+            if(exportedDataName == "GS" && _hasGPFatalError)
+            {
+                _loger.Log("Can't process GS messages! Reason: GP has error");
+                return;
+            }
             if(dataConnector==null)
             {
                 _loger.Log(string.Format("Data {0} has not been processed", exportedDataName));// "There is no stored file for data " + exportedDataName);
@@ -193,6 +197,10 @@ namespace ConnectorWorkflowManager
                     doc.Save(fileName);
                 }
                 XmlNodeList badNodes = docWithBadMsg.GetElementsByTagName("MSG");
+                if(exportedDataName == "GP")
+                {
+                    _hasGPFatalError = badNodes.Count > 0;
+                }
                 while (badNodes.Count != 0)
                 {
                     XmlNode insertedNode = doc.ImportNode(badNodes[0].ParentNode.RemoveChild(badNodes[0]), true);
@@ -207,6 +215,9 @@ namespace ConnectorWorkflowManager
                 _loger.Log(ex);
             }
         }
+
+        public bool _hasGPFatalError;
+        
 
         private XmlNode RecoveryExceptionedExportData(string exportedDataType)
         {
