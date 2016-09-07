@@ -490,6 +490,7 @@ namespace ConnectorWorkflowManager
                     case Ix4RequestProps.Orders:
                         foreach (LICSRequest request in requests)
                         {
+                            _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, request.OrderImport.Length));
                             if (request.OrderImport.Length > 0)
                             {
                                 result = true;
@@ -530,10 +531,10 @@ namespace ConnectorWorkflowManager
                     {
                         foreach (var item in requests)
                         {
-                            _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
-                            _loger.Log("LicsReques orders = " + item.SerializeObjectToString<LICSRequest>());
+                            //_loger.Log(string.Format("Count of available {0} = {1}", ix4Property, item.OrderImport.Length));
+                            //_loger.Log("LicsReques orders = " + item.SerializeObjectToString<LICSRequest>());
                             item.ClientId = _customerInfo.ClientID;
-                            _loger.Log("client id = " + _customerInfo.ClientID);
+                            //_loger.Log("client id = " + _customerInfo.ClientID);
                             foreach (var order in item.OrderImport)
                             {
                                 order.ClientNo = _customerInfo.ClientID;
