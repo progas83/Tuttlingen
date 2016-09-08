@@ -84,21 +84,27 @@ namespace SqlDataExtractor
 
                     foreach (DataColumn column in row.Table.Columns)
                     {
+                        _loger.Log("LICSRequestOrderTest");
                         var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = orderItem.GetType().GetProperty(column.ColumnName);
                         if (propertyInfo == null)
                         {
                             _loger.Log("LICSRequestOrder");
-                            _loger.Log(string.Format("{0} = {1}", column.ColumnName,(string)res));
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(res)));
                             _loger.Log(propertyInfo, "propertyInfo");
                             continue;
                         }
-                        if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
+                        _loger.Log(row[column.ColumnName], "row[column.ColumnName]");
+                        bool resul = row[column.ColumnName].GetType().Equals(DBNull.Value.GetType());
+                        _loger.Log("result = " + resul);
+                        if (resul)
                         {
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, "Is DB Null"));
                             propertyInfo.SetValue(orderItem, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
                         }
                         else
                         {
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(res)));
                             propertyInfo.SetValue(orderItem, Convert.ChangeType(Convert.ToString(row[column.ColumnName]).Trim(), propertyInfo.PropertyType), null);
                         }
 

@@ -98,7 +98,7 @@ namespace ConnectorWorkflowManager
                 {
 
 
-                    WrightLog("Timer has elapsed");
+                    WrightLog("Start checking");
                     if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
                     {
                         ExportData();
@@ -123,7 +123,7 @@ namespace ConnectorWorkflowManager
                         CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
                         WrightLog("Check Orders finished");
                     }
-
+                    WrightLog("Finish checking");
                     //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
                     //CheckDeliveries();
 
@@ -147,7 +147,7 @@ namespace ConnectorWorkflowManager
         {
             if (_ix4ServiceConnector != null && _ensureData != null && _dataCompositor != null)
             {
-                if (UpdateTimeWatcher.TimeToCheck("GP"))
+               // if (UpdateTimeWatcher.TimeToCheck("GP"))
                 {
                     try
                     {
@@ -480,6 +480,7 @@ namespace ConnectorWorkflowManager
                     case Ix4RequestProps.Articles:
                         foreach (LICSRequest request in requests)
                         {
+                            _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, request.OrderImport.Length));
                             if (request.ArticleImport.Length > 0)
                             {
                                 result = true;
@@ -501,6 +502,7 @@ namespace ConnectorWorkflowManager
                     case Ix4RequestProps.Deliveries:
                         foreach (LICSRequest request in requests)
                         {
+                            _loger.Log(string.Format("Count of available {0} = {1}", ix4Property, request.OrderImport.Length));
                             if (request.DeliveryImport.Length > 0)
                             {
                                 result = true;
@@ -522,7 +524,7 @@ namespace ConnectorWorkflowManager
 
             try
             {
-                if (UpdateTimeWatcher.TimeToCheck(ix4Property))
+               // if (UpdateTimeWatcher.TimeToCheck(ix4Property))
                 {
                     _loger.Log(string.Format("Start Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
