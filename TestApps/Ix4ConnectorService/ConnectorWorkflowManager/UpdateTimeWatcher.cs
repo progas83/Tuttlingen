@@ -16,6 +16,9 @@ namespace ConnectorWorkflowManager
             DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 17, 30, 00)).AddDays(-1);
             _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             _loger.Log("Articles last update total seconds = " + _articlesLastUpdate);
+
+            DateTime yesturdayTenPM = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 7, 00, 00)).AddDays(-1);
+            _exportSALastUpdate = (long)yesturdayTenPM.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
         private static long _articlesLastUpdate = 1;
         private static long _ordersLastUpdate = 0;
@@ -23,6 +26,7 @@ namespace ConnectorWorkflowManager
 
         private static long _exportGPLastUpdate = 0;
         private static long _exportGSLastUpdate = 0;
+        private static long _exportSALastUpdate = 1;
 
 
 
@@ -38,17 +42,27 @@ namespace ConnectorWorkflowManager
             switch (exportDataType)
             {
                 case "GP":
-                    if (_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1800)
+                    if (_exportGPLastUpdate == 0 || (GetTimeStamp() - _exportGPLastUpdate) > 1700)
                     {
                         isItTimeToCheck = true;
                     }
                     else
                     {
-
+                        isItTimeToCheck = true;
                     }
                     break;
                 case "GS":
-                    if (_exportGSLastUpdate == 0 || (GetTimeStamp() - _exportGSLastUpdate) > 1800)
+                    if (_exportGSLastUpdate == 0 || (GetTimeStamp() - _exportGSLastUpdate) > 1700)
+                    {
+                        isItTimeToCheck = true;
+                    }
+                    else
+                    {
+                        isItTimeToCheck = true;
+                    }
+                    break;
+                case "SA":
+                    if (_exportSALastUpdate == 0 || GetTimeStamp() - _exportSALastUpdate > 86400)
                     {
                         isItTimeToCheck = true;
                     }
@@ -116,6 +130,9 @@ namespace ConnectorWorkflowManager
                     break;
                 case "GS":
                     _exportGSLastUpdate = GetTimeStamp();
+                    break;
+                case "SA":
+                    _exportSALastUpdate = GetTimeStamp();
                     break;
                 default:
                     break;
