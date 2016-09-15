@@ -91,7 +91,7 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-          //  if(DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
+            if (DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
             {
                 _timer.Enabled = false;
                 try
@@ -137,7 +137,7 @@ namespace ConnectorWorkflowManager
                 {
                     _timer.Enabled = true;
                 }
-
+                SinplestLogger.Mailer.MailLogger.Instance.SendMailReport();
 
             }
 
@@ -147,30 +147,30 @@ namespace ConnectorWorkflowManager
         {
             if (_ix4ServiceConnector != null && _ensureData != null && _dataCompositor != null)
             {
-               // if (UpdateTimeWatcher.TimeToCheck("GP"))
+                // if (UpdateTimeWatcher.TimeToCheck("GP"))
                 {
                     try
                     {
-                        foreach (string mark in new string[] {"SA" })// { "GP", "GS" })
+                        foreach (string mark in new string[] { "GP", "GS" })
                         {
-                            if (!UpdateTimeWatcher.TimeToCheck(mark))
-                            {
-                                continue;
-                            }
-                            else
-                            {
+                            //if (!UpdateTimeWatcher.TimeToCheck(mark))
+                            //{
+                            //    continue;
+                            //}
+                            //else
+                            //{
 
-                            }
-                                _loger.Log("Starting export data " + mark);
+                            //}
+                            _loger.Log("Starting export data " + mark);
                             XmlNode nodeResult = _ix4ServiceConnector.ExportData(mark, null);
 
                             XmlDocument xmlDoc = new XmlDocument();
                             xmlDoc.InnerXml = nodeResult.OuterXml;
                             var msgNodes = xmlDoc.GetElementsByTagName("MSG");
 
-                          //  var msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
+                            //  var msgNodes = nodeResult.LastChild.LastChild.SelectNodes("MSG");
                             _loger.Log(string.Format("Got Exported {0} items count = {1}", mark, msgNodes.Count));
-                            if (msgNodes!=null && msgNodes.Count > 0)
+                            if (msgNodes != null && msgNodes.Count > 0)
                             {
                                 EnsureType ensureType = EnsureType.CollectData;
                                 switch (mark)
@@ -200,7 +200,7 @@ namespace ConnectorWorkflowManager
                                 _loger.Log("End export data " + mark);
                                 System.Threading.Thread.Sleep(30000);
                             }
-                            UpdateTimeWatcher.SetLastUpdateTimeProperty(mark);
+
                         }
                     }
                     catch (Exception ex)
@@ -208,9 +208,9 @@ namespace ConnectorWorkflowManager
                         _loger.Log("Exception while export data");
                         _loger.Log(ex);
                     }
+                    //    UpdateTimeWatcher.SetLastUpdateTimeProperty(mark);
 
 
-                   
                 }
             }
         }
@@ -249,7 +249,7 @@ namespace ConnectorWorkflowManager
 
 
         private static object _o = new object();
-      //  private static int _errorCount = 0;
+        //  private static int _errorCount = 0;
         private bool SendLicsRequestToIx4(LICSRequest request, string fileName)
         {
             bool result = false;
@@ -271,7 +271,7 @@ namespace ConnectorWorkflowManager
                             SimplestParcerLicsRequest(resp);
                             _loger.Log(resp);
                         }
-                       // if (!requestSuccess)
+                        // if (!requestSuccess)
                         {
                             //_errorCount++;
                             string dataFileName = string.Empty;
@@ -536,12 +536,12 @@ namespace ConnectorWorkflowManager
 
             try
             {
-               // if (UpdateTimeWatcher.TimeToCheck(ix4Property))
+                // if (UpdateTimeWatcher.TimeToCheck(ix4Property))
                 {
                     _loger.Log(string.Format("Start Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
 
-                    if (requests!=null && HasItemsForSending(requests, ix4Property))
+                    if (requests != null && HasItemsForSending(requests, ix4Property))
                     {
                         foreach (var item in requests)
                         {
@@ -682,7 +682,7 @@ namespace ConnectorWorkflowManager
                     LICSRequest request = new LICSRequest();
                     request.ClientId = currentClientID;
                     LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
-                    
+
                     _loger.Log(string.Format("Got ARTICLES {0}", articles != null ? articles.Length : 0));
 
                     if (articles == null || articles.Length == 0)

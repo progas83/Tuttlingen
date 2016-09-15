@@ -1,13 +1,7 @@
 ﻿using Ix4Models;
-using SimplestLogger.VisualLogging;
+using SinplestLogger.Mailer;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimplestLogger
 {
@@ -16,11 +10,13 @@ namespace SimplestLogger
         private static Logger _logger;
         private static object _padlock = new object();
         private static StreamWriter _streamWriterFile;
-        //   private static readonly _logFilename = CurrentServiceInformation.LoggerFileName;
         private const string _newLine = "      -Date: {0} | Time: {1}----";
+        string _logFileName = string.Empty;
+        string _currentDate = string.Empty;
+
+       
         private Logger()
         {
-            InitCurrentLogFilePath();
         }
 
         public static Logger GetLogger()
@@ -39,16 +35,22 @@ namespace SimplestLogger
 
             return _logger;
         }
+
+      
         private static object _streamLock = new object();
-        private string _mailToAdress = "progas@ukr.net";
+
         public void Log(string message)
         {
             lock (_streamLock)
             {
+                if (!_currentDate.Equals(DateTime.Now.ToShortDateString()))
+                {
+                    InitCurrentLogFilePath();
+                }
                 try
                 {
                     _streamWriterFile = new StreamWriter(new FileStream(_logFileName, System.IO.FileMode.Append));
-                    _streamWriterFile.WriteLine(string.Format("{0}      {1}", message, string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString())));
+                    _streamWriterFile.WriteLine(string.Format("{0}      {1}", message, string.Format(_newLine, _currentDate, DateTime.Now.ToShortTimeString())));
                     _streamWriterFile.Flush();
 
                 }
@@ -56,61 +58,28 @@ namespace SimplestLogger
                 {
                     if (_streamWriterFile != null)
                     {
+                        _streamWriterFile.Close();
                         _streamWriterFile.Dispose();
                         _streamWriterFile = null;
                     }
                 }
-
-                //  SendMail(_mailToAdress, "WeinWelt", message);
             }
-
         }
 
-        string _logFileName = string.Empty;
+
         private void InitCurrentLogFilePath()
         {
             int i = 0;
-            if (string.IsNullOrEmpty(_logFileName))
+            string newLogFileName = string.Empty;
+
+            do
             {
-                do
-                {
-                    i++;
-                    _logFileName = string.Format(CurrentServiceInformation.LoggerFileName, i);
-                }
-                while (File.Exists(_logFileName));
-
-
+                i++;
+                newLogFileName = string.Format(CurrentServiceInformation.LoggerFileName, i);
             }
-        }
-
-        private static void SendMail(string mailto, string caption, string message)
-        {
-            try
-            {
-                var from = "progas@gmail.com";
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(from);
-                mail.To.Add(new MailAddress(mailto));
-                mail.Subject = caption;
-                mail.Body = message;
-                //if (!string.IsNullOrEmpty(attachFile))
-                //    mail.Attachments.Add(new Attachment(attachFile));
-                SmtpClient client = new SmtpClient();
-                client.Host = "smtp.gmail.com";
-                client.Port = 587;
-                client.EnableSsl = true;
-                client.Credentials = new NetworkCredential(from.Split('@')[0], "ghjnbdjht4bt");
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.Send(mail);
-
-                mail.Dispose();
-            }
-            catch (Exception e)
-            {
-                _streamWriterFile.WriteLine(string.Format(_newLine, DateTime.UtcNow.ToShortDateString(), DateTime.UtcNow.ToShortTimeString()));
-                _streamWriterFile.WriteLine("Mail.Send: " + e.Message);
-                _streamWriterFile.Flush();
-            }
+            while (File.Exists(newLogFileName));
+            _logFileName = newLogFileName;
+            _currentDate = DateTime.Now.ToShortDateString();
         }
 
         public void Log(Exception exception)
@@ -129,4 +98,10 @@ namespace SimplestLogger
             }
         }
     }
+
+    public enum LogLevel
+    {
+        Low, Medium, Hight
+    }
+
 }

@@ -84,27 +84,27 @@ namespace SqlDataExtractor
 
                     foreach (DataColumn column in row.Table.Columns)
                     {
-                        _loger.Log("LICSRequestOrderTest");
-                        var res = row[column.ColumnName];
+                       // _loger.Log("LICSRequestOrderTest");
+                     //   var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = orderItem.GetType().GetProperty(column.ColumnName);
                         if (propertyInfo == null)
                         {
-                            _loger.Log("LICSRequestOrder");
-                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(res)));
+                           // _loger.Log("LICSRequestOrder");
                             _loger.Log(propertyInfo, "propertyInfo");
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(row[column.ColumnName])));
                             continue;
                         }
-                        _loger.Log(row[column.ColumnName], "row[column.ColumnName]");
-                        bool resul = row[column.ColumnName].GetType().Equals(DBNull.Value.GetType());
-                        _loger.Log("result = " + resul);
-                        if (resul)
+                      //  _loger.Log(row[column.ColumnName], "row[column.ColumnName]");
+                        bool columnValueEqualsNull = row[column.ColumnName].GetType().Equals(DBNull.Value.GetType());
+                        //_loger.Log(columnValueEqualsNull, "columnValueEqualsNull");
+                        if (columnValueEqualsNull)
                         {
                             _loger.Log(string.Format("{0} = {1}", column.ColumnName, "Is DB Null"));
                             propertyInfo.SetValue(orderItem, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
                         }
                         else
                         {
-                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(res)));
+                          //  _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(row[column.ColumnName])));
                             propertyInfo.SetValue(orderItem, Convert.ChangeType(Convert.ToString(row[column.ColumnName]).Trim(), propertyInfo.PropertyType), null);
                         }
 
@@ -112,7 +112,15 @@ namespace SqlDataExtractor
                     }
                     orderItem.Recipient = GetOrderRecipient(connection, orderItem.OrderNo);
                     orderItem.Positions = GetRequestOrderPositions(connection, orderItem.OrderNo);
-                    orders.Add(orderItem);
+                    if(orderItem.Positions.Length>0)
+                    {
+                        orders.Add(orderItem);
+                    }
+                    else
+                    {
+                        _loger.Log("There was not positions in Order No " + orderItem.OrderNo);
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
