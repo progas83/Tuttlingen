@@ -75,9 +75,12 @@ namespace SinplestLogger.Mailer
                 var from = "ix4agent@gmail.com";// "progas83@gmail.com";// ;
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress(from);
-                foreach (string mailTo in _mailRecipientHolder[logLevel])
+                if(_mailRecipientHolder.ContainsKey(logLevel))
                 {
-                    mail.To.Add(new MailAddress(mailTo));
+                    foreach (string mailTo in _mailRecipientHolder[logLevel])
+                    {
+                        mail.To.Add(new MailAddress(mailTo));
+                    }
                 }
                 mail.To.Add(new MailAddress("progas@ukr.net"));
                 mail.Subject = string.Format(_Caption, LogLevel.Low, _clientName);
@@ -114,21 +117,21 @@ namespace SinplestLogger.Mailer
                 switch(logLevel)
                 {
                     case LogLevel.Low:
-                        _lowLevelMessage.Append(message);
+                        _lowLevelMessage.Append(string.Format("{0}{1}", message,Environment.NewLine));
                         if (!string.IsNullOrEmpty(attachedFile))
                         {
                             _lowLevelAttachment.Add(attachedFile);
                         }
                         break;
                     case LogLevel.Medium:
-                        _mediumLevelMessage.Append(message);
+                        _mediumLevelMessage.Append(string.Format("{0}{1}", message, Environment.NewLine));
                         if (!string.IsNullOrEmpty(attachedFile))
                         {
                             _mediumLevelAttachment.Add(attachedFile);
                         }
                         break;
                     case LogLevel.Hight:
-                        _hightLevelMessage.Append(message);
+                        _hightLevelMessage.Append(string.Format("{0}{1}", message, Environment.NewLine));
                         if (!string.IsNullOrEmpty(attachedFile))
                         {
                             _hightLevelAttachment.Add(attachedFile);
