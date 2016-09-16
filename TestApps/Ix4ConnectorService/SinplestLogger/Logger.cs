@@ -85,8 +85,9 @@ namespace SimplestLogger
         public void Log(Exception exception)
         {
             Log(exception.ToString());
-            Log("Exception message");
-            Log(exception.Message);
+       //     Log("Exception message");
+       //     Log(exception.Message);
+            MailLogger.Instance.LogMail(LogLevel.Low, exception.ToString());
         }
 
         public void Log(object o, string propertyName)

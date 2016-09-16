@@ -10,6 +10,7 @@ using Ix4Models;
 using System.Data;
 using System.Reflection;
 using SimplestLogger;
+using SinplestLogger.Mailer;
 
 namespace SqlDataExtractor
 {
@@ -78,15 +79,15 @@ namespace SqlDataExtractor
             table.Load(reader);
             foreach (DataRow row in table.AsEnumerable())
             {
+                LICSRequestOrder orderItem = new LICSRequestOrder();
+                PropertyInfo propertyInfo = null;
                 try
                 {
-                    LICSRequestOrder orderItem = new LICSRequestOrder();
-
                     foreach (DataColumn column in row.Table.Columns)
                     {
                        // _loger.Log("LICSRequestOrderTest");
                      //   var res = row[column.ColumnName];
-                        PropertyInfo propertyInfo = orderItem.GetType().GetProperty(column.ColumnName);
+                        propertyInfo = orderItem.GetType().GetProperty(column.ColumnName);
                         if (propertyInfo == null)
                         {
                            // _loger.Log("LICSRequestOrder");
@@ -121,6 +122,13 @@ namespace SqlDataExtractor
                         _loger.Log("There was not positions in Order No " + orderItem.OrderNo);
                     }
                     
+                }
+                catch(FormatException formatEx)
+                {
+                    _loger.Log("FormatException while reflect DataColumn values using Reflection in LoadOrders");
+                    _loger.Log(formatEx);
+                    string mailMessage = string.Format("There was FormatException with Order number = {0}, problem field name = {1}", orderItem.OrderNo, propertyInfo.Name);
+                    MailLogger.Instance.LogMail(LogLevel.Low, mailMessage);
                 }
                 catch (Exception ex)
                 {

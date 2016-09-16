@@ -34,7 +34,7 @@
            
 
      
-        <WrapPanel MaxWidth="800" Height="400" ScrollViewer.CanContentScroll="True" >
+        <WrapPanel MaxWidth="800" Height="200" ScrollViewer.CanContentScroll="True" >
 
                 <ContentControl Margin="0,5,0,0" SnapsToDevicePixels="True" Height="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.PanningMode="VerticalFirst" ScrollViewer.VerticalScrollBarVisibility="Visible"
                             
