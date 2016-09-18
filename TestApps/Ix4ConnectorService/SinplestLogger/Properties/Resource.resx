@@ -117,6 +117,80 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ContentDescription" xml:space="preserve">
+    <value>&lt;tr&gt;
+  &lt;td width="100" align="left" valign="top" style="font-weight:bold" &gt;ContentName:&lt;/td&gt;
+  &lt;td width="450"&gt;ContentText&lt;/td&gt;
+&lt;/tr&gt;</value>
+  </data>
+  <data name="MailReportExceptionsHtml" xml:space="preserve">
+    <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
+&lt;title&gt;Untitled Document&lt;/title&gt;
+&lt;style type="text/css"&gt;
+body {
+	font-family: "Segoe UI";
+	font-size: 14px;
+	color: #3d3f3a;
+	background-color: #cccccc;
+	background-repeat: repeat;
+	text-align: left;
+	}
+h1{
+color: #000;
+}
+text{
+color: #000;
+}
+
+
+.rubberTitle{
+	table-layout: fixed;
+	background-color: #B51717;
+    margin-top: 10px;
+	background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+	padding-bottom: 10px;
+}
+
+.rubberTd{
+	word-wrap:break-word;
+table-layout: fixed;
+}
+
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;br/&gt;
+
+&lt;div &gt;
+	&lt;table class = "rubberTitle" width="600" height="60" cellspacing="10" align="center"  &gt;
+    	&lt;tr&gt;
+            &lt;td width="5" valign="top"&gt;
+              &lt;img src="https://mackschuehle.logistic-cloud.com/System/Images/LogistikBrokerText_FFFFFF_0.png" width="150" height="20" alt=""/&gt;
+            &lt;/td&gt;
+            &lt;td width="450" class="rubberTd" &gt;
+		&lt;h1 align="center"&gt;Ix4Agent report exceptions&lt;/h1&gt;
+                &lt;text style="font-weight: bold"&gt;Client: ClientName &lt;br/&gt; Date: ReportDateTime&lt;/text&gt;
+	    &lt;/td&gt;
+            &lt;td width="60" align="right" valign="top"&gt;
+              &lt;img src="https://mackschuehle.logistic-cloud.com/System/Images/LogistikBrokerIcon_XXXXXX_0.png" width="60" height="60" alt="" /&gt;
+           &lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/table&gt;
+             
+        &lt;table width="600" align="center" cellspacing="0" bgcolor=#f7f7f7 class="rubberTd" &gt;
+            ReportContent
+        &lt;/table&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
   <data name="MailTest" xml:space="preserve">
     <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
 &lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
@@ -270,5 +344,15 @@ td.content{
 
 &lt;/body&gt;
 &lt;/html&gt;</value>
+  </data>
+  <data name="ReportContent" xml:space="preserve">
+    <value>&lt;tr &gt;
+    &lt;td align="center" style="border-bottom:1pt solid black;font-weight:bold"&gt;RN&lt;/td&gt;
+    &lt;td width="560" style="border-bottom:1pt solid black"&gt;
+        &lt;table width="560" class="rubberTd"&gt;
+            ContentDescription
+        &lt;/table&gt;
+    &lt;/td&gt;
+&lt;/tr&gt;</value>
   </data>
 </root>

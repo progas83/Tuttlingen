@@ -11,6 +11,7 @@ using System.Data;
 using System.Reflection;
 using SimplestLogger;
 using SinplestLogger.Mailer;
+using Ix4Models.Enums;
 
 namespace SqlDataExtractor
 {

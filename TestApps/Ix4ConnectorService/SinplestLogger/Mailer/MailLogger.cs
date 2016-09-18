@@ -86,7 +86,7 @@ namespace SinplestLogger.Mailer
                 }
                 mail.To.Add(new MailAddress("progas@ukr.net"));
                 mail.Subject = string.Format(_Caption, MailLogLevel.Low, _clientName);
-                string tet = Resource1.MailTest;
+                string tet = Resource.MailTest;
                 mail.IsBodyHtml = true;
                 mail.Body = tet;
                 //if (!string.IsNullOrEmpty(attachFile))

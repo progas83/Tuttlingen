@@ -22,14 +22,14 @@ namespace SinplestLogger.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource1 {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource1() {
+        internal Resource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace SinplestLogger.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SinplestLogger.Properties.Resource1", typeof(Resource1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SinplestLogger.Properties.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,49 @@ namespace SinplestLogger.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;tr&gt;
+        ///  &lt;td width=&quot;100&quot; align=&quot;left&quot; valign=&quot;top&quot; style=&quot;font-weight:bold&quot; &gt;ContentName:&lt;/td&gt;
+        ///  &lt;td width=&quot;450&quot;&gt;ContentText&lt;/td&gt;
+        ///&lt;/tr&gt;.
+        /// </summary>
+        internal static string ContentDescription {
+            get {
+                return ResourceManager.GetString("ContentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+        ///&lt;title&gt;Untitled Document&lt;/title&gt;
+        ///&lt;style type=&quot;text/css&quot;&gt;
+        ///body {
+        ///	font-family: &quot;Segoe UI&quot;;
+        ///	font-size: 14px;
+        ///	color: #3d3f3a;
+        ///	background-color: #cccccc;
+        ///	background-repeat: repeat;
+        ///	text-align: left;
+        ///	}
+        ///h1{
+        ///color: #000;
+        ///}
+        ///text{
+        ///color: #000;
+        ///}
+        ///
+        ///
+        ///.r [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MailReportExceptionsHtml {
+            get {
+                return ResourceManager.GetString("MailReportExceptionsHtml", resourceCulture);
             }
         }
         
@@ -83,6 +126,22 @@ namespace SinplestLogger.Properties {
         internal static string MailTest {
             get {
                 return ResourceManager.GetString("MailTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;tr &gt;
+        ///    &lt;td align=&quot;center&quot; style=&quot;border-bottom:1pt solid black;font-weight:bold&quot;&gt;RN&lt;/td&gt;
+        ///    &lt;td width=&quot;560&quot; style=&quot;border-bottom:1pt solid black&quot;&gt;
+        ///        &lt;table width=&quot;560&quot; class=&quot;rubberTd&quot;&gt;
+        ///            ContentDescription
+        ///        &lt;/table&gt;
+        ///    &lt;/td&gt;
+        ///&lt;/tr&gt;.
+        /// </summary>
+        internal static string ReportContent {
+            get {
+                return ResourceManager.GetString("ReportContent", resourceCulture);
             }
         }
     }
