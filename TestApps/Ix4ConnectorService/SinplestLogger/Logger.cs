@@ -1,4 +1,5 @@
 ﻿using Ix4Models;
+using Ix4Models.Enums;
 using SinplestLogger.Mailer;
 using System;
 using System.IO;
@@ -87,7 +88,7 @@ namespace SimplestLogger
             Log(exception.ToString());
        //     Log("Exception message");
        //     Log(exception.Message);
-            MailLogger.Instance.LogMail(LogLevel.Low, exception.ToString());
+            MailLogger.Instance.LogMail(MailLogLevel.Low, exception.ToString());
         }
 
         public void Log(object o, string propertyName)
@@ -99,10 +100,4 @@ namespace SimplestLogger
             }
         }
     }
-
-    public enum LogLevel
-    {
-        Low, Medium, Hight
-    }
-
 }

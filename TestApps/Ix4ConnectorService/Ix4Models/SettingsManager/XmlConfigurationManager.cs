@@ -8,6 +8,7 @@ namespace Ix4Models.SettingsManager
 {
     public class XmlConfigurationManager
     {
+       
         private static object _padlock = new object();
         private CustomerInfoSerializer _xmlSerializer;
         private static XmlConfigurationManager _configrator = null;

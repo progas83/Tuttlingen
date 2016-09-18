@@ -128,7 +128,7 @@ namespace SqlDataExtractor
                     _loger.Log("FormatException while reflect DataColumn values using Reflection in LoadOrders");
                     _loger.Log(formatEx);
                     string mailMessage = string.Format("There was FormatException with Order number = {0}, problem field name = {1}", orderItem.OrderNo, propertyInfo.Name);
-                    MailLogger.Instance.LogMail(LogLevel.Low, mailMessage);
+                    MailLogger.Instance.LogMail(MailLogLevel.Low, mailMessage);
                 }
                 catch (Exception ex)
                 {

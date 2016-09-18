@@ -70,6 +70,60 @@ namespace Locale.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EnableSSL.
+        /// </summary>
+        public static string EnableSSL {
+            get {
+                return ResourceManager.GetString("EnableSSL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is mail HTML.
+        /// </summary>
+        public static string IsBodyHtml {
+            get {
+                return ResourceManager.GetString("IsBodyHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail From.
+        /// </summary>
+        public static string MailFrom {
+            get {
+                return ResourceManager.GetString("MailFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        public static string MailHost {
+            get {
+                return ResourceManager.GetString("MailHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail password.
+        /// </summary>
+        public static string MailPass {
+            get {
+                return ResourceManager.GetString("MailPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up mail notification.
+        /// </summary>
+        public static string MailSettingsControl {
+            get {
+                return ResourceManager.GetString("MailSettingsControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SQL query for getting positions of particular Order.
         /// </summary>
         public static string OrderPositionsSettingsPanel {
@@ -102,6 +156,15 @@ namespace Locale.Properties {
         public static string OrdersSettingsPanel {
             get {
                 return ResourceManager.GetString("OrdersSettingsPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port.
+        /// </summary>
+        public static string Port {
+            get {
+                return ResourceManager.GetString("Port", resourceCulture);
             }
         }
         
@@ -165,6 +228,15 @@ namespace Locale.Properties {
         public static string SettingsButton {
             get {
                 return ResourceManager.GetString("SettingsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TimeOut.
+        /// </summary>
+        public static string TimeOut {
+            get {
+                return ResourceManager.GetString("TimeOut", resourceCulture);
             }
         }
     }

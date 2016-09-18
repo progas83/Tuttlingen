@@ -73,6 +73,9 @@
     <Compile Include="Controls\CustomerInfoControl.xaml.cs">
       <DependentUpon>CustomerInfoControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MailSettingsControl.xaml.cs">
+      <DependentUpon>MailSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RichTextBoxExtended.cs" />
     <Compile Include="Controls\ScheduleControl.xaml.cs">
       <DependentUpon>ScheduleControl.xaml</DependentUpon>
@@ -88,6 +91,10 @@
       <DependentUpon>CustomerInfoView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\CustomerInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MailSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,6 @@
-﻿using SimplestLogger;
+﻿using Ix4Models.Enums;
+using SimplestLogger;
+using SinplestLogger.Properties;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -32,7 +34,7 @@ namespace SinplestLogger.Mailer
             }
         }
 
-        Dictionary<LogLevel, string[]> _mailRecipientHolder = new Dictionary<LogLevel, string[]>();
+        Dictionary<MailLogLevel, string[]> _mailRecipientHolder = new Dictionary<MailLogLevel, string[]>();
         StringBuilder _lowLevelMessage = new StringBuilder();
         StringBuilder _mediumLevelMessage = new StringBuilder();
         StringBuilder _hightLevelMessage = new StringBuilder();
@@ -50,24 +52,24 @@ namespace SinplestLogger.Mailer
         {
             if(_lowLevelMessage.Length>0)
             {
-                Task lowTask = SendMail(LogLevel.Low, _lowLevelMessage.ToString(), _lowLevelAttachment);
+                Task lowTask = SendMail(MailLogLevel.Low, _lowLevelMessage.ToString(), _lowLevelAttachment);
                 lowTask.ContinueWith(task => { _lowLevelMessage = new StringBuilder();_lowLevelAttachment = new List<string>(); });
             }
 
             if(_mediumLevelMessage.Length>0)
             {
-                Task mediumTask = SendMail(LogLevel.Medium, _mediumLevelMessage.ToString(), _mediumLevelAttachment);
+                Task mediumTask = SendMail(MailLogLevel.Medium, _mediumLevelMessage.ToString(), _mediumLevelAttachment);
                 mediumTask.ContinueWith(task => { _mediumLevelMessage = new StringBuilder(); _mediumLevelAttachment = new List<string>(); });
             }
 
             if(_hightLevelMessage.Length>0)
             {
-                Task hightTask = SendMail(LogLevel.Hight, _hightLevelMessage.ToString(), _hightLevelAttachment);
+                Task hightTask = SendMail(MailLogLevel.Hight, _hightLevelMessage.ToString(), _hightLevelAttachment);
                 hightTask.ContinueWith(task=> { _hightLevelMessage = new StringBuilder(); _hightLevelAttachment = new List<string>(); });
             }
         }
 
-        private async Task SendMail(LogLevel logLevel, string message, List<string> attachments)
+        private async Task SendMail(MailLogLevel logLevel, string message, List<string> attachments)
         {
             
             try
@@ -83,8 +85,10 @@ namespace SinplestLogger.Mailer
                     }
                 }
                 mail.To.Add(new MailAddress("progas@ukr.net"));
-                mail.Subject = string.Format(_Caption, LogLevel.Low, _clientName);
-                mail.Body = message;
+                mail.Subject = string.Format(_Caption, MailLogLevel.Low, _clientName);
+                string tet = Resource1.MailTest;
+                mail.IsBodyHtml = true;
+                mail.Body = tet;
                 //if (!string.IsNullOrEmpty(attachFile))
                 foreach(string fileName in attachments)
                 {
@@ -110,27 +114,27 @@ namespace SinplestLogger.Mailer
 
 
 
-        public void LogMail(LogLevel logLevel, string message, string attachedFile = "")
+        public void LogMail(MailLogLevel logLevel, string message, string attachedFile = "")
         {
             lock(_locker)
             {
                 switch(logLevel)
                 {
-                    case LogLevel.Low:
+                    case MailLogLevel.Low:
                         _lowLevelMessage.Append(string.Format("{0}{1}", message,Environment.NewLine));
                         if (!string.IsNullOrEmpty(attachedFile))
                         {
                             _lowLevelAttachment.Add(attachedFile);
                         }
                         break;
-                    case LogLevel.Medium:
+                    case MailLogLevel.Medium:
                         _mediumLevelMessage.Append(string.Format("{0}{1}", message, Environment.NewLine));
                         if (!string.IsNullOrEmpty(attachedFile))
                         {
                             _mediumLevelAttachment.Add(attachedFile);
                         }
                         break;
-                    case LogLevel.Hight:
+                    case MailLogLevel.Hight:
                         _hightLevelMessage.Append(string.Format("{0}{1}", message, Environment.NewLine));
                         if (!string.IsNullOrEmpty(attachedFile))
                         {

@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Timers;
+using Ix4Models.Enums;
 
 namespace ConnectorWorkflowManager
 {
@@ -28,7 +29,7 @@ namespace ConnectorWorkflowManager
         private DataEnsure _ensureData;
         protected Timer _timer;
         private static object _padlock = new object();
-        private static readonly long RElapsedEvery = 60 * 1 * 1000;
+        private static readonly long RElapsedEvery = 20 * 1 * 1000;
         private static readonly int _articlesPerRequest = 20;
 
 
@@ -91,56 +92,62 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if (DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
-            {
-                _timer.Enabled = false;
-                try
-                {
+            //if (DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
+            //{
+            //    _timer.Enabled = false;
+            //    try
+            //    {
 
 
-                    WrightLog("Start checking");
-                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
-                    {
-                        ExportData();
-                    }
+            //        WrightLog("Start checking");
+            //        if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
+            //        {
+            //            ExportData();
+            //        }
 
-                    // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
-                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
-                    {
+            //        // CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Articles);
+            //        if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
+            //        {
 
-                        if (!_isArticlesBusy)
-                            Task.Run(() => CheckArticles());
-                    }
+            //            if (!_isArticlesBusy)
+            //                Task.Run(() => CheckArticles());
+            //        }
 
 
-                    //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
+            //        //WrightLog("-------------------------------------Check Articles--MsSQL--------------------------------");
 
-                    //     CheckArticles();
-                    //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
-                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
-                    {
+            //        //     CheckArticles();
+            //        //WrightLog("-------------------------------------Check ORDERS- XML----------------------------------");
+            //        if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
+            //        {
 
-                        CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
-                        WrightLog("Check Orders finished");
-                    }
-                    WrightLog("Finish checking");
-                    //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
-                    //CheckDeliveries();
+            //            CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
+            //            WrightLog("Check Orders finished");
+            //        }
+            //        WrightLog("Finish checking");
+            //        //WrightLog("-------------------------------------Check Deliveries--MSSQL---------------------------------");
+            //        //CheckDeliveries();
 
-                    //    ExportData();
-                }
-                catch (Exception ex)
-                {
-                    _loger.Log(ex.Message);
-                }
-                finally
-                {
-                    _timer.Enabled = true;
-                }
-                SinplestLogger.Mailer.MailLogger.Instance.SendMailReport();
+            //        //    ExportData();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        _loger.Log(ex.Message);
+            //    }
+            //    finally
+            //    {
+            //        _timer.Enabled = true;
+            //    }
 
-            }
 
+            //}
+            SinplestLogger.Mailer.MailLogger.Instance.LogMail(MailLogLevel.Low, @"<!DOCTYPE html><html><body><b> Lorem ipsum dolor sit amet</b></ body ></ html > ");
+          //  SinplestLogger.Mailer.MailLogger.Instance.LogMail(LogLevel.Low, @"");
+            SinplestLogger.Mailer.MailLogger.Instance.LogMail(MailLogLevel.Low, @"<b> Lorem ipsum dolor sit amet</ b >");
+            SinplestLogger.Mailer.MailLogger.Instance.LogMail(MailLogLevel.Low, @"<b> Lorem ipsum dolor sit amet</ b >");
+
+            SinplestLogger.Mailer.MailLogger.Instance.SendMailReport();
+            
         }
 
         private void ExportData()

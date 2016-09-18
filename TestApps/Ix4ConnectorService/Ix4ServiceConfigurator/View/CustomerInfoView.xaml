@@ -31,17 +31,20 @@
         <Button Height="50" Margin="10,0,5,0" IsDefault="True" HorizontalAlignment="Stretch" DockPanel.Dock="Top" Command="{Binding}"
                 CommandParameter="{Binding ElementName=UIUserInfo}" Content="Save Information"/>
 
-           
 
-     
-        <WrapPanel MaxWidth="800" Height="200" ScrollViewer.CanContentScroll="True" >
+        
 
-                <ContentControl Margin="0,5,0,0" SnapsToDevicePixels="True" Height="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.PanningMode="VerticalFirst" ScrollViewer.VerticalScrollBarVisibility="Visible"
+        <WrapPanel  >
+
+            <ContentControl Margin="0,5,0,0" Height="200" MaxWidth="800"
+                            ScrollViewer.CanContentScroll="True" 
+                            ScrollViewer.PanningMode="VerticalFirst" 
+                            ScrollViewer.VerticalScrollBarVisibility="Visible"
                             
-                            x:Name="UiPlaceHsolder" Content="{Binding PluginControl}" DockPanel.Dock="Top" VerticalContentAlignment="Top"/>
-               
+                            x:Name="UiPlaceHsolder" Content="{Binding PluginControl}" />
+
         </WrapPanel>
-        
-        
+
+
     </StackPanel>
 </Window>

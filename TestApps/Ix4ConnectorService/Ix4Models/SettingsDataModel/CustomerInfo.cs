@@ -14,6 +14,8 @@ namespace Ix4Models.SettingsDataModel
             ServiceName = CurrentServiceInformation.ServiceName;
             PluginSettings = new PluginsSettings();
             ScheduleSettings = new SchedulerSettings();
+
+            MailNotificationSettings = new MailNotificationSettings();
             //{
             //    CsvSettings = new CsvPluginSettings(),
             //    MsSqlSettings = new MsSqlPluginSettings(),
@@ -63,6 +65,8 @@ namespace Ix4Models.SettingsDataModel
 
  
         public SchedulerSettings ScheduleSettings { get; set; }
+
+        public MailNotificationSettings MailNotificationSettings { get; set; }
 
         //public override string ToString()
         //{
