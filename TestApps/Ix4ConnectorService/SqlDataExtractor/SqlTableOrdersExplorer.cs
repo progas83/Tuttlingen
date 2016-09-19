@@ -120,7 +120,7 @@ namespace SqlDataExtractor
                     }
                     else
                     {
-                        string errorDescription = "There was not positions in Order No " + orderItem.OrderNo;
+                        string errorDescription = "There aren't positions in Order number " + orderItem.OrderNo;
                         _loger.Log(errorDescription);
                         MailLogger.Instance.LogMail(new ContentDescription(errorDescription));
                     }

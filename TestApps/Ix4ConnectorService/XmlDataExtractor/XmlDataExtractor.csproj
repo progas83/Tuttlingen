@@ -58,6 +58,7 @@
     <ProjectReference Include="..\Ix4Models\Ix4Models.csproj">
       <Project>{FC7C4D19-401C-43B8-A054-1F4C1C6B8228}</Project>
       <Name>Ix4Models</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

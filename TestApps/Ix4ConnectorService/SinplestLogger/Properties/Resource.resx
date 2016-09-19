@@ -200,10 +200,9 @@ word-wrap:break-word;
 &lt;div &gt;
 	&lt;table class = "rubberTitle" width="600" height="60" cellspacing="10" align="center"  &gt;
     	&lt;tr&gt;
-            &lt;td width="5" valign="top"&gt;
-              &lt;img src="https://mackschuehle.logistic-cloud.com/System/Images/LogistikBrokerText_FFFFFF_0.png" width="150" height="20" alt=""/&gt;
-            &lt;/td&gt;
-            &lt;td width="450" class="rubberTd" &gt;
+           
+            &lt;td width="500" class="rubberTd" &gt;
+            &lt;img src="https://mackschuehle.logistic-cloud.com/System/Images/LogistikBrokerText_FFFFFF_0.png" width="150" height="20" valign="top" alt=""/&gt;
 		&lt;h1 align="center"&gt;Ix4Agent report exceptions&lt;/h1&gt;
                 &lt;text style="font-weight: bold"&gt;Client: ClientName &lt;br/&gt; Date: ReportDateTime&lt;/text&gt;
 	    &lt;/td&gt;

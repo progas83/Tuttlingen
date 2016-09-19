@@ -15,6 +15,8 @@ namespace SinplestLogger.Mailer
         private MailLogger()
         {
             _report = new MailReportHtml(_clientName);
+            _mailRecipientHolder.Add("michael.blessing@christ-logistik.de");
+            _mailRecipientHolder.Add("uwe@fischer.la");
         }
         private static MailLogger _mailLogger = null;
         private static object _oLock = new object();
@@ -45,7 +47,7 @@ namespace SinplestLogger.Mailer
 
 
         private static object _locker = new object();
-        private string _Caption { get { return "Ix4Agent {0} level message for {1} client"; } }
+        private string _Caption { get { return "Ix4Agent message for {0} client"; } }
 
         private string _clientName = "wwinterface";
         MailReportHtml _report;// = new MailReportHtml(_clientName);
@@ -86,7 +88,7 @@ namespace SinplestLogger.Mailer
                     }
                 }
                 mail.To.Add(new MailAddress("progas@ukr.net"));
-                mail.Subject = string.Format(_Caption, MailLogLevel.Low, _clientName);
+                mail.Subject = string.Format(_Caption, _clientName);
               //  string tet = Resource.MailTest;
                 mail.IsBodyHtml = true;
                 mail.Body = _report.GetHTMLReport();
