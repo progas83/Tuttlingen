@@ -61,10 +61,10 @@ namespace SinplestLogger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;tr&gt;
-        ///  &lt;td width=&quot;100&quot; align=&quot;left&quot; valign=&quot;top&quot; style=&quot;font-weight:bold&quot; &gt;ContentName:&lt;/td&gt;
-        ///  &lt;td width=&quot;450&quot;&gt;ContentText&lt;/td&gt;
-        ///&lt;/tr&gt;.
+        ///   Looks up a localized string similar to &lt;div class=&quot;rTableRow&quot;&gt; 
+        ///			 &lt;div class=&quot;rTableCell&quot; &gt;ContentName:&lt;/div&gt; 
+        ///			 &lt;div class=&quot;rTableCell2&quot; width=&quot;900&quot; &gt;ContentText&lt;/div&gt;
+        ///			 &lt;/div&gt;.
         /// </summary>
         internal static string ContentDescription {
             get {
@@ -93,9 +93,7 @@ namespace SinplestLogger.Properties {
         ///text{
         ///color: #000;
         ///}
-        ///
-        ///
-        ///.r [rest of string was truncated]&quot;;.
+        ///tr.bor [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MailReportExceptionsHtml {
             get {
@@ -104,38 +102,10 @@ namespace SinplestLogger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
-        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
-        ///&lt;head&gt;
-        ///&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
-        ///&lt;title&gt;Untitled Document&lt;/title&gt;
-        ///&lt;style type=&quot;text/css&quot;&gt;
-        ///body {
-        ///	font-family: &quot;Segoe UI&quot;;
-        ///	font-size: 14px;
-        ///	color: #3d3f3a;
-        ///	background-color: #cccccc;
-        ///	background-repeat: repeat;
-        ///	text-align: left;
-        ///	}
-        ///
-        ///.sender {
-        ///	background-color: #f7f7f7;
-        ///	padding:2 [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string MailTest {
-            get {
-                return ResourceManager.GetString("MailTest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;tr &gt;
-        ///    &lt;td align=&quot;center&quot; style=&quot;border-bottom:1pt solid black;font-weight:bold&quot;&gt;RN&lt;/td&gt;
-        ///    &lt;td width=&quot;560&quot; style=&quot;border-bottom:1pt solid black&quot;&gt;
-        ///        &lt;table width=&quot;560&quot; class=&quot;rubberTd&quot;&gt;
-        ///            ContentDescription
-        ///        &lt;/table&gt;
+        ///   Looks up a localized string similar to &lt;tr class=&quot;border_bottom&quot; &gt;
+        ///    &lt;td align=&quot;center&quot; style=&quot;font-weight:bold&quot; width=&quot;40&quot;&gt;RN&lt;/td&gt;
+        ///    &lt;td &gt;
+        ///		ContentDescription
         ///    &lt;/td&gt;
         ///&lt;/tr&gt;.
         /// </summary>

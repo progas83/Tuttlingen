@@ -120,7 +120,9 @@ namespace SqlDataExtractor
                     }
                     else
                     {
-                        _loger.Log("There was not positions in Order No " + orderItem.OrderNo);
+                        string errorDescription = "There was not positions in Order No " + orderItem.OrderNo;
+                        _loger.Log(errorDescription);
+                        MailLogger.Instance.LogMail(new ContentDescription(errorDescription));
                     }
                     
                 }
@@ -129,7 +131,7 @@ namespace SqlDataExtractor
                     _loger.Log("FormatException while reflect DataColumn values using Reflection in LoadOrders");
                     _loger.Log(formatEx);
                     string mailMessage = string.Format("There was FormatException with Order number = {0}, problem field name = {1}", orderItem.OrderNo, propertyInfo.Name);
-                    MailLogger.Instance.LogMail(MailLogLevel.Low, mailMessage);
+                    MailLogger.Instance.LogMail(new ContentDescription(mailMessage, formatEx.Message));
                 }
                 catch (Exception ex)
                 {

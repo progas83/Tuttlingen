@@ -88,7 +88,7 @@ namespace SimplestLogger
             Log(exception.ToString());
        //     Log("Exception message");
        //     Log(exception.Message);
-            MailLogger.Instance.LogMail(MailLogLevel.Low, exception.ToString());
+            MailLogger.Instance.LogMail(new ContentDescription("Undescribed exception", exception.ToString()));
         }
 
         public void Log(object o, string propertyName)

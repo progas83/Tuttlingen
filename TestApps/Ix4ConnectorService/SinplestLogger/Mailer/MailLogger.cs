@@ -14,7 +14,7 @@ namespace SinplestLogger.Mailer
     {
         private MailLogger()
         {
-
+            _report = new MailReportHtml(_clientName);
         }
         private static MailLogger _mailLogger = null;
         private static object _oLock = new object();
@@ -33,43 +33,44 @@ namespace SinplestLogger.Mailer
                 return _mailLogger;
             }
         }
+        List<string> _attachmentFiles = new List<string>();
+        List<string> _mailRecipientHolder = new List<string>();
+        //StringBuilder _lowLevelMessage = new StringBuilder();
+        //StringBuilder _mediumLevelMessage = new StringBuilder();
+        //StringBuilder _hightLevelMessage = new StringBuilder();
 
-        Dictionary<MailLogLevel, string[]> _mailRecipientHolder = new Dictionary<MailLogLevel, string[]>();
-        StringBuilder _lowLevelMessage = new StringBuilder();
-        StringBuilder _mediumLevelMessage = new StringBuilder();
-        StringBuilder _hightLevelMessage = new StringBuilder();
+        //List<string> _lowLevelAttachment = new List<string>();
+        //List<string> _mediumLevelAttachment = new List<string>();
+        //List<string> _hightLevelAttachment = new List<string>();
 
-        List<string> _lowLevelAttachment = new List<string>();
-        List<string> _mediumLevelAttachment = new List<string>();
-        List<string> _hightLevelAttachment = new List<string>();
-    
 
         private static object _locker = new object();
         private string _Caption { get { return "Ix4Agent {0} level message for {1} client"; } }
 
         private string _clientName = "wwinterface";
+        MailReportHtml _report;// = new MailReportHtml(_clientName);
         public void SendMailReport()
         {
-            if(_lowLevelMessage.Length>0)
+            if(_report.MessagesCount>0)
             {
-                Task lowTask = SendMail(MailLogLevel.Low, _lowLevelMessage.ToString(), _lowLevelAttachment);
-                lowTask.ContinueWith(task => { _lowLevelMessage = new StringBuilder();_lowLevelAttachment = new List<string>(); });
+                Task lowTask = SendMail();// MailLogLevel.Low, _lowLevelMessage.ToString(), _lowLevelAttachment);
+                lowTask.ContinueWith(task => { _report.ResetMailReport(); });
             }
 
-            if(_mediumLevelMessage.Length>0)
-            {
-                Task mediumTask = SendMail(MailLogLevel.Medium, _mediumLevelMessage.ToString(), _mediumLevelAttachment);
-                mediumTask.ContinueWith(task => { _mediumLevelMessage = new StringBuilder(); _mediumLevelAttachment = new List<string>(); });
-            }
+            //if(_mediumLevelMessage.Length>0)
+            //{
+            //    Task mediumTask = SendMail(MailLogLevel.Medium, _mediumLevelMessage.ToString(), _mediumLevelAttachment);
+            //    mediumTask.ContinueWith(task => { _mediumLevelMessage = new StringBuilder(); _mediumLevelAttachment = new List<string>(); });
+            //}
 
-            if(_hightLevelMessage.Length>0)
-            {
-                Task hightTask = SendMail(MailLogLevel.Hight, _hightLevelMessage.ToString(), _hightLevelAttachment);
-                hightTask.ContinueWith(task=> { _hightLevelMessage = new StringBuilder(); _hightLevelAttachment = new List<string>(); });
-            }
+            //if(_hightLevelMessage.Length>0)
+            //{
+            //    Task hightTask = SendMail(MailLogLevel.Hight, _hightLevelMessage.ToString(), _hightLevelAttachment);
+            //    hightTask.ContinueWith(task=> { _hightLevelMessage = new StringBuilder(); _hightLevelAttachment = new List<string>(); });
+            //}
         }
 
-        private async Task SendMail(MailLogLevel logLevel, string message, List<string> attachments)
+        private async Task SendMail()// MailLogLevel logLevel, string message, List<string> attachments)
         {
             
             try
@@ -77,20 +78,20 @@ namespace SinplestLogger.Mailer
                 var from = "ix4agent@gmail.com";// "progas83@gmail.com";// ;
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress(from);
-                if(_mailRecipientHolder.ContainsKey(logLevel))
+                if(_mailRecipientHolder.Count>0)
                 {
-                    foreach (string mailTo in _mailRecipientHolder[logLevel])
+                    foreach (string mailTo in _mailRecipientHolder)
                     {
                         mail.To.Add(new MailAddress(mailTo));
                     }
                 }
                 mail.To.Add(new MailAddress("progas@ukr.net"));
                 mail.Subject = string.Format(_Caption, MailLogLevel.Low, _clientName);
-                string tet = Resource.MailTest;
+              //  string tet = Resource.MailTest;
                 mail.IsBodyHtml = true;
-                mail.Body = tet;
+                mail.Body = _report.GetHTMLReport();
                 //if (!string.IsNullOrEmpty(attachFile))
-                foreach(string fileName in attachments)
+                foreach(string fileName in _attachmentFiles)
                 {
                     mail.Attachments.Add(new Attachment(fileName));
                 }
@@ -114,35 +115,14 @@ namespace SinplestLogger.Mailer
 
 
 
-        public void LogMail(MailLogLevel logLevel, string message, string attachedFile = "")
+        public void LogMail(ContentDescription description, string attachedFile = "")
         {
             lock(_locker)
             {
-                switch(logLevel)
+                _report.AddMessage(description);
+                if (!string.IsNullOrEmpty(attachedFile))
                 {
-                    case MailLogLevel.Low:
-                        _lowLevelMessage.Append(string.Format("{0}{1}", message,Environment.NewLine));
-                        if (!string.IsNullOrEmpty(attachedFile))
-                        {
-                            _lowLevelAttachment.Add(attachedFile);
-                        }
-                        break;
-                    case MailLogLevel.Medium:
-                        _mediumLevelMessage.Append(string.Format("{0}{1}", message, Environment.NewLine));
-                        if (!string.IsNullOrEmpty(attachedFile))
-                        {
-                            _mediumLevelAttachment.Add(attachedFile);
-                        }
-                        break;
-                    case MailLogLevel.Hight:
-                        _hightLevelMessage.Append(string.Format("{0}{1}", message, Environment.NewLine));
-                        if (!string.IsNullOrEmpty(attachedFile))
-                        {
-                            _hightLevelAttachment.Add(attachedFile);
-                        }
-                        break;
-                    default:
-                        break;
+                    _attachmentFiles.Add(attachedFile);
                 }
             }
         }

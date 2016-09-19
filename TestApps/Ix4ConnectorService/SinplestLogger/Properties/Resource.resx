@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ContentDescription" xml:space="preserve">
-    <value>&lt;tr&gt;
-  &lt;td width="100" align="left" valign="top" style="font-weight:bold" &gt;ContentName:&lt;/td&gt;
-  &lt;td width="450"&gt;ContentText&lt;/td&gt;
-&lt;/tr&gt;</value>
+    <value>&lt;div class="rTableRow"&gt; 
+			 &lt;div class="rTableCell" &gt;ContentName:&lt;/div&gt; 
+			 &lt;div class="rTableCell2" width="900" &gt;ContentText&lt;/div&gt;
+			 &lt;/div&gt;</value>
   </data>
   <data name="MailReportExceptionsHtml" xml:space="preserve">
     <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
@@ -144,7 +144,9 @@ color: #000;
 text{
 color: #000;
 }
-
+tr.border_bottom td {
+  border-bottom:1pt solid black;
+}
 
 .rubberTitle{
 	table-layout: fixed;
@@ -158,8 +160,35 @@ color: #000;
 
 .rubberTd{
 	word-wrap:break-word;
-table-layout: fixed;
+table-layout: fixed;background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
+
+.rubberTd1{
+	word-wrap:break-word;
+table-layout: fixed;background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+	border-collapse: collapse; 
+}
+.rTableRow { display: block; width: 550px }
+
+.rTableCell {
+   	font-weight:bold;
+   	float: left;
+   	height: 17px;
+   	overflow: hidden;
+   	padding: 3px 1.8%;
+   	width: 18%; }
+.rTableCell2 {
+   	
+   	float: left;
+   	
+   	overflow: hidden;
+   	padding: 3px 1.8%;
+word-wrap:break-word;
+   	width: 70%; }
 
 &lt;/style&gt;
 
@@ -184,174 +213,18 @@ table-layout: fixed;
         &lt;/tr&gt;
         &lt;/table&gt;
              
-        &lt;table width="600" align="center" cellspacing="0" bgcolor=#f7f7f7 class="rubberTd" &gt;
+        &lt;table class = "rubberTd1" width="600" height="60" cellspacing="10" align="center" bgcolor=#f7f7f7&gt;
             ReportContent
         &lt;/table&gt;
 &lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;</value>
   </data>
-  <data name="MailTest" xml:space="preserve">
-    <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
-&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
-&lt;head&gt;
-&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
-&lt;title&gt;Untitled Document&lt;/title&gt;
-&lt;style type="text/css"&gt;
-body {
-	font-family: "Segoe UI";
-	font-size: 14px;
-	color: #3d3f3a;
-	background-color: #cccccc;
-	background-repeat: repeat;
-	text-align: left;
-	}
-
-.sender {
-	background-color: #f7f7f7;
-	padding:2px; 
-}
-
-.recipient {
-	background-color: #dcdcdc;
-}
-
-.content{
-	text-align: left;	
-}
-
-td.content{
-	text-align: left;	
-}
-.protocol {
-	text-align: left;
-}
-
-.small_font {
-	color: #999999;
-	font-size: 10px;
-	font-weight: bold;
-}
-
-.user_id {font-weight: bold; }
-
-.title {
-	font-size: 29px;
-	font-weight: bold;
-	color: #f7f7f7;
-	font-family: Century Gothic, Arial, Segoi UI, Helvetica, sans-serif;
-}
-
-
-.table_with_border {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
- 	border-bottom-color: #b4b4b3;
-	}
-
-.message2 {
-	color: #f7f7f7;
-	text-align: left;
-	font-size:14px;
-	font-weight: bold;
-}
-
-.rubberTitle{
-	table-layout: fixed;
-	background-color: #ec0100;
-    margin-top: 10px;
-	background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-	padding-bottom: 10px;
-}
-
-.rubberTd{
-	word-wrap:break-word;
-}
-
-.col { 
-    width: 503px;
-    word-wrap: break-word; 
-   }
-   
-.col_min { 
-    width: 400px; 
-    word-wrap: break-word;
-   }
-
-&lt;/style&gt;
-
-&lt;/head&gt;
-
-&lt;body&gt;
-&lt;br/&gt;
-
-&lt;div &gt;
-
-	&lt;table width="642" height="22" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor=#cccccc&gt;
-	&lt;/table&gt;
-	
-	&lt;table class = "rubberTitle" width="642" height="92" border="0" cellpadding="0" cellspacing="0" bgcolor=#f7f7f7 align="center"  &gt;
-    	
-     	&lt;tr&gt;
-        &lt;td width="70"&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td width="446" class="rubberTd" align="center"&gt;
-			SuitableTitle
-		&lt;/td&gt;
-        
-		
-		
-		
-		&lt;td width="10"&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td width="116"&gt;
-			&lt;img src="http://193.109.52.60/facebook/gwtalk/img1/Mark_IM.png" width="103" height="76" alt="" /&gt;
-		&lt;/td&gt;
-        &lt;/tr&gt;
-        
-     &lt;/table&gt;
-             
-&lt;table class="table_with_border" width="642" align="center" border="0" cellpadding="2" cellspacing="0" bgcolor=#f7f7f7 &gt;
-              
-		&lt;tr&gt;
-        	&lt;td width="27"&gt;&amp;nbsp;&lt;/td&gt;
-        	&lt;td width="67"&gt;&amp;nbsp;&lt;/td&gt;
-        	&lt;td width="503"&gt;&amp;nbsp;&lt;/td&gt;
-        	&lt;td width="27"&gt;&amp;nbsp;&lt;/td&gt;
-         &lt;/tr&gt;
-		 &lt;tr&gt;
-           	&lt;td class="content"&gt;&amp;nbsp;&lt;/td&gt;
-           	&lt;td height="23" class="protocol"&gt;&amp;nbsp;&lt;/td&gt;
-           	&lt;td class="content"&gt;&amp;nbsp;&lt;/td&gt;
-           	&lt;td class="content"&gt;&amp;nbsp;&lt;/td&gt;
-           &lt;/tr&gt;
-  &lt;/table&gt;
-        
- 
- &lt;br/&gt;
-
-  &lt;table width="642" class="small_font"  align="center" border="0" cellpadding="0" cellspacing="0"&gt;
-    &lt;tr&gt;
-    	&lt;td width="289" align="right"&gt;
-    		&lt;img src="http://193.109.52.60/facebook/gwtalk/test/komnicator.png" width="24" height="24" alt="" /&gt;
-    	&lt;/td&gt;
-        &lt;td width="353" height="24" align="left" valign="top"&gt;
-        &lt;div style="margin-top:5px; margin-left: 3px; height: 14px;" &gt;Created by Komnicator&lt;/div&gt;
-        &lt;/td&gt;
-           &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/div&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="ReportContent" xml:space="preserve">
-    <value>&lt;tr &gt;
-    &lt;td align="center" style="border-bottom:1pt solid black;font-weight:bold"&gt;RN&lt;/td&gt;
-    &lt;td width="560" style="border-bottom:1pt solid black"&gt;
-        &lt;table width="560" class="rubberTd"&gt;
-            ContentDescription
-        &lt;/table&gt;
+    <value>&lt;tr class="border_bottom" &gt;
+    &lt;td align="center" style="font-weight:bold" width="40"&gt;RN&lt;/td&gt;
+    &lt;td &gt;
+		ContentDescription
     &lt;/td&gt;
 &lt;/tr&gt;</value>
   </data>
