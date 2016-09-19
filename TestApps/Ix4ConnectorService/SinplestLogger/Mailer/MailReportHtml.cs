@@ -20,7 +20,7 @@ namespace SinplestLogger.Mailer
         public int MessagesCount { get { return _msgCount; } }
         public void AddMessage(ContentDescription contentDescription)
         {
-            _reportMessages.Append(_reportContent.Replace("RN", _msgCount++.ToString()).Replace("ContentDescription", contentDescription.ToString()));
+            _reportMessages.Append(_reportContent.Replace("RN", (++_msgCount).ToString()).Replace("ContentDescription", contentDescription.ToString()));
         }
         public void ResetMailReport()
         {
