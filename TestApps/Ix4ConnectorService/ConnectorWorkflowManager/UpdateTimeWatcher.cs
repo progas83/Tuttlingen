@@ -13,14 +13,14 @@ namespace ConnectorWorkflowManager
         private static Logger _loger = Logger.GetLogger();
         static UpdateTimeWatcher()
         {
-            DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 17, 30, 00)).AddDays(-1);
-            _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            _loger.Log("Articles last update total seconds = " + _articlesLastUpdate);
+          //  DateTime yesturdayHalfPastSeventeen = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 17, 30, 00)).AddDays(-1);
+          //  _articlesLastUpdate = (long)yesturdayHalfPastSeventeen.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+         //   _loger.Log("Articles last update total seconds = " + _articlesLastUpdate);
 
-            DateTime yesturdayTenPM = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 7, 00, 00)).AddDays(-1);
-            _exportSALastUpdate = (long)yesturdayTenPM.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        //    DateTime yesturdayTenPM = (new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 7, 00, 00)).AddDays(-1);
+        //    _exportSALastUpdate = (long)yesturdayTenPM.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
-        private static long _articlesLastUpdate = 1;
+        private static long _articlesLastUpdate = 0;
         private static long _ordersLastUpdate = 0;
         private static long _deliveriesLastUpdate = 0;
 
@@ -79,13 +79,13 @@ namespace ConnectorWorkflowManager
             switch (ix4Property)
             {
                 case Ix4RequestProps.Articles:
-                    if (_articlesLastUpdate == 0 || GetTimeStamp() - _articlesLastUpdate > 86400)
+                    if (_articlesLastUpdate == 0 || GetTimeStamp() - _articlesLastUpdate > 7200)
                     {
                         result = true;
                     }
                     break;
                 case Ix4RequestProps.Deliveries:
-                    if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 7200)
+                    if (_deliveriesLastUpdate == 0 || (GetTimeStamp() - _deliveriesLastUpdate) > 1800)
                     {
                         result = true;
                     }

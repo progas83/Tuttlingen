@@ -3,6 +3,7 @@ using SimplestLogger;
 using SinplestLogger.Properties;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -49,7 +50,7 @@ namespace SinplestLogger.Mailer
         private static object _locker = new object();
         private string _Caption { get { return "Ix4Agent message for {0} client"; } }
 
-        private string _clientName = "wwinterface";
+        private string _clientName = "wsbio";
         MailReportHtml _report;// = new MailReportHtml(_clientName);
         public void SendMailReport()
         {
@@ -74,13 +75,13 @@ namespace SinplestLogger.Mailer
 
         private async Task SendMail()// MailLogLevel logLevel, string message, List<string> attachments)
         {
-            
+
             try
             {
                 var from = "ix4agent@gmail.com";// "progas83@gmail.com";// ;
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress(from);
-                if(_mailRecipientHolder.Count>0)
+                if (_mailRecipientHolder.Count > 0)
                 {
                     foreach (string mailTo in _mailRecipientHolder)
                     {
@@ -89,15 +90,15 @@ namespace SinplestLogger.Mailer
                 }
                 mail.To.Add(new MailAddress("progas@ukr.net"));
                 mail.Subject = string.Format(_Caption, _clientName);
-              //  string tet = Resource.MailTest;
+                //  string tet = Resource.MailTest;
                 mail.IsBodyHtml = true;
                 mail.Body = _report.GetHTMLReport();
                 //if (!string.IsNullOrEmpty(attachFile))
-                foreach(string fileName in _attachmentFiles)
+                foreach (string fileName in _attachmentFiles)
                 {
                     mail.Attachments.Add(new Attachment(fileName));
                 }
-                
+
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
                 //  client.Host = "smtp.ukr.net";
                 //  client.Port = 587;
@@ -111,6 +112,12 @@ namespace SinplestLogger.Mailer
             catch (Exception e)
             {
 
+                using (StreamWriter _streamWriterFile = new StreamWriter(new FileStream("mailEx.txt", System.IO.FileMode.Append)))
+                {
+                    _streamWriterFile.WriteLine(string.Format("{0}      {1}", e.ToString(), string.Format(Environment.NewLine, DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString())));
+                    _streamWriterFile.Flush();
+                    _streamWriterFile.Close();
+                }
             }
         }
 

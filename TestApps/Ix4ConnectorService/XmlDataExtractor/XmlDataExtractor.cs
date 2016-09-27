@@ -90,7 +90,7 @@ namespace XmlDataExtractor
                 return requests.ToArray();
             }
 
-            if (pluginSettings.CheckArticles)
+           // if (pluginSettings.CheckArticles)
             {
                 LICSRequest request = new LICSRequest();
                 switch (ix4Property)
@@ -112,7 +112,7 @@ namespace XmlDataExtractor
 
                             // string[] xmlSourceFiles = Directory.GetFiles("C:\\Ilya\\TestXmlFolder\\XmlSource");// _customerInfo.PluginSettings.XmlSettings.SourceFolder);
                             // ICustomerDataConnector xmlDataConnector = CustomerDataComposition.Instance.GetDataConnector(CustomDataSourceTypes.Xml);
-                            string[] xmlSourceFiles = Directory.GetFiles(xmlSettings.XmlArticleSourceFolder, "*.xml");
+                            string[] xmlSourceFiles = Directory.GetFiles(xmlSettings.XmlOrdersSourceFolder, "*.xml");
                             if (xmlSourceFiles.Length > 0)
                             {
                                 foreach (string file in xmlSourceFiles)

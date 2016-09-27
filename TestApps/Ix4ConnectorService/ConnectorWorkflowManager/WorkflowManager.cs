@@ -88,31 +88,49 @@ namespace ConnectorWorkflowManager
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if (DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
+            //if (DateTime.Now.Minute == 30 || DateTime.Now.Minute == 0)
             {
                 _timer.Enabled = false;
                 try
                 {
                     WrightLog("Start checking");
-                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
-                    {
-                        ExportData();
-                    }
-
                     if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
                     {
-
-                        if (!_isArticlesBusy)
-                            Task.Run(() => CheckArticles());
+                        WrightLog("Start checking articles");
+                        CheckArticles();
                     }
 
-                    if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
+                    if(_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
                     {
-
-                        CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
-                        WrightLog("Check Orders finished");
+                        WrightLog("Start checking deliveries");
+                        CheckDeliveries();
                     }
-                    WrightLog("Finish checking");
+
+                    if(_customerInfo.PluginSettings.XmlSettings.CheckOrders)
+                    {
+                        WrightLog("Start Check Orders");
+                        CheckPreparedRequest(CustomDataSourceTypes.Xml, Ix4RequestProps.Orders);
+                    }
+                    //
+                    //if (_customerInfo.PluginSettings.MsSqlSettings.CheckDeliveries)
+                    //{
+                    //    ExportData();
+                    //}
+
+                    //if (_customerInfo.PluginSettings.MsSqlSettings.CheckArticles)
+                    //{
+
+                    //    if (!_isArticlesBusy)
+                    //        Task.Run(() => CheckArticles());
+                    //}
+
+                    //if (_customerInfo.PluginSettings.MsSqlSettings.CheckOrders)
+                    //{
+
+                    //    CheckPreparedRequest(CustomDataSourceTypes.MsSql, Ix4RequestProps.Orders);
+                    //    WrightLog("Check Orders finished");
+                    //}
+                    //WrightLog("Finish checking");
                 }
                 catch (Exception ex)
                 {
@@ -250,10 +268,11 @@ namespace ConnectorWorkflowManager
                             _loger.Log("Check customerID = ClientId" + request.ClientId);
                             serializator.Serialize(st, request);
                             byte[] bytesRequest = ReadToEnd(st);
-                            string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
-                            requestSuccess = CheckStateRequest(resp);
-                            SimplestParcerLicsRequest(resp);
-                            _loger.Log(resp);
+                           // string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
+                            //requestSuccess = CheckStateRequest(resp);
+                      
+
+                          //  _loger.Log(resp);
                         }
                         // if (!requestSuccess)
                         {
@@ -297,9 +316,15 @@ namespace ConnectorWorkflowManager
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 LICSResponse resp = (LICSResponse)serializer.Deserialize(new StringReader(response));
-                if (resp.State != 0)
+                string orderFileName = string.Format("D:\\Transfer\\XML_out\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
+                if (resp.State != 0 || resp.OrderImport.State != 0)
                 {
                     result = false;
+                }
+                else
+                {
+                    
+                    _loger.Log(new Exception(string.Format("Filename for remove {0}",orderFileName)));
                 }
             }
             catch (Exception ex)
@@ -346,21 +371,21 @@ namespace ConnectorWorkflowManager
 
 
                 // LICSResponse resp = (LICSResponse)serializer.Deserialize(tr);
-                if (objResponse.OrderImport != null)
-                    foreach (var ord in objResponse.OrderImport.Order)
-                    {
-                        int status = 2;
-                        if (ord.State == 1)
-                        {
-                            status = 5;
-                        }
-                        else
-                        {
-                            status = 3;
-                        }
-                        SendToDB(ord.OrderNo, status);
-                        _loger.Log(string.Format("Has updated order with NO = {0}  new status = {1}", ord.ReferenceNo, status));
-                    }
+                //if (objResponse.OrderImport != null)
+                //    foreach (var ord in objResponse.OrderImport.Order)
+                //    {
+                //        int status = 2;
+                //        if (ord.State == 1)
+                //        {
+                //            status = 5;
+                //        }
+                //        else
+                //        {
+                //            status = 3;
+                //        }
+                //        SendToDB(ord.OrderNo, status);
+                //        _loger.Log(string.Format("Has updated order with NO = {0}  new status = {1}", ord.ReferenceNo, status));
+                //    }
             }
             catch (Exception ex)
             {
@@ -520,7 +545,7 @@ namespace ConnectorWorkflowManager
 
             try
             {
-                // if (UpdateTimeWatcher.TimeToCheck(ix4Property))
+                 if (UpdateTimeWatcher.TimeToCheck(ix4Property))
                 {
                     _loger.Log(string.Format("Start Check {0} using {1} plugin", ix4Property.ToString(), dataSourceType.ToString()));
                     LICSRequest[] requests = _dataCompositor.GetPreparedRequests(dataSourceType, ix4Property);
@@ -666,7 +691,7 @@ namespace ConnectorWorkflowManager
                     LICSRequest request = new LICSRequest();
                     request.ClientId = currentClientID;
                     LICSRequestArticle[] articles = _dataCompositor.GetRequestArticles();
-
+                    _cachedArticles = articles;
                     _loger.Log(string.Format("Got ARTICLES {0}", articles != null ? articles.Length : 0));
 
                     if (articles == null || articles.Length == 0)
