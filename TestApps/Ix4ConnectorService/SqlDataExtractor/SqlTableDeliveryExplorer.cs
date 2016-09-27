@@ -156,13 +156,26 @@ namespace SqlDataExtractor
                     {
                         var res = row[column.ColumnName];
                         PropertyInfo propertyInfo = deliveryPosition.GetType().GetProperty(column.ColumnName);
-                        if (row[column.ColumnName].GetType().Equals(DBNull.Value.GetType()))
+                        if (propertyInfo == null)
                         {
+                            // _loger.Log("LICSRequestOrder");
+                            _loger.Log(propertyInfo, "propertyInfo");
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(row[column.ColumnName])));
+                            continue;
+                        }
+                        _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(row[column.ColumnName])));
+                        //  _loger.Log(row[column.ColumnName], "row[column.ColumnName]");
+                        bool columnValueEqualsNull = row[column.ColumnName].GetType().Equals(DBNull.Value.GetType());
+                        //_loger.Log(columnValueEqualsNull, "columnValueEqualsNull");
+                        if (columnValueEqualsNull)
+                        {
+                            _loger.Log(string.Format("{0} = {1}", column.ColumnName, "Is DB Null"));
                             propertyInfo.SetValue(deliveryPosition, Convert.ChangeType(GetDefaultValue(propertyInfo.PropertyType), propertyInfo.PropertyType), null);
                         }
                         else
                         {
-                            propertyInfo.SetValue(deliveryPosition, Convert.ChangeType(row[column.ColumnName].ToString().Trim(), propertyInfo.PropertyType), null);
+                            //  _loger.Log(string.Format("{0} = {1}", column.ColumnName, Convert.ToString(row[column.ColumnName])));
+                            propertyInfo.SetValue(deliveryPosition, Convert.ChangeType(Convert.ToString(row[column.ColumnName]).Trim(), propertyInfo.PropertyType), null);
                         }
 
 

@@ -317,6 +317,7 @@ namespace ConnectorWorkflowManager
 
                 LICSResponse resp = (LICSResponse)serializer.Deserialize(new StringReader(response));
                 string orderFileName = string.Format("D:\\Transfer\\XML_out\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
+                string orderNewFileName = string.Format("D:\\Transfer\\XML_Archiv\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
                 if (resp.State != 0 || resp.OrderImport.State != 0)
                 {
                     result = false;
@@ -324,7 +325,9 @@ namespace ConnectorWorkflowManager
                 else
                 {
                     
-                    _loger.Log(new Exception(string.Format("Filename for remove {0}",orderFileName)));
+                    _loger.Log(new Exception(string.Format("Filename for remove from {0}",orderFileName)));
+                    _loger.Log(new Exception(string.Format("Filename for remove To {0}", orderNewFileName)));
+
                 }
             }
             catch (Exception ex)
