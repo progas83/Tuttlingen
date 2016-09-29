@@ -268,11 +268,11 @@ namespace ConnectorWorkflowManager
                             _loger.Log("Check customerID = ClientId" + request.ClientId);
                             serializator.Serialize(st, request);
                             byte[] bytesRequest = ReadToEnd(st);
-                           // string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
-                            //requestSuccess = CheckStateRequest(resp);
+                            string resp = _ix4ServiceConnector.ImportXmlRequest(bytesRequest, fileName);
+                            requestSuccess = CheckStateRequest(resp);
                       
 
-                          //  _loger.Log(resp);
+                            _loger.Log(resp);
                         }
                         // if (!requestSuccess)
                         {
@@ -316,19 +316,19 @@ namespace ConnectorWorkflowManager
                 XmlSerializer serializer = new XmlSerializer(typeof(LICSResponse));
 
                 LICSResponse resp = (LICSResponse)serializer.Deserialize(new StringReader(response));
-                string orderFileName = string.Format("D:\\Transfer\\XML_out\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
-                string orderNewFileName = string.Format("D:\\Transfer\\XML_Archiv\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
-                if (resp.State != 0 || resp.OrderImport.State != 0)
+                if(resp.OrderImport!=null && resp.OrderImport.State == 0)
+                {
+                    string orderFileName = string.Format("D:\\Transfer\\XML_out\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
+                    string orderNewFileName = string.Format("D:\\Transfer\\XML_Archiv\\{0}BIONISYS.xml", resp.OrderImport.Order[0].OrderNo);
+                    _loger.Log(new Exception(string.Format("Filename for remove from {0}", orderFileName)));
+                    _loger.Log(new Exception(string.Format("Filename for remove To {0}", orderNewFileName)));
+                }
+                
+                if (resp.State != 0 )
                 {
                     result = false;
                 }
-                else
-                {
-                    
-                    _loger.Log(new Exception(string.Format("Filename for remove from {0}",orderFileName)));
-                    _loger.Log(new Exception(string.Format("Filename for remove To {0}", orderNewFileName)));
-
-                }
+       
             }
             catch (Exception ex)
             {
